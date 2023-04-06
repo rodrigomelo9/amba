@@ -1,4 +1,21 @@
-<!-- .slide: data-background="#145A32" -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>reveal-md</title>
+    <link rel="shortcut icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./dist/reset.css" />
+    <link rel="stylesheet" href="./dist/reveal.css" />
+    <link rel="stylesheet" href="./dist/theme/moon.css" id="theme" />
+    <link rel="stylesheet" href="./css/highlight/base16/zenburn.css" />
+
+
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template"><!-- .slide: data-background="#145A32" -->
 
 ## AMBA APB, AHB and AXI
 
@@ -7,16 +24,12 @@
 Rodrigo Alejandro Melo
 
 [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
-
----
-
+</script></section><section ><section data-markdown><script type="text/template">
 ### Advanced Microcontroller Bus Architecture
 
 AMBA is a freely available, globally adopted, open standard for the connection and management of functional blocks in a System-on-Chip (SoC).
 It facilitates right-first-time development of multiprocessor designs, with large numbers of controllers and peripherals.
-
-----
-
+</script></section><section data-markdown><script type="text/template">
 ### AMBA Specs
 
 | AMBA       | AMBA2       | AMBA3           | AMBA4                             | AMBA5
@@ -36,9 +49,7 @@ Full: Higher performance system bus          | AHB: High Performance system bus 
 Lite: Control/Status registers               | AHB-Lite: for single masters     |                     | Control/Status registers
 Stream: High speeds unidirectional transfers |                                  |                     |
 <!-- .element: style="font-size: 0.35em !important;" -->
-
-----
-
+</script></section><section data-markdown><script type="text/template">
 ### Vocabulary
 
 Term        | Description
@@ -50,9 +61,7 @@ Transfer    | (aka beat) single clock cycle, qualified by a VALID/READY handshak
 Transaction | Complete communication, with one or more transfers
 Burst       | Transaction with more than one transfer
 <!-- .element: style="font-size: 0.5em !important;" -->
-
----
-
+</script></section></section><section ><section data-markdown><script type="text/template">
 ### APB signals
 
 | APB2         | APB3         | APB4 / APB5    | Description
@@ -70,21 +79,15 @@ Burst       | Transaction with more than one transfer
 |              |              | PPROT[2:0]     | Normal, privileged, or secure protection level
 |              |              | PSTRB[D/8-1:0] | Write Strobe (bytes to update during a write)
 <!-- .element: style="font-size: 0.4em !important;" -->
-
-----
-
+</script></section><section data-markdown><script type="text/template">
 ### APB Signals
 
 ![APB signals](images/apb.png)
-
-----
-
+</script></section><section data-markdown><script type="text/template">
 ### APB Signaling
 
 ![APB Signaling](images/apb-waves.png)
-
-----
-
+</script></section><section data-markdown><script type="text/template">
 ### APB5 additional signals
 
 | APB5              | Description
@@ -96,9 +99,7 @@ Burst       | Transaction with more than one transfer
 | PBUSER[up-to-16]  | User response attribute
 | P*CHK             | Parity (for safety)
 <!-- .element: style="font-size: 0.5em !important;" -->
-
----
-
+</script></section></section><section ><section data-markdown><script type="text/template">
 ### AHB signals
 
 | AHB2          | AHB-Lite               | AHB5          | Description
@@ -125,9 +126,7 @@ Burst       | Transaction with more than one transfer
 | HSPLITx[15:0] |                        |               | M to re-attempt a split transaction
 |               | HREADYOUT              | HREADYOUT     | (OUT) transfer has finished
 <!-- .element: style="font-size: 0.35em !important;" -->
-
-----
-
+</script></section><section data-markdown><script type="text/template">
 ### AHB5 additional signals
 
 | AHB5              | Description
@@ -143,9 +142,7 @@ Burst       | Transaction with more than one transfer
 | HCTRLCHK1         | Parity (for safety)
 | HCTRLCHK2         | Parity (for safety)
 <!-- .element: style="font-size: 0.5em !important;" -->
-
----
-
+</script></section></section><section ><section data-markdown><script type="text/template">
 ### AXI signals
 
 Write Address Channel    | Write Data Channel         | Read Address Channel     | Read Data Channel
@@ -169,9 +166,7 @@ AWREADY                  | BREADY                     | AWREADY                 
 > * AXI4: removed WID, added AxQOS, AxREGION and xUSER.
 > * AXI5: several signals added (not only parity)
 <!-- .element: style="font-size: 0.4em !important;" -->
-
-----
-
+</script></section><section data-markdown><script type="text/template">
 ### AXI signals description
 
 Signal   | Description
@@ -190,9 +185,7 @@ AxREGION | Up to 16 regions for the address decode
 xID      | Transaction identifiers (ordering)
 xUSER    | User-defined (not recommended)
 <!-- .element: style="font-size: 0.5em !important;" -->
-
----
-
+</script></section></section><section  data-markdown><script type="text/template">
 ### AXI-Lite signals
 
 |Write Address Channel | Write Data Channel         | Read Address Channel     | Read Data Channel
@@ -209,9 +202,7 @@ xUSER    | User-defined (not recommended)
 
 > AXI5-lite: several signals added, for parity and more flexibility on bus width and ordering
 <!-- .element: style="font-size: 0.4em !important;" -->
-
----
-
+</script></section><section  data-markdown><script type="text/template">
 ### AXI-Stream signals
 
 | AXI4-Stream  | AXI5-Stream  | Description
@@ -230,9 +221,7 @@ xUSER    | User-defined (not recommended)
 |              | TWAKEUP      | Wake-up
 |              | T*CHK        | Parity (for safety)
 <!-- .element: style="font-size: 0.5em !important;" -->
-
----
-<!-- ###################################################################### -->
+</script></section><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
 # Questions?
 <!-- .slide: data-background="#1F618D" -->
 <!-- ###################################################################### -->
@@ -243,3 +232,56 @@ xUSER    | User-defined (not recommended)
 | ![Twitter icon](icons/twitter.png)   | [rodrigomelo9ok](https://twitter.com/rodrigomelo9ok)                     |
 | ![LinkedIn icon](icons/linkedin.png) | [rodrigoalejandromelo](https://www.linkedin.com/in/rodrigoalejandromelo) |
 |   |   |
+</script></section></div>
+    </div>
+
+    <script src="./dist/reveal.js"></script>
+
+    <script src="./plugin/markdown/markdown.js"></script>
+    <script src="./plugin/highlight/highlight.js"></script>
+    <script src="./plugin/zoom/zoom.js"></script>
+    <script src="./plugin/notes/notes.js"></script>
+    <script src="./plugin/math/math.js"></script>
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        slideNumber: true,
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath
+        ]
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {}, queryOptions);
+    </script>
+
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+</html>
