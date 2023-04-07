@@ -2,7 +2,7 @@
 
 ## AMBA APB, AHB and AXI
 
-[rodrigomelo9.github.io/digital-design](https://rodrigomelo9.github.io/digital-design/)
+[rodrigomelo9.github.io/amba](https://rodrigomelo9.github.io/amba)
 
 Rodrigo Alejandro Melo
 
@@ -19,23 +19,38 @@ It facilitates right-first-time development of multiprocessor designs, with larg
 
 ### AMBA Specs
 
-| AMBA       | AMBA2       | AMBA3           | AMBA4                             | AMBA5
-|:---:       |:---:        |:---:            |:---:                              |:---:
-|            |             | AXI3 (2003/4)   | AXI4 AXI4-Lite AXI4-Stream (2010) | AXI5 AXI5-Lite AXI5-Stream (2017/21)
-|            | AHB (1999)  | AHB-Lite (2006) |                                   | AHB5 AHB5-Lite (2015/21)
-| ASB (1996) | ASB (1996)  |                 |                                   |
-| APB (1996) | APB2 (1999) | APB3 (2003/4)   | APB4                       (2010) | APB5 (2021)
+| AMBA       | AMBA2       | AMBA3           | AMBA4                 | AMBA5
+| :---:      | :---:       | :---:           | :---:                 | :---:
+|            |             |                 | AXI4-Stream (2010)    | AXI5-Stream (2021)
+|            |             | AXI3 (2003/4)   | AXI4 AXI4-Lite (2010) | AXI5 AXI5-Lite (2017/21)
+|            | AHB (1999)  | AHB-Lite (2006) |                       | AHB5 AHB5-Lite (2015/21)
+| ASB (1996) | ASB (1996)  |                 |                       |
+| APB (1996) | APB2 (1999) | APB3 (2003/4)   | APB4           (2010) | APB5 (2021)
 <!-- .element: style="font-size: 0.5em !important;" -->
 
 > **WARNING:** the first APB and ASB are obsolete (shouldn't be used in new designs)
 <!-- .element: style="font-size: 0.4em !important;" -->
 
-Advanced eXtensible Interface                | Advanced High-performance Bus    | Advanced System Bus | Advanced Peripherals Bus
----                                          |---                               |---                  | ---
-Full: Higher performance system bus          | AHB: High Performance system bus | System bus          | Low bandwidth peripherals
-Lite: Control/Status registers               | AHB-Lite: for single masters     |                     | Control/Status registers
-Stream: High speeds unidirectional transfers |                                  |                     |
-<!-- .element: style="font-size: 0.35em !important;" -->
+> * APB: Advanced Peripherals Bus
+> * ASB: Advanced System Bus
+> * AHB: Advanced High-performance Bus
+> * AXI: Advanced eXtensible Interface
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### In this presentation
+
+* Advanced Peripherals Bus
+  * Low bandwidth peripherals
+  * Control/Status registers
+* Advanced High-performance Bus
+  * High Performance system bus
+  * Lite: single masters
+* Advanced eXtensible Interface
+  * Full: Higher performance system bus
+  * Lite: Control/Status registers
+  * Stream: High speeds unidirectional transfers
 
 ----
 
