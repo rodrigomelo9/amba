@@ -89,18 +89,6 @@ Subordinate | Agent that receives and responds to requests
 
 ----
 
-### APB-S interface
-
-![APB-S interface](images/APB-S.png)
-
-----
-
-### APB Signaling
-
-![APB Signaling](images/apb-waves.png)
-
-----
-
 ### APB5 additional signals
 
 | APB5              | Description
@@ -112,6 +100,24 @@ Subordinate | Agent that receives and responds to requests
 | PBUSER[up-to-16]  | User response attribute
 | P*CHK             | Parity (for safety)
 <!-- .element: style="font-size: 0.5em !important;" -->
+
+----
+
+### APB-S interface
+
+![APB-S interface](images/apb-s.svg)
+
+----
+
+### APB states
+
+![APB states](images/apb-states.svg)
+
+----
+
+### APB Signaling
+
+![APB Signaling](images/apb-waves.png)
 
 ---
 
