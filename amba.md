@@ -1,6 +1,5 @@
-<!-- .slide: data-background="#145A32" -->
-
 ## AMBA APB, AHB and AXI
+<!-- .slide: data-background="#145A32" -->
 
 [rodrigomelo9.github.io/amba](https://rodrigomelo9.github.io/amba)
 
@@ -28,7 +27,7 @@ It facilitates right-first-time development of multiprocessor designs, with larg
 | APB (1996) | APB2 (1999) | APB3 (2003/4)   | APB4           (2010) | APB5 (2021)
 <!-- .element: style="font-size: 0.5em !important;" -->
 
-> **WARNING:** the first APB and ASB are obsolete (shouldn't be used in new designs)
+> **WARNING:** ASB and the first APB are deprecated (shouldn't be used in new designs)
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 > * APB: Advanced Peripherals Bus
@@ -54,7 +53,7 @@ It facilitates right-first-time development of multiprocessor designs, with larg
 
 ----
 
-### Vocabulary
+### Terminology
 
 Term        | Description
 ---         |---
@@ -64,6 +63,8 @@ Bus         | Multi-bit signal (not an interface, not a channel)
 Transfer    | (aka beat) single clock cycle, qualified by a VALID/READY handshake
 Transaction | Complete communication, with one or more transfers
 Burst       | Transaction with more than one transfer
+Manager     | Agent that initiates transactions
+Subordinate | Agent that receives and responds to requests
 <!-- .element: style="font-size: 0.5em !important;" -->
 
 ---
@@ -88,9 +89,9 @@ Burst       | Transaction with more than one transfer
 
 ----
 
-### APB Signals
+### APB-S interface
 
-![APB signals](images/apb.png)
+![APB-S interface](images/APB-S.png)
 
 ----
 

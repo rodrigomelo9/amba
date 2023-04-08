@@ -6,3 +6,4 @@
 
 * [reveal-md](https://github.com/webpro/reveal-md)
 * [WaveDrom](https://wavedrom.com)
+* [Diagrams.net](https://app.diagrams.net)
