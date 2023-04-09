@@ -1,5 +1,7 @@
+<!-- ###################################################################### -->
 ## AMBA APB, AHB and AXI
 <!-- .slide: data-background="#145A32" -->
+<!-- ###################################################################### -->
 
 [rodrigomelo9.github.io/amba](https://rodrigomelo9.github.io/amba)
 
@@ -8,8 +10,9 @@ Rodrigo Alejandro Melo
 [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
 
 ---
-
+<!-- ###################################################################### -->
 ### Advanced Microcontroller Bus Architecture
+<!-- ###################################################################### -->
 
 AMBA is a freely available, globally adopted, open standard for the connection and management of functional blocks in a System-on-Chip (SoC).
 It facilitates right-first-time development of multiprocessor designs, with large numbers of controllers and peripherals.
@@ -68,38 +71,28 @@ Subordinate | Agent that receives and responds to requests
 <!-- .element: style="font-size: 0.5em !important;" -->
 
 ---
-
+<!-- ###################################################################### -->
 ### APB signals
+<!-- ###################################################################### -->
 
-| APB2         | APB3         | APB4 / APB5    | Description
-|---           |---           |---             |---
-| PCLK         | PCLK         | PCLK           | Clock
-| PRESETn      | PRESETn      | PRESETn        | Reset (active low)
-| PADDR[A-1:0] | PADDR[A-1:0] | PADDR[A-1:0]   | Address (up to 32 bits)
-| PSELx        | PSELx        | PSELx          | Selected
-| PENABLE      | PENABLE      | PENABLE        | Enabled
-| PWRITE       | PWRITE       | PWRITE         | Write operation
-| PWDATA[D-1]  | PWDATA[D-1]  | PWDATA[D-1]    | Write Data. (8, 16 or 32 bits)
-| PRDATA[D-1]  | PRDATA[D-1]  | PRDATA[D-1]    | Read Data (8, 16 or 32 bits)
-|              | PREADY       | PREADY         | Indicates the completion of a transfer
-|              | PSLVERR      | PSLVERR        | Indicates an error condition
-|              |              | PPROT[2:0]     | Normal, privileged, or secure protection level
-|              |              | PSTRB[D/8-1:0] | Write Strobe (bytes to update during a write)
+|                | APB2  | APB3  | APB4  | APB5  | Default | Description
+| ---            | :---: | :---: | :---: | :---: | :---:   | ---
+| PCLK           | Y     | Y     | Y     | Y     |         | Clock
+| PRESETn        | Y     | Y     | Y     | Y     |         | Reset (active low)
+| PADDR[A-1:0]   | Y     | Y     | Y     | Y     |         | Address (up to 32 bits)
+| PSELx          | Y     | Y     | Y     | Y     |         | Selected
+| PENABLE        | Y     | Y     | Y     | Y     |         | Enabled
+| PWRITE         | Y     | Y     | Y     | Y     |         | Write operation
+| PWDATA[D-1]    | Y     | Y     | Y     | Y     |         | Write Data. (8, 16 or 32 bits)
+| PRDATA[D-1]    | Y     | Y     | Y     | Y     |         | Read Data (8, 16 or 32 bits)
+| PREADY         |       | O     | O     | O     | 1       | Indicates the completion of a transfer
+| PSLVERR        |       | O     | O     | O     | 0       | Indicates an error condition
+| PPROT[2:0]     |       |       | O     | O     | '0      | Normal, privileged, or secure protection level
+| PSTRB[D/8-1:0] |       |       | O     | O     | '1      | Write Strobe (bytes to update during a write)
+| PWAKEUP        |       |       |       | O     |         | Wake-up
+| P*USER[]       |       |       |       | O     |         | User defined attribute
+| P*CHK          |       |       |       | O     |         | Parity (for safety-critical applications)
 <!-- .element: style="font-size: 0.4em !important;" -->
-
-----
-
-### APB5 additional signals
-
-| APB5              | Description
-|---                |---
-| PWAKEUP           | Wake-up
-| PAUSER[up-to-128] | User request attribute
-| PWUSER[up-to-D/2] | User write data attribute
-| PRUSER[up-to-D/2] | User read data attribute
-| PBUSER[up-to-16]  | User response attribute
-| P*CHK             | Parity (for safety)
-<!-- .element: style="font-size: 0.5em !important;" -->
 
 ----
 
@@ -109,19 +102,20 @@ Subordinate | Agent that receives and responds to requests
 
 ----
 
-### APB states
-
-![APB states](images/apb-states.svg)
-
-----
-
 ### APB Signaling
 
 ![APB Signaling](images/apb-waves.png)
 
----
+----
 
+### APB states
+
+![APB states](images/apb-states.svg)
+
+---
+<!-- ###################################################################### -->
 ### AHB signals
+<!-- ###################################################################### -->
 
 | AHB2          | AHB-Lite               | AHB5          | Description
 |---            |---                     |---            |---
@@ -167,8 +161,9 @@ Subordinate | Agent that receives and responds to requests
 <!-- .element: style="font-size: 0.5em !important;" -->
 
 ---
-
+<!-- ###################################################################### -->
 ### AXI signals
+<!-- ###################################################################### -->
 
 Write Address Channel    | Write Data Channel         | Read Address Channel     | Read Data Channel
 ---                      |---                         |---                       |---
@@ -214,8 +209,9 @@ xUSER    | User-defined (not recommended)
 <!-- .element: style="font-size: 0.5em !important;" -->
 
 ---
-
+<!-- ###################################################################### -->
 ### AXI-Lite signals
+<!-- ###################################################################### -->
 
 |Write Address Channel | Write Data Channel         | Read Address Channel     | Read Data Channel
 |---                   |---                         |---                       |---
@@ -233,8 +229,9 @@ xUSER    | User-defined (not recommended)
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 ---
-
+<!-- ###################################################################### -->
 ### AXI-Stream signals
+<!-- ###################################################################### -->
 
 | AXI4-Stream  | AXI5-Stream  | Description
 |---           |--            |---
