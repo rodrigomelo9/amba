@@ -21,38 +21,17 @@ It facilitates right-first-time development of multiprocessor designs, with larg
 
 ### AMBA Specs
 
-| AMBA       | AMBA2       | AMBA3           | AMBA4                 | AMBA5
-| :---:      | :---:       | :---:           | :---:                 | :---:
-|            |             |                 | AXI4-Stream (2010)    | AXI5-Stream (2021)
-|            |             | AXI3 (2003/4)   | AXI4 AXI4-Lite (2010) | AXI5 AXI5-Lite (2017/21)
-|            | AHB (1999)  | AHB-Lite (2006) |                       | AHB5 AHB5-Lite (2015/21)
-| ASB (1996) | ASB (1996)  |                 |                       |
-| APB (1996) | APB2 (1999) | APB3 (2003/4)   | APB4           (2010) | APB5 (2021)
+|                                     | AMBA          | AMBA2          | AMBA3              | AMBA4                       | AMBA5
+| :---:                               | :---:         | :---:          | :---:              | :---:                       | :---:
+|                                     |               |                |                    | AXI4-Stream<br>(2010)       | AXI5-Stream<br>(2021)
+| Advanced<br>eXtensible<br>Interface |               |                | AXI3<br>(2003/4)   | AXI4<br>AXI4-Lite<br>(2010) | AXI5<br>AXI5-Lite<br>(2017/21)
+| Advanced<br>High-performance<br>Bus |               | AHB<br>(1999)  | AHB-Lite<br>(2006) |                             | AHB5<br>AHB5-Lite<br>(2015/21)
+| Advanced<br>System<br>Bus           | ASB<br>(1996) | ASB<br>(1996)  |                    |                             |
+| Advanced<br>Peripherals<br>Bus      | APB<br>(1996) | APB2<br>(1999) | APB3<br>(2003/4)   | APB4<br>(2010)              | APB5<br>(2021)
 <!-- .element: style="font-size: 0.5em !important;" -->
 
 > **WARNING:** ASB and the first APB are deprecated (shouldn't be used in new designs)
 <!-- .element: style="font-size: 0.4em !important;" -->
-
-> * APB: Advanced Peripherals Bus
-> * ASB: Advanced System Bus
-> * AHB: Advanced High-performance Bus
-> * AXI: Advanced eXtensible Interface
-<!-- .element: style="font-size: 0.4em !important;" -->
-
-----
-
-### In this presentation
-
-* Advanced Peripherals Bus
-  * Low bandwidth peripherals
-  * Control/Status registers
-* Advanced High-performance Bus
-  * High Performance system bus
-  * Lite: single masters
-* Advanced eXtensible Interface
-  * Full: Higher performance system bus
-  * Lite: Control/Status registers
-  * Stream: High speeds unidirectional transfers
 
 ----
 
@@ -71,9 +50,22 @@ Subordinate | Agent that receives and responds to requests
 <!-- .element: style="font-size: 0.5em !important;" -->
 
 ---
+
 <!-- ###################################################################### -->
+### Advanced Peripherals Bus (APB)
+<!-- ###################################################################### -->
+
+A low-cost interface, optimized for minimal power consumption and reduced complexity.
+It is not  pipelined and is a simple, synchronous protocol.
+Every transfer takes at least two cycles to complete.
+
+Main uses:
+* Low bandwidth peripherals
+* Control/Status registers
+
+----
+
 ### APB signals
-<!-- ###################################################################### -->
 
 |                | APB2  | APB3  | APB4  | APB5  | Default | Description
 | ---            | :---: | :---: | :---: | :---: | :---:   | ---
@@ -91,7 +83,7 @@ Subordinate | Agent that receives and responds to requests
 | PSTRB[D/8-1:0] |       |       | O     | O     | '1      | Write Strobe (bytes to update during a write)
 | PWAKEUP        |       |       |       | O     |         | Wake-up
 | PxUSER[]       |       |       |       | O     |         | User defined attribute
-| PxCHK          |       |       |       | O     |         | Parity (for safety-critical applications)
+| PxCHK          |       |       |       | O     |         | Parity protection (for safety-critical applications)
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 ----
@@ -108,14 +100,27 @@ Subordinate | Agent that receives and responds to requests
 
 ----
 
-### APB states
+### APB states diagram
+
+----
+
+### APB states diagram
 
 ![APB states](images/apb-states.svg)
 
 ---
+
 <!-- ###################################################################### -->
+### Advanced High-performance Bus (AHB)
+<!-- ###################################################################### -->
+
+Main uses:
+* High Performance system bus
+* Lite: single masters
+
+----
+
 ### AHB signals
-<!-- ###################################################################### -->
 
 |               | AHB2     | AHB-Lite  | AHB5    | Default | Description
 | ---           | :---:    | :---:     | :---:   | :---:   | ---
@@ -144,13 +149,23 @@ Subordinate | Agent that receives and responds to requests
 | HEXCL         |          |           | O       | 0'b0    | Exclusive Access
 | HEXOKAY       |          |           | O       | 0'b0    | Exclusive Okay
 | HxUSER[]      |          |           | O       |         | User defined attribute
-| HxCHKx        |          |           | O       |         | Parity (for safety-critical applications)
+| HxCHKx        |          |           | O       |         | Parity protection (for safety-critical applications)
 <!-- .element: style="font-size: 0.3em !important;" -->
 
 ---
+
 <!-- ###################################################################### -->
+### Advanced eXtensible Interface (AXI)
+<!-- ###################################################################### -->
+
+Main uses:
+* Full: Higher performance system bus
+* Lite: Control/Status registers
+* Stream: High speeds unidirectional transfers
+
+----
+
 ### AXI signals
-<!-- ###################################################################### -->
 
 Write Address Channel    | Write Data Channel         | Read Address Channel     | Read Data Channel
 ---                      |---                         |---                       |---
