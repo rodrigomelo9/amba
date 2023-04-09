@@ -80,18 +80,18 @@ Subordinate | Agent that receives and responds to requests
 | PCLK           | Y     | Y     | Y     | Y     |         | Clock
 | PRESETn        | Y     | Y     | Y     | Y     |         | Reset (active low)
 | PADDR[A-1:0]   | Y     | Y     | Y     | Y     |         | Address (up to 32 bits)
-| PSELx          | Y     | Y     | Y     | Y     |         | Selected
+| PSEL           | Y     | Y     | Y     | Y     |         | Selected
 | PENABLE        | Y     | Y     | Y     | Y     |         | Enabled
 | PWRITE         | Y     | Y     | Y     | Y     |         | Write operation
 | PWDATA[D-1]    | Y     | Y     | Y     | Y     |         | Write Data. (8, 16 or 32 bits)
 | PRDATA[D-1]    | Y     | Y     | Y     | Y     |         | Read Data (8, 16 or 32 bits)
-| PREADY         |       | O     | O     | O     | 1       | Indicates the completion of a transfer
-| PSLVERR        |       | O     | O     | O     | 0       | Indicates an error condition
+| PREADY         |       | O     | O     | O     | 1'b1    | Indicates the completion of a transfer
+| PSLVERR        |       | O     | O     | O     | 1'b0    | Indicates an error condition
 | PPROT[2:0]     |       |       | O     | O     | '0      | Normal, privileged, or secure protection level
 | PSTRB[D/8-1:0] |       |       | O     | O     | '1      | Write Strobe (bytes to update during a write)
 | PWAKEUP        |       |       |       | O     |         | Wake-up
-| P*USER[]       |       |       |       | O     |         | User defined attribute
-| P*CHK          |       |       |       | O     |         | Parity (for safety-critical applications)
+| PxUSER[]       |       |       |       | O     |         | User defined attribute
+| PxCHK          |       |       |       | O     |         | Parity (for safety-critical applications)
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 ----
@@ -117,48 +117,35 @@ Subordinate | Agent that receives and responds to requests
 ### AHB signals
 <!-- ###################################################################### -->
 
-| AHB2          | AHB-Lite               | AHB5          | Description
-|---            |---                     |---            |---
-| HCLK          | HCLK                   | HCLK          | Clock
-| HRESETn       | HRESETn                | HRESETn       | Reset (active low)
-| HADDR[31:0]   | HADDR[31:0]            | HADDR[31:0]   | Address (32-bits, between 10 and 64 in AHB5)
-| HSELx         | HSELx                  | HSELx         | Selected
-| HTRANS[1:0]   | HTRANS[1:0]            | HTRANS[1:0]   | Transfer type (IDLE, BUSY, NONSEQ, SEQ)
-| HWRITE        | HWRITE                 | HWRITE        | Write operation
-| HSIZE[2:0]    | HSIZE[2:0]             | HSIZE[2:0]    | Size of the transfer (2^SIZE bytes)
-| HBURST[2:0]   | HBURST[2:0]            | HBURST[2:0]   | Burst length and address increments
-| HPROT[3:0]    | HPROT[3:0]             | HPROT[2:0]    | Normal, privileged, or secure protection level
-| HWDATA[31:0]  | HWDATA[31:0]           | HWDATA[]      | WR (8, 16, 32, 64, 128, 256, 512, 1024 bits)
-| HRDATA[31:0]  | HRDATA[31:0]           | HRDATA[]      | RD (8, 16, 32, 64, 128, 256, 512, 1024 bits)
-|               | HWSTRB[D/8-1] -- AMBA5 | HWSTRB[D/8-1] | Write Strobe (bytes to update during a write)
-| HREADY        | HREADY                 | HREADY        | (IN) other transfers completed
-| HRESP[1:0]    | HRESP                  | HRESP         | Transfer response
-| HBUSREQx      |                        |               | Bus required
-| HLOCKx        |                        |               | Locked access required
-| HGRANTx       |                        |               | Locked access has the highest priority
-| HMASTER[3:0]  |                        | HMASTER[7:0]  | Manager identifier
-| HMASTLOCK     | HMASTLOCK              | HMASTLOCK     | Current transfer is part of a locked sequence
-| HSPLITx[15:0] |                        |               | M to re-attempt a split transaction
-|               | HREADYOUT              | HREADYOUT     | (OUT) transfer has finished
-<!-- .element: style="font-size: 0.35em !important;" -->
-
-----
-
-### AHB5 additional signals
-
-| AHB5              | Description
-|---                |---
-| HNONSEC           | Indicates Non-secure transaction
-| HEXCL             | Exclusive Access
-| HEXOKAY           | Exclusive Okay
-| HAUSER[up-to-128] | User-defined request attribute
-| HWUSER[up-to-D/2] | User-defined write data attribute
-| HRUSER[up-to-D/2] | User-defined read data attribute
-| HBUSER[up-to-16]  | User-defined response attribute
-| H*CHK             | Parity (for safety)
-| HCTRLCHK1         | Parity (for safety)
-| HCTRLCHK2         | Parity (for safety)
-<!-- .element: style="font-size: 0.5em !important;" -->
+|               | AHB2     | AHB-Lite  | AHB5    | Default | Description
+| ---           | :---:    | :---:     | :---:   | :---:   | ---
+| HCLK          | Y        | Y         | Y       |         | Clock
+| HRESETn       | Y        | Y         | Y       |         | Reset (active low)
+| HADDR[]       | Y        | Y         | Y       |         | Address (32-bits, between 10 and 64 in AHB5)
+| HSEL          | Y        | Y         | Y       |         | Selected
+| HTRANS[1:0]   | Y        | Y         | Y       |         | Transfer type (IDLE, BUSY, NONSEQ, SEQ)
+| HWRITE        | Y        | Y         | Y       |         | Write operation
+| HSIZE[2:0]    | Y        | Y         | Y       |         | Size of the transfer (2^SIZE bytes)
+| HBURST[2:0]   | O        | O         | O       | 2'b01   | Burst length and address increments
+| HPROT[]       | O [3:0]  | O [3:0]   | O [2:0] | 3'b010  | Normal, privileged, or secure protection level
+| HWDATA[]      | Y [31:0] | Y [31:0]  | Y       |         | WR (8, 16, 32, 64, 128, 256, 512, 1024 bits)
+| HRDATA[]      | Y [31:0] | Y [31:0]  | Y       |         | RD (8, 16, 32, 64, 128, 256, 512, 1024 bits)
+| HWSTRB[D/8-1] |          | O (AMBA5) | O       | '1      | Write Strobe (bytes to update during a write)
+| HREADY        | Y        | Y         | Y       |         | (IN) other transfers completed
+| HRESP         | Y [1:0]  | Y         | Y       |         | Transfer response
+| HBUSREQx      | Y        |           |         |         | Bus required
+| HLOCKx        | Y        |           |         |         | Locked access required
+| HGRANTx       | Y        |           |         |         | Locked access has the highest priority
+| HMASTER[]     | O [3:0]  |           | O [7:0] | '0      | Manager identifier
+| HMASTLOCK     | O        | O         | O       | 1'b0    | Current transfer is part of a locked sequence
+| HSPLITx[15:0] | Y        |           |         |         | M to re-attempt a split transaction
+| HREADYOUT     |          | Y         | Y       |         | (OUT) transfer has finished
+| HNONSEC       |          |           | O       | 0'b0    | Indicates Non-secure transaction
+| HEXCL         |          |           | O       | 0'b0    | Exclusive Access
+| HEXOKAY       |          |           | O       | 0'b0    | Exclusive Okay
+| HxUSER[]      |          |           | O       |         | User defined attribute
+| HxCHKx        |          |           | O       |         | Parity (for safety-critical applications)
+<!-- .element: style="font-size: 0.3em !important;" -->
 
 ---
 <!-- ###################################################################### -->
