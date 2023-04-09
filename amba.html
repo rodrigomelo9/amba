@@ -15,55 +15,38 @@
   </head>
   <body>
     <div class="reveal">
-      <div class="slides"><section  data-markdown><script type="text/template"><!-- .slide: data-background="#145A32" -->
-
+      <div class="slides"><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
 ## AMBA APB, AHB and AXI
+<!-- .slide: data-background="#145A32" -->
+<!-- ###################################################################### -->
 
 [rodrigomelo9.github.io/amba](https://rodrigomelo9.github.io/amba)
 
 Rodrigo Alejandro Melo
 
 [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
-</script></section><section ><section data-markdown><script type="text/template">
+</script></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### Advanced Microcontroller Bus Architecture
+<!-- ###################################################################### -->
 
 AMBA is a freely available, globally adopted, open standard for the connection and management of functional blocks in a System-on-Chip (SoC).
 It facilitates right-first-time development of multiprocessor designs, with large numbers of controllers and peripherals.
 </script></section><section data-markdown><script type="text/template">
 ### AMBA Specs
 
-| AMBA       | AMBA2       | AMBA3           | AMBA4                 | AMBA5
-| :---:      | :---:       | :---:           | :---:                 | :---:
-|            |             |                 | AXI4-Stream (2010)    | AXI5-Stream (2021)
-|            |             | AXI3 (2003/4)   | AXI4 AXI4-Lite (2010) | AXI5 AXI5-Lite (2017/21)
-|            | AHB (1999)  | AHB-Lite (2006) |                       | AHB5 AHB5-Lite (2015/21)
-| ASB (1996) | ASB (1996)  |                 |                       |
-| APB (1996) | APB2 (1999) | APB3 (2003/4)   | APB4           (2010) | APB5 (2021)
+|                                     | AMBA          | AMBA2          | AMBA3              | AMBA4                       | AMBA5
+| :---:                               | :---:         | :---:          | :---:              | :---:                       | :---:
+|                                     |               |                |                    | AXI4-Stream<br>(2010)       | AXI5-Stream<br>(2021)
+| Advanced<br>eXtensible<br>Interface |               |                | AXI3<br>(2003/4)   | AXI4<br>AXI4-Lite<br>(2010) | AXI5<br>AXI5-Lite<br>(2017/21)
+| Advanced<br>High-performance<br>Bus |               | AHB<br>(1999)  | AHB-Lite<br>(2006) |                             | AHB5<br>AHB5-Lite<br>(2015/21)
+| Advanced<br>System<br>Bus           | ASB<br>(1996) | ASB<br>(1996)  |                    |                             |
+| Advanced<br>Peripherals<br>Bus      | APB<br>(1996) | APB2<br>(1999) | APB3<br>(2003/4)   | APB4<br>(2010)              | APB5<br>(2021)
 <!-- .element: style="font-size: 0.5em !important;" -->
 
-> **WARNING:** the first APB and ASB are obsolete (shouldn't be used in new designs)
-<!-- .element: style="font-size: 0.4em !important;" -->
-
-> * APB: Advanced Peripherals Bus
-> * ASB: Advanced System Bus
-> * AHB: Advanced High-performance Bus
-> * AXI: Advanced eXtensible Interface
+> **WARNING:** ASB and the first APB are deprecated (shouldn't be used in new designs)
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
-### In this presentation
-
-* Advanced Peripherals Bus
-  * Low bandwidth peripherals
-  * Control/Status registers
-* Advanced High-performance Bus
-  * High Performance system bus
-  * Lite: single masters
-* Advanced eXtensible Interface
-  * Full: Higher performance system bus
-  * Lite: Control/Status registers
-  * Stream: High speeds unidirectional transfers
-</script></section><section data-markdown><script type="text/template">
-### Vocabulary
+### Terminology
 
 Term        | Description
 ---         |---
@@ -73,89 +56,106 @@ Bus         | Multi-bit signal (not an interface, not a channel)
 Transfer    | (aka beat) single clock cycle, qualified by a VALID/READY handshake
 Transaction | Complete communication, with one or more transfers
 Burst       | Transaction with more than one transfer
+Manager     | Agent that initiates transactions
+Subordinate | Agent that receives and responds to requests
 <!-- .element: style="font-size: 0.5em !important;" -->
 </script></section></section><section ><section data-markdown><script type="text/template">
+<!-- ###################################################################### -->
+### Advanced Peripherals Bus (APB)
+<!-- ###################################################################### -->
+
+A low-cost interface, optimized for minimal power consumption and reduced complexity.
+It is not  pipelined and is a simple, synchronous protocol.
+Every transfer takes at least two cycles to complete.
+
+Main uses:
+* Low bandwidth peripherals
+* Control/Status registers
+</script></section><section data-markdown><script type="text/template">
 ### APB signals
 
-| APB2         | APB3         | APB4 / APB5    | Description
-|---           |---           |---             |---
-| PCLK         | PCLK         | PCLK           | Clock
-| PRESETn      | PRESETn      | PRESETn        | Reset (active low)
-| PADDR[A-1:0] | PADDR[A-1:0] | PADDR[A-1:0]   | Address (up to 32 bits)
-| PSELx        | PSELx        | PSELx          | Selected
-| PENABLE      | PENABLE      | PENABLE        | Enabled
-| PWRITE       | PWRITE       | PWRITE         | Write operation
-| PWDATA[D-1]  | PWDATA[D-1]  | PWDATA[D-1]    | Write Data. (8, 16 or 32 bits)
-| PRDATA[D-1]  | PRDATA[D-1]  | PRDATA[D-1]    | Read Data (8, 16 or 32 bits)
-|              | PREADY       | PREADY         | Indicates the completion of a transfer
-|              | PSLVERR      | PSLVERR        | Indicates an error condition
-|              |              | PPROT[2:0]     | Normal, privileged, or secure protection level
-|              |              | PSTRB[D/8-1:0] | Write Strobe (bytes to update during a write)
+|                | APB2  | APB3  | APB4  | APB5  | Default | Description
+| ---            | :---: | :---: | :---: | :---: | :---:   | ---
+| PCLK           | Y     | Y     | Y     | Y     |         | Clock
+| PRESETn        | Y     | Y     | Y     | Y     |         | Reset (active low)
+| PADDR[A-1:0]   | Y     | Y     | Y     | Y     |         | Address (up to 32 bits)
+| PSEL           | Y     | Y     | Y     | Y     |         | Selected
+| PENABLE        | Y     | Y     | Y     | Y     |         | Enabled
+| PWRITE         | Y     | Y     | Y     | Y     |         | Write operation
+| PWDATA[D-1]    | Y     | Y     | Y     | Y     |         | Write Data. (8, 16 or 32 bits)
+| PRDATA[D-1]    | Y     | Y     | Y     | Y     |         | Read Data (8, 16 or 32 bits)
+| PREADY         |       | O     | O     | O     | 1'b1    | Indicates the completion of a transfer
+| PSLVERR        |       | O     | O     | O     | 1'b0    | Indicates an error condition
+| PPROT[2:0]     |       |       | O     | O     | '0      | Normal, privileged, or secure protection level
+| PSTRB[D/8-1:0] |       |       | O     | O     | '1      | Write Strobe (bytes to update during a write)
+| PWAKEUP        |       |       |       | O     |         | Wake-up
+| PxUSER[]       |       |       |       | O     |         | User defined attribute
+| PxCHK          |       |       |       | O     |         | Parity protection (for safety-critical applications)
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
-### APB Signals
+### APB-S interface
 
-![APB signals](images/apb.png)
+![APB-S interface](images/apb-s.svg)
 </script></section><section data-markdown><script type="text/template">
 ### APB Signaling
 
 ![APB Signaling](images/apb-waves.png)
 </script></section><section data-markdown><script type="text/template">
-### APB5 additional signals
+### APB states diagram
+</script></section><section data-markdown><script type="text/template">
+### APB states diagram
 
-| APB5              | Description
-|---                |---
-| PWAKEUP           | Wake-up
-| PAUSER[up-to-128] | User request attribute
-| PWUSER[up-to-D/2] | User write data attribute
-| PRUSER[up-to-D/2] | User read data attribute
-| PBUSER[up-to-16]  | User response attribute
-| P*CHK             | Parity (for safety)
-<!-- .element: style="font-size: 0.5em !important;" -->
+![APB states](images/apb-states.svg)
 </script></section></section><section ><section data-markdown><script type="text/template">
+<!-- ###################################################################### -->
+### Advanced High-performance Bus (AHB)
+<!-- ###################################################################### -->
+
+Main uses:
+* High Performance system bus
+* Lite: single masters
+</script></section><section data-markdown><script type="text/template">
 ### AHB signals
 
-| AHB2          | AHB-Lite               | AHB5          | Description
-|---            |---                     |---            |---
-| HCLK          | HCLK                   | HCLK          | Clock
-| HRESETn       | HRESETn                | HRESETn       | Reset (active low)
-| HADDR[31:0]   | HADDR[31:0]            | HADDR[31:0]   | Address (32-bits, between 10 and 64 in AHB5)
-| HSELx         | HSELx                  | HSELx         | Selected
-| HTRANS[1:0]   | HTRANS[1:0]            | HTRANS[1:0]   | Transfer type (IDLE, BUSY, NONSEQ, SEQ)
-| HWRITE        | HWRITE                 | HWRITE        | Write operation
-| HSIZE[2:0]    | HSIZE[2:0]             | HSIZE[2:0]    | Size of the transfer (2^SIZE bytes)
-| HBURST[2:0]   | HBURST[2:0]            | HBURST[2:0]   | Burst length and address increments
-| HPROT[3:0]    | HPROT[3:0]             | HPROT[2:0]    | Normal, privileged, or secure protection level
-| HWDATA[31:0]  | HWDATA[31:0]           | HWDATA[]      | WR (8, 16, 32, 64, 128, 256, 512, 1024 bits)
-| HRDATA[31:0]  | HRDATA[31:0]           | HRDATA[]      | RD (8, 16, 32, 64, 128, 256, 512, 1024 bits)
-|               | HWSTRB[D/8-1] -- AMBA5 | HWSTRB[D/8-1] | Write Strobe (bytes to update during a write)
-| HREADY        | HREADY                 | HREADY        | (IN) other transfers completed
-| HRESP[1:0]    | HRESP                  | HRESP         | Transfer response
-| HBUSREQx      |                        |               | Bus required
-| HLOCKx        |                        |               | Locked access required
-| HGRANTx       |                        |               | Locked access has the highest priority
-| HMASTER[3:0]  |                        | HMASTER[7:0]  | Manager identifier
-| HMASTLOCK     | HMASTLOCK              | HMASTLOCK     | Current transfer is part of a locked sequence
-| HSPLITx[15:0] |                        |               | M to re-attempt a split transaction
-|               | HREADYOUT              | HREADYOUT     | (OUT) transfer has finished
-<!-- .element: style="font-size: 0.35em !important;" -->
-</script></section><section data-markdown><script type="text/template">
-### AHB5 additional signals
-
-| AHB5              | Description
-|---                |---
-| HNONSEC           | Indicates Non-secure transaction
-| HEXCL             | Exclusive Access
-| HEXOKAY           | Exclusive Okay
-| HAUSER[up-to-128] | User-defined request attribute
-| HWUSER[up-to-D/2] | User-defined write data attribute
-| HRUSER[up-to-D/2] | User-defined read data attribute
-| HBUSER[up-to-16]  | User-defined response attribute
-| H*CHK             | Parity (for safety)
-| HCTRLCHK1         | Parity (for safety)
-| HCTRLCHK2         | Parity (for safety)
-<!-- .element: style="font-size: 0.5em !important;" -->
+|               | AHB2     | AHB-Lite  | AHB5    | Default | Description
+| ---           | :---:    | :---:     | :---:   | :---:   | ---
+| HCLK          | Y        | Y         | Y       |         | Clock
+| HRESETn       | Y        | Y         | Y       |         | Reset (active low)
+| HADDR[]       | Y        | Y         | Y       |         | Address (32-bits, between 10 and 64 in AHB5)
+| HSEL          | Y        | Y         | Y       |         | Selected
+| HTRANS[1:0]   | Y        | Y         | Y       |         | Transfer type (IDLE, BUSY, NONSEQ, SEQ)
+| HWRITE        | Y        | Y         | Y       |         | Write operation
+| HSIZE[2:0]    | Y        | Y         | Y       |         | Size of the transfer (2^SIZE bytes)
+| HBURST[2:0]   | O        | O         | O       | 2'b01   | Burst length and address increments
+| HPROT[]       | O [3:0]  | O [3:0]   | O [2:0] | 3'b010  | Normal, privileged, or secure protection level
+| HWDATA[]      | Y [31:0] | Y [31:0]  | Y       |         | WR (8, 16, 32, 64, 128, 256, 512, 1024 bits)
+| HRDATA[]      | Y [31:0] | Y [31:0]  | Y       |         | RD (8, 16, 32, 64, 128, 256, 512, 1024 bits)
+| HWSTRB[D/8-1] |          | O (AMBA5) | O       | '1      | Write Strobe (bytes to update during a write)
+| HREADY        | Y        | Y         | Y       |         | (IN) other transfers completed
+| HRESP         | Y [1:0]  | Y         | Y       |         | Transfer response
+| HBUSREQx      | Y        |           |         |         | Bus required
+| HLOCKx        | Y        |           |         |         | Locked access required
+| HGRANTx       | Y        |           |         |         | Locked access has the highest priority
+| HMASTER[]     | O [3:0]  |           | O [7:0] | '0      | Manager identifier
+| HMASTLOCK     | O        | O         | O       | 1'b0    | Current transfer is part of a locked sequence
+| HSPLITx[15:0] | Y        |           |         |         | M to re-attempt a split transaction
+| HREADYOUT     |          | Y         | Y       |         | (OUT) transfer has finished
+| HNONSEC       |          |           | O       | 0'b0    | Indicates Non-secure transaction
+| HEXCL         |          |           | O       | 0'b0    | Exclusive Access
+| HEXOKAY       |          |           | O       | 0'b0    | Exclusive Okay
+| HxUSER[]      |          |           | O       |         | User defined attribute
+| HxCHKx        |          |           | O       |         | Parity protection (for safety-critical applications)
+<!-- .element: style="font-size: 0.3em !important;" -->
 </script></section></section><section ><section data-markdown><script type="text/template">
+<!-- ###################################################################### -->
+### Advanced eXtensible Interface (AXI)
+<!-- ###################################################################### -->
+
+Main uses:
+* Full: Higher performance system bus
+* Lite: Control/Status registers
+* Stream: High speeds unidirectional transfers
+</script></section><section data-markdown><script type="text/template">
 ### AXI signals
 
 Write Address Channel    | Write Data Channel         | Read Address Channel     | Read Data Channel
@@ -198,8 +198,9 @@ AxREGION | Up to 16 regions for the address decode
 xID      | Transaction identifiers (ordering)
 xUSER    | User-defined (not recommended)
 <!-- .element: style="font-size: 0.5em !important;" -->
-</script></section></section><section  data-markdown><script type="text/template">
+</script></section></section><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AXI-Lite signals
+<!-- ###################################################################### -->
 
 |Write Address Channel | Write Data Channel         | Read Address Channel     | Read Data Channel
 |---                   |---                         |---                       |---
@@ -215,8 +216,9 @@ xUSER    | User-defined (not recommended)
 
 > AXI5-lite: several signals added, for parity and more flexibility on bus width and ordering
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section><section  data-markdown><script type="text/template">
+</script></section><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AXI-Stream signals
+<!-- ###################################################################### -->
 
 | AXI4-Stream  | AXI5-Stream  | Description
 |---           |--            |---
