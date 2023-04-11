@@ -88,13 +88,13 @@ Main uses:
 
 ----
 
-### APB-S interface
+### APB4-S interface
 
 ![APB-S interface](images/apb-s.svg)
 
 ----
 
-### APB Signaling
+### APB4 Signaling
 
 ![APB Signaling](images/apb-waves.png)
 
@@ -102,11 +102,48 @@ Main uses:
 
 ### APB states diagram
 
+![APB states](images/apb-states.svg)
+
 ----
 
-### APB states diagram
+### APB - PSTRB
 
-![APB states](images/apb-states.svg)
+* Enables sparse data transfer on the write data bus
+* There is one bit per each byte of PWDATA
+  * PSTRB[n] -> PWDATA[(8n + 7):(8n)]
+* When asserted HIGH, the corresponding byte of PWDATA contains valid information
+
+> **ATTENTION:** during read transfers, all the bits of PSTRB **must** be driven LOW
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### APB - PSLVERR
+
+* Can be used to indicate an error condition
+  * Error, unsupported, timeout, etc
+* Considered valid during the last cycle of a transfer (it is recommended, but not required, to be driven LOW in other cases)
+
+> **ATTENTION:** transactions with an error might, or not, have changed the state of the peripheral
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### APB - PPROT
+
+* PPROT[0]: Normal or Privileged
+* PPROT[1]: Secure or Non-secure
+* PPROT[2]: Data or Instruction
+
+> **ATTENTION:** the primary use of PPROT is as an identifier for Secure or Non-secure transactions (it is acceptable to use different interpretations for PPROT[0] and PPROT[2])
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+> **WARNING:** PPROT[2] is provided as a hint, but might not be accurate in all cases
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### Design considerations
 
 ---
 
