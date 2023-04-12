@@ -143,7 +143,15 @@ Main uses:
 
 ----
 
-### Design considerations
+### APB - Validity rules
+
+* PSEL must be always valid
+* PADDR, PPROT, PENABLE, PWRITE, PSTRB and PWDATA must be valid when PSEL is asserted
+* PREADY must be valid when PSEL, and PENABLE are asserted
+* PRDATA, and PSLVERR must be valid when PSEL, PENABLE and PREADY are asserted
+
+> **RECOMMENDATION:** signals which are not required to be valid should be driven to zero
+<!-- .element: style="font-size: 0.4em !important;" -->
 
 ---
 
