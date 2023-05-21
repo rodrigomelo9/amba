@@ -223,8 +223,13 @@ Main uses:
 | HxCHKx        |          |           | O       |         | Parity protection (for safety-critical applications)
 <!-- .element: style="font-size: 0.3em !important;" -->
 
----
+----
 
+### AHB interface
+
+![AHB interface](images/ahb.svg)
+
+---
 <!-- ###################################################################### -->
 ### Advanced eXtensible Interface (AXI)
 <!-- ###################################################################### -->
