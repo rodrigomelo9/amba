@@ -225,7 +225,7 @@ Main uses:
 
 ----
 
-### AHB interface
+### AHB-Lite interfaces
 
 ![AHB interface](images/ahb.svg)
 
@@ -264,6 +264,12 @@ AWREADY                  | BREADY                     | AWREADY                 
 > * AXI4: removed WID, added AxQOS, AxREGION and xUSER.
 > * AXI5: several signals added (not only parity)
 <!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### AXI4 interface
+
+![AXI4 interface](images/axi.svg)
 
 ----
 
