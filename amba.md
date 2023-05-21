@@ -312,6 +312,12 @@ xUSER    | User-defined (not recommended)
 > AXI5-lite: several signals added, for parity and more flexibility on bus width and ordering
 <!-- .element: style="font-size: 0.4em !important;" -->
 
+----
+
+### AXI4-Lite interface
+
+![AXI4-Lite interface](images/axi-lite.svg)
+
 ---
 <!-- ###################################################################### -->
 ### AXI-Stream signals
