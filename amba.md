@@ -49,6 +49,15 @@ Manager     | Agent that initiates transactions
 Subordinate | Agent that receives and responds to requests
 <!-- .element: style="font-size: 0.5em !important;" -->
 
+----
+
+### General considerations
+
+* All signals are sampled at the rising edge of xCLK.
+* xRESETn is the only active low signal.
+* xADDR indicates a byte address.
+* Read and write data buses must have the same width.
+
 ---
 
 <!-- ###################################################################### -->
@@ -63,6 +72,9 @@ Main uses:
 * Low bandwidth peripherals
 * Control/Status registers
 
+> Transfers are typically initiated by a bridge (Requester), and a peripheral interface (Completer) responds.
+<!-- .element: style="font-size: 0.4em !important;" -->
+
 ----
 
 ### APB signals
@@ -70,10 +82,10 @@ Main uses:
 |                | APB2  | APB3  | APB4  | APB5  | Default | Description
 | ---            | :---: | :---: | :---: | :---: | :---:   | ---
 | PCLK           | Y     | Y     | Y     | Y     |         | Clock
-| PRESETn        | Y     | Y     | Y     | Y     |         | Reset (active low)
+| PRESETn        | Y     | Y     | Y     | Y     |         | Reset
 | PADDR[A-1:0]   | Y     | Y     | Y     | Y     |         | Address (up to 32 bits)
-| PSEL           | Y     | Y     | Y     | Y     |         | Selected
-| PENABLE        | Y     | Y     | Y     | Y     |         | Enabled
+| PSELx          | Y     | Y     | Y     | Y     |         | Completer x selected
+| PENABLE        | Y     | Y     | Y     | Y     |         | Enable
 | PWRITE         | Y     | Y     | Y     | Y     |         | Write operation
 | PWDATA[D-1]    | Y     | Y     | Y     | Y     |         | Write Data. (8, 16 or 32 bits)
 | PRDATA[D-1]    | Y     | Y     | Y     | Y     |         | Read Data (8, 16 or 32 bits)
@@ -100,9 +112,13 @@ Main uses:
 
 ----
 
-### APB states diagram
+### Operating States
 
 ![APB states](images/apb-states.svg)
+
+> When a transfer is required, the interface moves into the SETUP state, where the appropriate PSELx is asserted.
+> The interface remains in this state for one clock cycle and always moves to the ACCESS state, where PENABLE is asserted.
+<!-- .element: style="font-size: 0.4em !important;" -->
 
 ----
 
@@ -114,17 +130,6 @@ Main uses:
 * When asserted HIGH, the corresponding byte of PWDATA contains valid information
 
 > **ATTENTION:** during read transfers, all the bits of PSTRB **must** be driven LOW
-<!-- .element: style="font-size: 0.4em !important;" -->
-
-----
-
-### APB - PSLVERR
-
-* Can be used to indicate an error condition
-  * Error, unsupported, timeout, etc
-* Considered valid during the last cycle of a transfer (it is recommended, but not required, to be driven LOW in other cases)
-
-> **ATTENTION:** transactions with an error might, or not, have changed the state of the peripheral
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 ----
@@ -143,6 +148,21 @@ Main uses:
 
 ----
 
+### APB - PREADY
+
+* Completer can use PREADY to extend (introduce wait states) transfers.
+* Peripherals with fixed two-cycle access can set PREADY always HIGH.
+
+----
+
+### APB - PSLVERR
+
+* Can be used to indicate an ERROR condition (error, unsupported, timeout, etc).
+* A WRITE transaction with ERROR, might or might not have updated the state of the peripheral.
+* A READ transaction with ERROR, might or might not provide valid data.
+
+----
+
 ### APB - Validity rules
 
 * PSEL must be always valid
@@ -152,6 +172,12 @@ Main uses:
 
 > **RECOMMENDATION:** signals which are not required to be valid should be driven to zero
 <!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### Other considerations
+
+PADDR can be unaligned, but the result is UNPREDICTABLE (Completer may utilize the unaligned address, aligned address, or indicate an error response).
 
 ---
 
@@ -170,7 +196,7 @@ Main uses:
 |               | AHB2     | AHB-Lite  | AHB5    | Default | Description
 | ---           | :---:    | :---:     | :---:   | :---:   | ---
 | HCLK          | Y        | Y         | Y       |         | Clock
-| HRESETn       | Y        | Y         | Y       |         | Reset (active low)
+| HRESETn       | Y        | Y         | Y       |         | Reset
 | HADDR[]       | Y        | Y         | Y       |         | Address (32-bits, between 10 and 64 in AHB5)
 | HSEL          | Y        | Y         | Y       |         | Selected
 | HTRANS[1:0]   | Y        | Y         | Y       |         | Transfer type (IDLE, BUSY, NONSEQ, SEQ)
@@ -283,7 +309,7 @@ xUSER    | User-defined (not recommended)
 | AXI4-Stream  | AXI5-Stream  | Description
 |---           |--            |---
 | ACLK         | ACLK         | Clock
-| ARESETn      | ARESETn      | Reset (active low)
+| ARESETn      | ARESETn      | Reset
 | TVALID       | TVALID       | Valid
 | TREADY       | TREADY       | Ready
 | TDATA[D-1:0] | TDATA[D-1:0] | D: 8, 16, 32, 64, 128, 256, 512, 1024 (bits)
@@ -296,6 +322,39 @@ xUSER    | User-defined (not recommended)
 |              | TWAKEUP      | Wake-up
 |              | T*CHK        | Parity (for safety)
 <!-- .element: style="font-size: 0.5em !important;" -->
+
+---
+<!-- ###################################################################### -->
+### Interconnect
+<!-- ###################################################################### -->
+
+----
+
+### Buses
+
+----
+
+### Crossbar switches
+
+----
+
+### Network-on-Chip (NoC)
+
+---
+<!-- ###################################################################### -->
+### AMBA5 parity signals
+<!-- ###################################################################### -->
+
+<!-- diagram about interconnect protection -->
+
+---
+<!-- ###################################################################### -->
+### Last considerations
+<!-- ###################################################################### -->
+
+----
+
+### Multiple interfaces per device
 
 ---
 <!-- ###################################################################### -->
