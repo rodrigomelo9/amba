@@ -373,6 +373,8 @@ xUSER    | User-defined (not recommended)
 
 ### Multiple interfaces per device
 
+![DMA example](images/dma-example.svg)
+
 ---
 <!-- ###################################################################### -->
 # Questions?
