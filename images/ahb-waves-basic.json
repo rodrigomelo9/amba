@@ -1,0 +1,14 @@
+{
+  signal: [
+    {name: 'HCLK',        wave: 'p....|......|....|......', period: 1 },
+    {name: 'HRESETn',     wave: '01...|......|....|......'},
+    {name: 'HSEL',        wave: '0.1..|......|....|......'},
+    {name: 'HTRANS[1:0]', wave: '2.22.|.22...|.22.|.22...', data: "I N I N I N I N I"},
+    {name: 'HADDR[ ]',    wave: 'x.22x|.22..x|.22x|.22..x', data: "A1 - A2 - A1 - A2 -"},
+    {name: 'HWRITE',      wave: 'x.12x|.12..x|.02x|.02..x', data: "- - - -"},
+    {name: 'HWDATA[ ]',   wave: 'x.22x|.22..x|....|......', data: "- D1 - D2"},
+    {name: 'HRDATA[ ]',   wave: 'x....|......|..2x|....2x', data: "D1 D2"},
+    {name: 'HREADY',      wave: 'x.11x|.10.1x|.11x|.10.1x'},
+  ],
+  foot: {text: ['tspan', '1. Write with no wait states | 2. Write with wait states | 3. Read with no wait states | 4. Read with wait states']}
+}

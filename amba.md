@@ -198,7 +198,7 @@ Main uses:
 | HCLK          | Y        | Y         | Y       |         | Clock
 | HRESETn       | Y        | Y         | Y       |         | Reset
 | HADDR[]       | Y        | Y         | Y       |         | Address (32-bits, between 10 and 64 in AHB5)
-| HSEL          | Y        | Y         | Y       |         | Selected
+| HSELx         | Y        | Y         | Y       |         | Selected (combinatorial decode of the address bus)
 | HTRANS[1:0]   | Y        | Y         | Y       |         | Transfer type (IDLE, BUSY, NONSEQ, SEQ)
 | HWRITE        | Y        | Y         | Y       |         | Write operation
 | HSIZE[2:0]    | Y        | Y         | Y       |         | Size of the transfer (2^SIZE bytes)
@@ -228,6 +228,12 @@ Main uses:
 ### AHB-Lite interfaces
 
 ![AHB interface](images/ahb.svg)
+
+----
+
+### AHB-Lite Signaling (basic transfers)
+
+![AHB basic signaling](images/ahb-waves-basic.png)
 
 ---
 <!-- ###################################################################### -->
