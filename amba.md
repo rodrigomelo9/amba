@@ -233,7 +233,16 @@ Main uses:
 
 ### AHB-Lite Signaling (basic transfers)
 
-![AHB basic signaling](images/ahb-waves-basic.png)
+![AHB basic transfers signaling](images/ahb-waves-basic.png)
+
+----
+
+### AHB-Lite Signaling (multiple transfers)
+
+![AHB multiple transfers signaling](images/ahb-waves-multi.png)
+
+> Extending the data phase of transfer B has the effect of extending the address phase of transfer C.
+<!-- .element: style="font-size: 0.4em !important;" -->
 
 ---
 <!-- ###################################################################### -->

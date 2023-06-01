@@ -1,0 +1,17 @@
+{
+  signal: [
+    {name: 'HCLK',        wave: 'p......', period: 1 },
+    {name: 'HADDR[ ]',    wave: 'x222.x.', data: "A B C"},
+    {name: 'HWRITE',      wave: 'x101.x.'},
+    {name: 'HWDATA[ ]',   wave: 'x222.2x', data: "- A - C"},
+    {name: 'HRDATA[ ]',   wave: 'x...2x.', data: "B"},
+    {name: 'HREADY',      wave: 'x11011x'},
+    {                     node: '.ABCDEF'},
+    {                     node: '.GHIJKL'},
+    {                     node: '.MNOPQR'},
+  ],
+  edge: [
+    'A+B Address phase A', 'B+C Data phase A', 'H+I Address phase B', 'I+K Data phase B', 'O+Q Address phase C', 'Q+R Data phase C'
+  ],
+  config: { hscale: 3 }
+}
