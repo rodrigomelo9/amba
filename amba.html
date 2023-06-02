@@ -27,6 +27,7 @@ Rodrigo Alejandro Melo
 [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
 </script></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### Advanced Microcontroller Bus Architecture
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 AMBA is a freely available, globally adopted, open standard for the connection and management of functional blocks in a System-on-Chip (SoC).
@@ -68,7 +69,8 @@ Subordinate | Agent that receives and responds to requests
 * Read and write data buses must have the same width.
 </script></section></section><section ><section data-markdown><script type="text/template">
 <!-- ###################################################################### -->
-### Advanced Peripherals Bus (APB)
+### APB - Advanced Peripherals Bus
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 A low-cost interface, optimized for minimal power consumption and reduced complexity.
@@ -111,15 +113,18 @@ Main uses:
 
 ![APB Signaling](images/apb-waves.png)
 </script></section><section data-markdown><script type="text/template">
-### Operating States
+### APB3 - PREADY
 
-![APB states](images/apb-states.svg)
-
-> When a transfer is required, the interface moves into the SETUP state, where the appropriate PSELx is asserted.
-> The interface remains in this state for one clock cycle and always moves to the ACCESS state, where PENABLE is asserted.
-<!-- .element: style="font-size: 0.4em !important;" -->
+* Completer can use PREADY to extend (introduce wait states) transfers.
+* Peripherals with fixed two-cycle access can set PREADY always HIGH.
 </script></section><section data-markdown><script type="text/template">
-### APB - PSTRB
+### APB3 - PSLVERR
+
+* Can be used to indicate an ERROR condition (error, unsupported, timeout, etc).
+* A WRITE transaction with ERROR, might or might not have updated the state of the peripheral.
+* A READ transaction with ERROR, might or might not provide valid data.
+</script></section><section data-markdown><script type="text/template">
+### APB4 - PSTRB
 
 * Enables sparse data transfer on the write data bus
 * There is one bit per each byte of PWDATA
@@ -129,7 +134,7 @@ Main uses:
 > **ATTENTION:** during read transfers, all the bits of PSTRB **must** be driven LOW
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
-### APB - PPROT
+### APB4 - PPROT
 
 * PPROT[0]: Normal or Privileged
 * PPROT[1]: Secure or Non-secure
@@ -141,18 +146,22 @@ Main uses:
 > **WARNING:** PPROT[2] is provided as a hint, but might not be accurate in all cases
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
-### APB - PREADY
+### APB design considerations - Unaligned transfers
+<!-- .slide: data-background="yellow" -->
 
-* Completer can use PREADY to extend (introduce wait states) transfers.
-* Peripherals with fixed two-cycle access can set PREADY always HIGH.
+PADDR can be unaligned, but the result is UNPREDICTABLE (Completer may utilize the unaligned address, aligned address, or indicate an error response).
 </script></section><section data-markdown><script type="text/template">
-### APB - PSLVERR
+### APB design considerations - Operating States
+<!-- .slide: data-background="yellow" -->
 
-* Can be used to indicate an ERROR condition (error, unsupported, timeout, etc).
-* A WRITE transaction with ERROR, might or might not have updated the state of the peripheral.
-* A READ transaction with ERROR, might or might not provide valid data.
+![APB states](images/apb-states.svg)
+
+> When a transfer is required, the interface moves into the SETUP state, where the appropriate PSELx is asserted.
+> The interface remains in this state for one clock cycle and always moves to the ACCESS state, where PENABLE is asserted.
+<!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
-### APB - Validity rules
+### APB design considerations - Validity rules
+<!-- .slide: data-background="yellow" -->
 
 * PSEL must be always valid
 * PADDR, PPROT, PENABLE, PWRITE, PSTRB and PWDATA must be valid when PSEL is asserted
@@ -161,13 +170,10 @@ Main uses:
 
 > **RECOMMENDATION:** signals which are not required to be valid should be driven to zero
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section><section data-markdown><script type="text/template">
-### Other considerations
-
-PADDR can be unaligned, but the result is UNPREDICTABLE (Completer may utilize the unaligned address, aligned address, or indicate an error response).
 </script></section></section><section ><section data-markdown><script type="text/template">
 <!-- ###################################################################### -->
-### Advanced High-performance Bus (AHB)
+### AHB - Advanced High-performance Bus
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 Main uses:
@@ -220,8 +226,31 @@ Main uses:
 
 > Extending the data phase of transfer B has the effect of extending the address phase of transfer C.
 <!-- .element: style="font-size: 0.4em !important;" -->
+</script></section><section data-markdown><script type="text/template">
+### AHB - HTRANS (transfer types)
+</script></section><section data-markdown><script type="text/template">
+### AHB - HSIZE (transfer size)
+</script></section><section data-markdown><script type="text/template">
+### AHB - HBURST (burst types)
+</script></section><section data-markdown><script type="text/template">
+### AHB - Burst operation
+</script></section><section data-markdown><script type="text/template">
+### AHB - HRESP (transfer response)
+</script></section><section data-markdown><script type="text/template">
+### AHB - HPROT (protection control)
+</script></section><section data-markdown><script type="text/template">
+### AHB - HMASTLOCK (locked transfers)
+</script></section><section data-markdown><script type="text/template">
+### AHB5 - HSTRB
+
+<!-- ---- -->
+
+<!-- ### Other considerations -->
+
+<!-- Waited transfers -->
 </script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
-### Advanced eXtensible Interface (AXI)
+### AXI - Advanced eXtensible Interface
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 Main uses:
@@ -253,10 +282,6 @@ AWREADY                  | BREADY                     | AWREADY                 
 > * AXI5: several signals added (not only parity)
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
-### AXI4 interface
-
-![AXI4 interface](images/axi.svg)
-</script></section><section data-markdown><script type="text/template">
 ### AXI signals description
 
 Signal   | Description
@@ -275,8 +300,13 @@ AxREGION | Up to 16 regions for the address decode
 xID      | Transaction identifiers (ordering)
 xUSER    | User-defined (not recommended)
 <!-- .element: style="font-size: 0.5em !important;" -->
-</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+</script></section><section data-markdown><script type="text/template">
+### AXI4 interface
+
+![AXI4 interface](images/axi.svg)
+</script></section><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AXI-Lite signals
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 |Write Address Channel | Write Data Channel         | Read Address Channel     | Read Data Channel
@@ -297,8 +327,9 @@ xUSER    | User-defined (not recommended)
 ### AXI4-Lite interface
 
 ![AXI4-Lite interface](images/axi-lite.svg)
-</script></section></section><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
+</script></section><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AXI-Stream signals
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 | AXI4-Stream  | AXI5-Stream  | Description
@@ -317,8 +348,9 @@ xUSER    | User-defined (not recommended)
 |              | TWAKEUP      | Wake-up
 |              | T*CHK        | Parity (for safety)
 <!-- .element: style="font-size: 0.5em !important;" -->
-</script></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### Interconnect
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 </script></section><section data-markdown><script type="text/template">
 ### Buses
@@ -328,11 +360,13 @@ xUSER    | User-defined (not recommended)
 ### Network-on-Chip (NoC)
 </script></section></section><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AMBA5 parity signals
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 <!-- diagram about interconnect protection -->
 </script></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### Last considerations
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 </script></section><section data-markdown><script type="text/template">
 ### Multiple interfaces per device
