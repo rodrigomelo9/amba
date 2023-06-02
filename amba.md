@@ -12,6 +12,7 @@ Rodrigo Alejandro Melo
 ---
 <!-- ###################################################################### -->
 ### Advanced Microcontroller Bus Architecture
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 AMBA is a freely available, globally adopted, open standard for the connection and management of functional blocks in a System-on-Chip (SoC).
@@ -61,7 +62,8 @@ Subordinate | Agent that receives and responds to requests
 ---
 
 <!-- ###################################################################### -->
-### Advanced Peripherals Bus (APB)
+### APB - Advanced Peripherals Bus
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 A low-cost interface, optimized for minimal power consumption and reduced complexity.
@@ -112,17 +114,22 @@ Main uses:
 
 ----
 
-### Operating States
+### APB3 - PREADY
 
-![APB states](images/apb-states.svg)
-
-> When a transfer is required, the interface moves into the SETUP state, where the appropriate PSELx is asserted.
-> The interface remains in this state for one clock cycle and always moves to the ACCESS state, where PENABLE is asserted.
-<!-- .element: style="font-size: 0.4em !important;" -->
+* Completer can use PREADY to extend (introduce wait states) transfers.
+* Peripherals with fixed two-cycle access can set PREADY always HIGH.
 
 ----
 
-### APB - PSTRB
+### APB3 - PSLVERR
+
+* Can be used to indicate an ERROR condition (error, unsupported, timeout, etc).
+* A WRITE transaction with ERROR, might or might not have updated the state of the peripheral.
+* A READ transaction with ERROR, might or might not provide valid data.
+
+----
+
+### APB4 - PSTRB
 
 * Enables sparse data transfer on the write data bus
 * There is one bit per each byte of PWDATA
@@ -134,7 +141,7 @@ Main uses:
 
 ----
 
-### APB - PPROT
+### APB4 - PPROT
 
 * PPROT[0]: Normal or Privileged
 * PPROT[1]: Secure or Non-secure
@@ -148,22 +155,26 @@ Main uses:
 
 ----
 
-### APB - PREADY
+### APB design considerations - Unaligned transfers
+<!-- .slide: data-background="yellow" -->
 
-* Completer can use PREADY to extend (introduce wait states) transfers.
-* Peripherals with fixed two-cycle access can set PREADY always HIGH.
-
-----
-
-### APB - PSLVERR
-
-* Can be used to indicate an ERROR condition (error, unsupported, timeout, etc).
-* A WRITE transaction with ERROR, might or might not have updated the state of the peripheral.
-* A READ transaction with ERROR, might or might not provide valid data.
+PADDR can be unaligned, but the result is UNPREDICTABLE (Completer may utilize the unaligned address, aligned address, or indicate an error response).
 
 ----
 
-### APB - Validity rules
+### APB design considerations - Operating States
+<!-- .slide: data-background="yellow" -->
+
+![APB states](images/apb-states.svg)
+
+> When a transfer is required, the interface moves into the SETUP state, where the appropriate PSELx is asserted.
+> The interface remains in this state for one clock cycle and always moves to the ACCESS state, where PENABLE is asserted.
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### APB design considerations - Validity rules
+<!-- .slide: data-background="yellow" -->
 
 * PSEL must be always valid
 * PADDR, PPROT, PENABLE, PWRITE, PSTRB and PWDATA must be valid when PSEL is asserted
@@ -173,16 +184,11 @@ Main uses:
 > **RECOMMENDATION:** signals which are not required to be valid should be driven to zero
 <!-- .element: style="font-size: 0.4em !important;" -->
 
-----
-
-### Other considerations
-
-PADDR can be unaligned, but the result is UNPREDICTABLE (Completer may utilize the unaligned address, aligned address, or indicate an error response).
-
 ---
 
 <!-- ###################################################################### -->
-### Advanced High-performance Bus (AHB)
+### AHB - Advanced High-performance Bus
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 Main uses:
@@ -244,9 +250,48 @@ Main uses:
 > Extending the data phase of transfer B has the effect of extending the address phase of transfer C.
 <!-- .element: style="font-size: 0.4em !important;" -->
 
+----
+
+### AHB - HTRANS (transfer types)
+
+----
+
+### AHB - HSIZE (transfer size)
+
+----
+
+### AHB - HBURST (burst types)
+
+----
+
+### AHB - Burst operation
+
+----
+
+### AHB - HRESP (transfer response)
+
+----
+
+### AHB - HPROT (protection control)
+
+----
+
+### AHB - HMASTLOCK (locked transfers)
+
+----
+
+### AHB5 - HSTRB
+
+<!-- ---- -->
+
+<!-- ### Other considerations -->
+
+<!-- Waited transfers -->
+
 ---
 <!-- ###################################################################### -->
-### Advanced eXtensible Interface (AXI)
+### AXI - Advanced eXtensible Interface
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 Main uses:
@@ -282,12 +327,6 @@ AWREADY                  | BREADY                     | AWREADY                 
 
 ----
 
-### AXI4 interface
-
-![AXI4 interface](images/axi.svg)
-
-----
-
 ### AXI signals description
 
 Signal   | Description
@@ -307,9 +346,16 @@ xID      | Transaction identifiers (ordering)
 xUSER    | User-defined (not recommended)
 <!-- .element: style="font-size: 0.5em !important;" -->
 
----
+----
+
+### AXI4 interface
+
+![AXI4 interface](images/axi.svg)
+
+----
 <!-- ###################################################################### -->
 ### AXI-Lite signals
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 |Write Address Channel | Write Data Channel         | Read Address Channel     | Read Data Channel
@@ -333,9 +379,10 @@ xUSER    | User-defined (not recommended)
 
 ![AXI4-Lite interface](images/axi-lite.svg)
 
----
+----
 <!-- ###################################################################### -->
 ### AXI-Stream signals
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 | AXI4-Stream  | AXI5-Stream  | Description
@@ -358,6 +405,7 @@ xUSER    | User-defined (not recommended)
 ---
 <!-- ###################################################################### -->
 ### Interconnect
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 ----
@@ -375,6 +423,7 @@ xUSER    | User-defined (not recommended)
 ---
 <!-- ###################################################################### -->
 ### AMBA5 parity signals
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 <!-- diagram about interconnect protection -->
@@ -382,6 +431,7 @@ xUSER    | User-defined (not recommended)
 ---
 <!-- ###################################################################### -->
 ### Last considerations
+<!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 ----
