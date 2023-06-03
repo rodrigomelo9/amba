@@ -252,6 +252,32 @@ Main uses:
 
 ----
 
+### AHB - HREADY & HREADYOUT
+
+----
+
+### AHB - HRESP (transfer response)
+
+----
+
+### AHB5 - HWSTRB
+
+* Enables sparse data transfer on the write data bus
+* There is one bit per each byte of HWDATA
+  * HWSTRB[n] -> HWDATA[(8n + 7):(8n)]
+* When asserted HIGH, the corresponding byte of HWDATA contains valid information
+
+> * During read transfers, it is recommended that write strobes are deasserted.
+> * Write transfers with all HWSTRB deasserted are permitted (no bytes are written).
+> * HWSTRB can change between beats of a burst.
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### AHB - HPROT (protection control)
+
+----
+
 ### AHB - HTRANS (transfer types)
 
 ----
@@ -268,25 +294,12 @@ Main uses:
 
 ----
 
-### AHB - HRESP (transfer response)
-
-----
-
-### AHB - HPROT (protection control)
-
-----
-
 ### AHB - HMASTLOCK (locked transfers)
 
 ----
 
-### AHB5 - HSTRB
-
-<!-- ---- -->
-
-<!-- ### Other considerations -->
-
-<!-- Waited transfers -->
+### AHB design considerations - TBD
+<!-- .slide: data-background="yellow" -->
 
 ---
 <!-- ###################################################################### -->
