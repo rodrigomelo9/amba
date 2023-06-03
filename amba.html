@@ -227,6 +227,24 @@ Main uses:
 > Extending the data phase of transfer B has the effect of extending the address phase of transfer C.
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
+### AHB - HREADY & HREADYOUT
+</script></section><section data-markdown><script type="text/template">
+### AHB - HRESP (transfer response)
+</script></section><section data-markdown><script type="text/template">
+### AHB5 - HWSTRB
+
+* Enables sparse data transfer on the write data bus
+* There is one bit per each byte of HWDATA
+  * HWSTRB[n] -> HWDATA[(8n + 7):(8n)]
+* When asserted HIGH, the corresponding byte of HWDATA contains valid information
+
+> * During read transfers, it is recommended that write strobes are deasserted.
+> * Write transfers with all HWSTRB deasserted are permitted (no bytes are written).
+> * HWSTRB can change between beats of a burst.
+<!-- .element: style="font-size: 0.4em !important;" -->
+</script></section><section data-markdown><script type="text/template">
+### AHB - HPROT (protection control)
+</script></section><section data-markdown><script type="text/template">
 ### AHB - HTRANS (transfer types)
 </script></section><section data-markdown><script type="text/template">
 ### AHB - HSIZE (transfer size)
@@ -235,19 +253,10 @@ Main uses:
 </script></section><section data-markdown><script type="text/template">
 ### AHB - Burst operation
 </script></section><section data-markdown><script type="text/template">
-### AHB - HRESP (transfer response)
-</script></section><section data-markdown><script type="text/template">
-### AHB - HPROT (protection control)
-</script></section><section data-markdown><script type="text/template">
 ### AHB - HMASTLOCK (locked transfers)
 </script></section><section data-markdown><script type="text/template">
-### AHB5 - HSTRB
-
-<!-- ---- -->
-
-<!-- ### Other considerations -->
-
-<!-- Waited transfers -->
+### AHB design considerations - TBD
+<!-- .slide: data-background="yellow" -->
 </script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AXI - Advanced eXtensible Interface
 <!-- .slide: data-background="#581845" -->
