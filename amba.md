@@ -397,6 +397,15 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 
 ### AHB - HMASTLOCK (locked transfers)
 
+Indicates that the current transfer sequence is indivisible (typically used to maintain the integrity of a semaphore).
+<!-- .element: style="font-size: 0.8em !important;" -->
+
+![AHB locked transfers](images/ahb-lock.png)
+<!-- .element: style="background-color: white;" -->
+
+> After a locked transfer, it is recommended to insert an IDLE transfer.
+<!-- .element: style="font-size: 0.4em !important;" -->
+
 ----
 
 ### AHB design considerations - TBD
@@ -563,10 +572,9 @@ xUSER    | User-defined (not recommended)
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
-<!--AHB-->
-<!--The minimum address space that can be allocated to a single slave is 1kB. All bus-->
-<!--masters are designed such that they will not perform incrementing transfers over a 1kB-->
-<!--boundary, thus ensuring that a burst never crosses an address decode boundary.-->
+----
+
+### Performance comparison
 
 ----
 
@@ -579,6 +587,11 @@ xUSER    | User-defined (not recommended)
 ### Address boundaries
 
 WIP (1KB AHB, 4KB AXI)
+
+<!--AHB-->
+<!--The minimum address space that can be allocated to a single slave is 1kB. All bus-->
+<!--masters are designed such that they will not perform incrementing transfers over a 1kB-->
+<!--boundary, thus ensuring that a burst never crosses an address decode boundary.-->
 
 ---
 <!-- ###################################################################### -->
