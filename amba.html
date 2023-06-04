@@ -199,10 +199,10 @@ Main uses:
 | HTRANS[1:0]   | Y        | Y         | Y       |         | Transfer type (IDLE, BUSY, NONSEQ, SEQ)
 | HWRITE        | Y        | Y         | Y       |         | Write operation
 | HSIZE[2:0]    | Y        | Y         | Y       |         | Size of the transfer (2^SIZE bytes)
-| HBURST[2:0]   | O        | O         | O       | 2'b01   | Burst length and address increments
-| HPROT[]       | O [3:0]  | O [3:0]   | O [2:0] | 3'b010  | Normal, privileged, or secure protection level
-| HWDATA[]      | Y [31:0] | Y [31:0]  | Y       |         | WR (8, 16, 32, 64, 128, 256, 512, 1024 bits)
-| HRDATA[]      | Y [31:0] | Y [31:0]  | Y       |         | RD (8, 16, 32, 64, 128, 256, 512, 1024 bits)
+| HBURST[2:0]   | O        | O         | O       | 3'b001  | Burst length and address increments
+| HPROT[3:0]    | O        | O         | O       | 4'b0011 | Protection level
+| HWDATA[]      | Y        | Y         | Y       |         | WR (8, 16, 32, 64, 128, 256, 512, 1024 bits)
+| HRDATA[]      | Y        | Y         | Y       |         | RD (8, 16, 32, 64, 128, 256, 512, 1024 bits)
 | HWSTRB[D/8-1] |          | O (AMBA5) | O       | '1      | Write Strobe (bytes to update during a write)
 | HREADY        | Y        | Y         | Y       |         | (IN) other transfers completed
 | HRESP         | Y [1:0]  | Y         | Y       |         | Transfer response
@@ -213,9 +213,9 @@ Main uses:
 | HMASTLOCK     | O        | O         | O       | 1'b0    | Current transfer is part of a locked sequence
 | HSPLITx[15:0] | Y        |           |         |         | M to re-attempt a split transaction
 | HREADYOUT     |          | Y         | Y       |         | (OUT) transfer has finished
-| HNONSEC       |          |           | O       | 0'b0    | Indicates Non-secure transaction
-| HEXCL         |          |           | O       | 0'b0    | Exclusive Access
-| HEXOKAY       |          |           | O       | 0'b0    | Exclusive Okay
+| HNONSEC       |          |           | O       | 1'b0    | Indicates Non-secure transaction
+| HEXCL         |          |           | O       | 1'b0    | Exclusive Access
+| HEXOKAY       |          |           | O       | 1'b0    | Exclusive Okay
 | HxUSER[]      |          |           | O       |         | User defined attribute
 | HxCHKx        |          |           | O       |         | Parity protection (for safety-critical applications)
 <!-- .element: style="font-size: 0.3em !important;" -->
@@ -236,8 +236,23 @@ Main uses:
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
 ### AHB - HREADY & HREADYOUT (waited transfers)
+
+> SUBORDINATES require HREADY as both an input and an output (HREADYOUT) signal.
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+* HREADYOUT is driven during the data phase:
+  * LOW: extend the transfer
+  * HIGH: transfer has finished
+* The INTERCONNECT is responsible for combining all the HREADYOUT to generate a single HREADY.
+* HSELx, HADDR and control **must** be sampled when HREADY is HIGH (current transfer is completing).
+
+> A SUBORDINATE cannot request that the address phase be extended, so it **must** always be capable of sampling the address.
+<!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
 ### AHB - HRESP (transfer response)
+
+> HRESP is 2 bits wide in AHB2, to support SPLIT and RETRY (removed on AMBA3).
+<!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
 ### AHB5 - HWSTRB
 
@@ -251,7 +266,18 @@ Main uses:
 > * HWSTRB can change between beats of a burst.
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
-### AHB - HPROT (protection control)
+### AHB - HPROT
+
+* HPROT[0]: Data/Opcode
+* HPROT[1]: Privileged
+* HPROT[2]: Buffereable
+* HPROT[3]: Cacheable
+
+> * HPROT **must** remain constant during a burst transfer.
+> * If unused, a manager should set 3'b0011
+> * A subordinate shouldn't use HPROT unless absolutely necessary.
+<!-- .element: style="font-size: 0.4em !important;" -->
+
 </script></section><section data-markdown><script type="text/template">
 ### AHB - HTRANS (transfer types)
 
@@ -282,7 +308,7 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 | 3'b111     | 128   |
 <!-- .element: style="font-size: 0.5em !important;" -->
 
-> * HSIZE **must** remain constant throughout a burst transfer.
+> * HSIZE **must** remain constant during a burst transfer.
 > * SIZE = `2**HSIZE` (or `1<<HSIZE`).
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
@@ -306,9 +332,10 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 > * Wrapping bursts wrap when they cross an address boundary (BEATS x SIZE).
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
-### AHB - WRAP4 example
-</script></section><section data-markdown><script type="text/template">
-### AHB - INCR example
+### AHB - WRAP4/INCR4 example
+
+![AHB WRAP4/INCR4 example](images/ahb-wrap4-incr4.png)
+<!-- .element: style="background-color: white;" -->
 </script></section><section data-markdown><script type="text/template">
 ### AHB - Undefined INCR example
 </script></section><section data-markdown><script type="text/template">
@@ -445,6 +472,11 @@ xUSER    | User-defined (not recommended)
 ### Practical considerations
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
+
+<!--AHB-->
+<!--The minimum address space that can be allocated to a single slave is 1kB. All bus-->
+<!--masters are designed such that they will not perform incrementing transfers over a 1kB-->
+<!--boundary, thus ensuring that a burst never crosses an address decode boundary.-->
 </script></section><section data-markdown><script type="text/template">
 ### It is common to have multiple interfaces per IP
 
