@@ -386,6 +386,9 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 
 ### AHB - Undefined INCR example
 
+![AHB undefined INCR example](images/ahb-undef-incr.png)
+<!-- .element: style="background-color: white;" -->
+
 ----
 
 ### AHB - Early burst termination
