@@ -136,7 +136,7 @@ Main uses:
   * PSTRB[n] -> PWDATA[(8n + 7):(8n)]
 * When asserted HIGH, the corresponding byte of PWDATA contains valid information
 
-> **ATTENTION:** during read transfers, all the bits of PSTRB **must** be driven LOW
+> During read transfers, all the bits of PSTRB **must** be driven LOW
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
 ### APB4 - PPROT
@@ -235,7 +235,7 @@ Main uses:
 > Extending the data phase of transfer B has the effect of extending the address phase of transfer C.
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
-### AHB - HREADY & HREADYOUT
+### AHB - HREADY & HREADYOUT (waited transfers)
 </script></section><section data-markdown><script type="text/template">
 ### AHB - HRESP (transfer response)
 </script></section><section data-markdown><script type="text/template">
@@ -254,12 +254,65 @@ Main uses:
 ### AHB - HPROT (protection control)
 </script></section><section data-markdown><script type="text/template">
 ### AHB - HTRANS (transfer types)
+
+| HTRANS[1:0] | Type   | Description                                                                                                           |
+| :---:       | :---:  | ---                                                                                                                   |
+| 2'b00       | IDLE   | No data transfer is required                                                                                          |
+| 2'b01       | BUSY   | Insert idle cycles in the middle of a burst (address and control signals must reflect the next transfer in the burst) |
+| 2'b10       | NONSEQ | Single transfer or first transfer of a burst (address and control signals are unrelated to the previous transfer)     |
+| 2'b11       | SEQ    | Remaining transfers in a burst (control information is identical to the previous transfer, address is adjusted)       |
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+> In case of IDLE and BUSY, a subordinate **must** always provide a zero wait state OKAY response, and the transfer **must** be ignored.
+<!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
 ### AHB - HSIZE (transfer size)
+
+Indicates the size (bytes) of a data transfer (**must** be less than or equal to the width of the data bus).
+
+| HSIZE[2:0] | Bytes |
+| :---:      | :---: |
+| 3'b000     | 1     |
+| 3'b001     | 2     |
+| 3'b010     | 4     |
+| 3'b011     | 8     |
+| 3'b100     | 16    |
+| 3'b101     | 32    |
+| 3'b110     | 64    |
+| 3'b111     | 128   |
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+> * HSIZE **must** remain constant throughout a burst transfer.
+> * SIZE = `2**HSIZE` (or `1<<HSIZE`).
+<!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
 ### AHB - HBURST (burst types)
+
+| HBURST[2:0] | Type        | Description
+| :---:       | :---:       | ---
+| 3'b000      | SINGLE      | Single burst
+| 3'b001      | INCR        | Incrementing burst of undefined length
+| 3'b010      | WRAP4       | Wrapping burst (4 beats)
+| 3'b011      | INCR4       | Incremental burst (4 beats)
+| 3'b100      | WRAP8       | Wrapping burst (8 beats)
+| 3'b101      | INCR8       | Incremental burst (8 beats)
+| 3'b110      | WRAP16      | Wrapping burst (16 beats)
+| 3'b111      | INCR16      | Incremental burst (16 beats)
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+> * Managers **must** not attempt to start an incrementing burst that crosses a 1KB address boundary.
+> * The total amount of data transferred in a burst is calculated multiplying the number of beats by the amount of data (as indicated by HSIZE[2:0]).
+> * Transfers in a burst **must** be aligned to the address boundary (as indicated by HSIZE[2:0]).
+> * Wrapping bursts wrap when they cross an address boundary (BEATS x SIZE).
+<!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
-### AHB - Burst operation
+### AHB - WRAP4 example
+</script></section><section data-markdown><script type="text/template">
+### AHB - INCR example
+</script></section><section data-markdown><script type="text/template">
+### AHB - Undefined INCR example
+</script></section><section data-markdown><script type="text/template">
+### AHB - Early burst termination
 </script></section><section data-markdown><script type="text/template">
 ### AHB - HMASTLOCK (locked transfers)
 </script></section><section data-markdown><script type="text/template">
@@ -387,10 +440,19 @@ xUSER    | User-defined (not recommended)
 ### Crossbar switches
 </script></section><section data-markdown><script type="text/template">
 ### Network-on-Chip (NoC)
+</script></section></section><section ><section data-markdown><script type="text/template">
+<!-- ###################################################################### -->
+### Practical considerations
+<!-- .slide: data-background="#581845" -->
+<!-- ###################################################################### -->
 </script></section><section data-markdown><script type="text/template">
 ### It is common to have multiple interfaces per IP
 
 ![DMA example](images/dma-example.svg)
+</script></section><section data-markdown><script type="text/template">
+### Address boundaries
+
+WIP (1KB AHB, 4KB AXI)
 </script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AMBA5 parity signals
 <!-- .slide: data-background="#581845" -->
