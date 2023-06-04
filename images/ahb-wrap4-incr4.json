@@ -1,0 +1,15 @@
+{
+  signal: [
+    {name: 'HCLK',        wave: 'p..............', period: 1 },
+    {name: 'HADDR[ ]',    wave: 'x22.22x.22.22x.', data: "0x38 0x3C 0x30 0x34 0x38 0x3C 0x40 0x44"},
+    {name: 'HTRANS[1:0]', wave: '222.222.22.222.', data: "IDLE NONSEQ SEQ SEQ SEQ IDLE NONSEQ SEQ SEQ SEQ IDLE"},
+    {name: 'HBURST[2:0]', wave: 'x2....x.2....x.', data: "WRAP4 INCR4"},
+    {name: 'HSIZE[2:0]',  wave: 'x2....x.2....x.', data: "Word Word"},
+    {name: 'HPROT[3:0]',  wave: 'x2....x.2....x.'},
+    {name: 'HWRITE',      wave: 'x11.11x.00.00x.'},
+    {name: 'HWDATA[ ]',   wave: 'x.2.222x.......', data: "D[0x38] D[0x3C] D[0x30] D[0x34]"},
+    {name: 'HRDATA[ ]',   wave: 'x.........2222x', data: "D[0x38] D[0x3C] D[0x40] D[0x44]"},
+    {name: 'HREADY',      wave: 'x101111..01111x'},
+  ],
+  config: { hscale: 2 }
+}

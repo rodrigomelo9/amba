@@ -313,6 +313,7 @@ Main uses:
 > * HPROT **must** remain constant during a burst transfer.
 > * If unused, a manager should set 3'b0011
 > * A subordinate shouldn't use HPROT unless absolutely necessary.
+<!-- .element: style="font-size: 0.4em !important;" -->
 
 
 ----
@@ -376,11 +377,10 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 
 ----
 
-### AHB - WRAP4 example
+### AHB - WRAP4/INCR4 example
 
-----
-
-### AHB - INCR example
+![AHB WRAP4/INCR4 example](images/ahb-wrap4-incr4.png)
+<!-- .element: style="background-color: white;" -->
 
 ----
 
