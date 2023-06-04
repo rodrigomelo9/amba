@@ -315,7 +315,6 @@ Main uses:
 > * A subordinate shouldn't use HPROT unless absolutely necessary.
 <!-- .element: style="font-size: 0.4em !important;" -->
 
-
 ----
 
 ### AHB - HTRANS (transfer types)

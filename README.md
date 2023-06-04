@@ -1,6 +1,6 @@
 # A presentation about Advanced Microcontroller Bus Architecture
 
-> Apr 2023: it is WIP, but there is a basic Overview
+> Jun 2023: it is WIP, but APB is done, AHB is almost finished and there is a basic Overview of AXI flavors.
 
 ## Resources employed to make this presentation
 
