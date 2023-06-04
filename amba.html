@@ -26,14 +26,17 @@ Rodrigo Alejandro Melo
 
 [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
 </script></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
-### Advanced Microcontroller Bus Architecture
+### AMBA
+#### Advanced Microcontroller Bus Architecture
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
+</script></section><section data-markdown><script type="text/template">
+### Description
 
 AMBA is a freely available, globally adopted, open standard for the connection and management of functional blocks in a System-on-Chip (SoC).
 It facilitates right-first-time development of multiprocessor designs, with large numbers of controllers and peripherals.
 </script></section><section data-markdown><script type="text/template">
-### AMBA Specs
+### AMBA specifications
 
 |                                     | AMBA          | AMBA2          | AMBA3              | AMBA4                       | AMBA5
 | :---:                               | :---:         | :---:          | :---:              | :---:                       | :---:
@@ -66,12 +69,14 @@ Subordinate | Agent that receives and responds to requests
 * All signals are sampled at the rising edge of xCLK.
 * xRESETn is the only active low signal.
 * xADDR indicates a byte address.
-* Read and write data buses must have the same width.
 </script></section></section><section ><section data-markdown><script type="text/template">
 <!-- ###################################################################### -->
-### APB - Advanced Peripherals Bus
+### APB
+#### Advanced Peripherals Bus
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
+</script></section><section data-markdown><script type="text/template">
+### Description
 
 A low-cost interface, optimized for minimal power consumption and reduced complexity.
 It is not  pipelined and is a simple, synchronous protocol.
@@ -172,9 +177,12 @@ PADDR can be unaligned, but the result is UNPREDICTABLE (Completer may utilize t
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section></section><section ><section data-markdown><script type="text/template">
 <!-- ###################################################################### -->
-### AHB - Advanced High-performance Bus
+### AHB
+#### Advanced High-performance Bus
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
+</script></section><section data-markdown><script type="text/template">
+### Description
 
 Main uses:
 * High Performance system bus
@@ -258,9 +266,12 @@ Main uses:
 ### AHB design considerations - TBD
 <!-- .slide: data-background="yellow" -->
 </script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
-### AXI - Advanced eXtensible Interface
+### AXI
+#### Advanced eXtensible Interface
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
+</script></section><section data-markdown><script type="text/template">
+### Description
 
 Main uses:
 * Full: Higher performance system bus
@@ -313,10 +324,15 @@ xUSER    | User-defined (not recommended)
 ### AXI4 interface
 
 ![AXI4 interface](images/axi.svg)
-</script></section><section data-markdown><script type="text/template"><!-- ###################################################################### -->
-### AXI-Lite signals
+</script></section></section><section ><section data-markdown><script type="text/template">
+<!-- ###################################################################### -->
+### AXI-Lite
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
+</script></section><section data-markdown><script type="text/template">
+### Description
+</script></section><section data-markdown><script type="text/template">
+### AXI-Lite signals
 
 |Write Address Channel | Write Data Channel         | Read Address Channel     | Read Data Channel
 |---                   |---                         |---                       |---
@@ -336,10 +352,14 @@ xUSER    | User-defined (not recommended)
 ### AXI4-Lite interface
 
 ![AXI4-Lite interface](images/axi-lite.svg)
-</script></section><section data-markdown><script type="text/template"><!-- ###################################################################### -->
-### AXI-Stream signals
+</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+### AXI-Stream
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
+</script></section><section data-markdown><script type="text/template">
+### Description
+</script></section><section data-markdown><script type="text/template">
+### AXI-Stream signals
 
 | AXI4-Stream  | AXI5-Stream  | Description
 |---           |--            |---
@@ -367,20 +387,22 @@ xUSER    | User-defined (not recommended)
 ### Crossbar switches
 </script></section><section data-markdown><script type="text/template">
 ### Network-on-Chip (NoC)
-</script></section></section><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
+</script></section><section data-markdown><script type="text/template">
+### It is common to have multiple interfaces per IP
+
+![DMA example](images/dma-example.svg)
+</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AMBA5 parity signals
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 <!-- diagram about interconnect protection -->
-</script></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
-### Last considerations
-<!-- .slide: data-background="#581845" -->
-<!-- ###################################################################### -->
 </script></section><section data-markdown><script type="text/template">
-### Multiple interfaces per device
-
-![DMA example](images/dma-example.svg)
+### APB5 parity signals
+</script></section><section data-markdown><script type="text/template">
+### AHB5 parity signals
+</script></section><section data-markdown><script type="text/template">
+### AXI5 parity signals
 </script></section></section><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
 # Questions?
 <!-- .slide: data-background="#1F618D" -->
