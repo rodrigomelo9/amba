@@ -114,12 +114,14 @@ Main uses:
 ### APB4-S interface
 
 ![APB-S interface](images/apb-s.svg)
+<!-- .element: style="background-color: white;" -->
 
 ----
 
 ### APB4 Signaling
 
 ![APB Signaling](images/apb-waves.png)
+<!-- .element: style="background-color: white;" -->
 
 ----
 
@@ -175,6 +177,7 @@ PADDR can be unaligned, but the result is UNPREDICTABLE (Completer may utilize t
 <!-- .slide: data-background="yellow" -->
 
 ![APB states](images/apb-states.svg)
+<!-- .element: style="background-color: white;" -->
 
 > When a transfer is required, the interface moves into the SETUP state, where the appropriate PSELx is asserted.
 > The interface remains in this state for one clock cycle and always moves to the ACCESS state, where PENABLE is asserted.
@@ -248,18 +251,21 @@ Main uses:
 ### AHB-Lite interfaces
 
 ![AHB interface](images/ahb.svg)
+<!-- .element: style="background-color: white;" -->
 
 ----
 
 ### AHB-Lite Signaling (basic transfers)
 
 ![AHB basic transfers signaling](images/ahb-waves-basic.png)
+<!-- .element: style="background-color: white;" -->
 
 ----
 
 ### AHB-Lite Signaling (multiple transfers)
 
 ![AHB multiple transfers signaling](images/ahb-waves-multi.png)
+<!-- .element: style="background-color: white;" -->
 
 > Extending the data phase of transfer B has the effect of extending the address phase of transfer C.
 <!-- .element: style="font-size: 0.4em !important;" -->
@@ -271,11 +277,11 @@ Main uses:
 > SUBORDINATES require HREADY as both an input and an output (HREADYOUT) signal.
 <!-- .element: style="font-size: 0.4em !important;" -->
 
+* HSELx, HADDR and control **must** be sampled when HREADY is HIGH (previous transfer is completed).
 * HREADYOUT is driven during the data phase:
   * LOW: extend the transfer
   * HIGH: transfer has finished
 * The INTERCONNECT is responsible for combining all the HREADYOUT to generate a single HREADY.
-* HSELx, HADDR and control **must** be sampled when HREADY is HIGH (current transfer is completing).
 
 > A SUBORDINATE cannot request that the address phase be extended, so it **must** always be capable of sampling the address.
 <!-- .element: style="font-size: 0.4em !important;" -->
@@ -478,6 +484,7 @@ xUSER    | User-defined (not recommended)
 ### AXI4 interface
 
 ![AXI4 interface](images/axi.svg)
+<!-- .element: style="background-color: white;" -->
 
 ---
 
@@ -514,6 +521,7 @@ xUSER    | User-defined (not recommended)
 ### AXI4-Lite interface
 
 ![AXI4-Lite interface](images/axi-lite.svg)
+<!-- .element: style="background-color: white;" -->
 
 ---
 <!-- ###################################################################### -->
@@ -580,6 +588,7 @@ xUSER    | User-defined (not recommended)
 ### It is common to have multiple interfaces per IP
 
 ![DMA example](images/dma-example.svg)
+<!-- .element: style="background-color: white;" -->
 
 ----
 
