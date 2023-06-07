@@ -317,7 +317,6 @@ Main uses:
 * HPROT[3]: Cacheable
 
 > * HPROT **must** remain constant during a burst transfer.
-> * If unused, a manager should set 3'b0011
 > * A subordinate shouldn't use HPROT unless absolutely necessary.
 <!-- .element: style="font-size: 0.4em !important;" -->
 

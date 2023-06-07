@@ -6,9 +6,9 @@
     {name: 'HADDR[ ]',    wave: 'x.2x.|.2x..|.2x.|.2x..', data: "A1 A2 A3 A4"},
     {name: 'HTRANS[1:0]', wave: '2.22.|.22..|.22.|.22..', data: "IDLE NS IDLE NS IDLE NS IDLE NS IDLE"},
     {name: 'HBURST[2:0]', wave: 'x.2x.|.2x..|.2x.|.2x..', data: "000 000 000 000"},
-
+    {name: 'HSIZE[2:0]',  wave: 'x.2x.|.2x..|.2x.|.2x..', data: "VAL VAL VAL VAL"},
+    {name: 'HPROT[3:0]',  wave: 'x.2x.|.2x..|.2x.|.2x..', data: "VAL VAL VAL VAL"},
     {name: 'HWRITE',      wave: 'x.1x.|.1x..|.0x.|.0x..'},
-    {name: 'HWSTRB[ ]',   wave: 'x..2x|..2.x|....|.....'},
     {name: 'HWDATA[ ]',   wave: 'x..2x|..2.x|....|.....', data: "D1 D2"},
     {name: 'HRDATA[ ]',   wave: 'x....|.....|..2x|...2x', data: "D3 D4"},
     {name: 'HREADY[OUT]', wave: 'x.11x|.101x|.11x|.101x'},
