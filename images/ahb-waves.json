@@ -1,0 +1,21 @@
+{
+  signal: [
+    {name: 'HCLK',        wave: 'p.........', period: 1 },
+    {name: 'HRESETn',     wave: '01........'},
+    {name: 'HSEL',        wave: '0.1.......'},
+    {name: 'HADDR[ ]',    wave: 'x.22.222x.', data: "A1 A2 A3 A3 A4"},
+    {name: 'HTRANS[1:0]', wave: '2.22.2222.', data: "IDLE NONSEQ SEQ BUSY SEQ SEQ IDLE"},
+    {name: 'HBURST[2:0]', wave: 'x.2.....x.', data: "INCR"},
+    {name: 'HSIZE[2:0]',  wave: 'x.2.....x.', data: "Word"},
+    {name: 'HPROT[3:0]',  wave: 'x.2.....x.', data: "INCR INCR"},
+    {name: 'HMASTLOCK',   wave: 'x.0.....x.'},
+    {name: 'HWRITE',      wave: 'x.11.111x.'},
+    {name: 'HWSTRB[ ]',   wave: 'x..2.2222x', data: "VAL VAL x VAL VAL"},
+    {name: 'HWDATA[ ]',   wave: 'x..2.2222x', data: "D1 D2 x D3 D4"},
+    {name: 'HRDATA[ ]',   wave: 'x..x......', data: "D[0x20] D[0x22]"},
+    {name: 'HREADY',      wave: 'x.1x......'},
+    {name: 'HREADYOUT',   wave: 'x..011111x'},
+    {name: 'HRESP',       wave: 'x..000000x'},
+  ],
+  config: { hscale: 2 }
+}
