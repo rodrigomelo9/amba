@@ -304,7 +304,7 @@ Main uses:
 ![AHB response](images/ahb-hresp.png)
 <!-- .element: style="background-color: white;" -->
 
-> * If an ERROR response is received, the remaining transfers in a burst can be canceled, but this is not a strict requirement.
+> * If an ERROR response is received, the remaining transfers in a burst can be canceled, but this is not a strict requirement, and it is also acceptable to continue.
 > * HRESP is 2 bits wide in AHB2, to support SPLIT and RETRY (removed on AMBA3).
 <!-- .element: style="font-size: 0.4em !important;" -->
 
@@ -424,6 +424,13 @@ Indicates that the current transfer sequence is indivisible (typically used to m
 
 > After a locked transfer, it is recommended to insert an IDLE transfer.
 <!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### The full picture
+
+![AHB full signaling](images/ahb-waves.png)
+<!-- .element: style="background-color: white;" -->
 
 ----
 
