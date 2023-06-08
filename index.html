@@ -69,6 +69,10 @@ Subordinate | Agent that receives and responds to requests
 * All signals are sampled at the rising edge of xCLK.
 * xRESETn is the only active low signal.
 * xADDR indicates a byte address.
+* Transfers are initiated by M (specifying ADDR/CTRL), and finished by S (with a response).
+
+> **ATTENTION:** transfers **CAN'T BE CANCELED**
+<!-- .element: style="font-size: 0.8em !important;" -->
 </script></section></section><section ><section data-markdown><script type="text/template">
 <!-- ###################################################################### -->
 ### APB
@@ -257,7 +261,18 @@ Main uses:
 </script></section><section data-markdown><script type="text/template">
 ### AHB - HRESP (transfer response)
 
-> HRESP is 2 bits wide in AHB2, to support SPLIT and RETRY (removed on AMBA3).
+> HRESP is used to indicate an ERROR condition.
+> OKAY response can be given in a single cycle, but for ERROR two cycles are required.
+> In the first cycle, HREADY must be LOW, and HIGH in the second.
+> The two cycles are needed because of the pipelined nature of the bus (when ERROR response starts,
+> the address of the following transfer is already available).
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+![AHB response](images/ahb-hresp.png)
+<!-- .element: style="background-color: white;" -->
+
+> * If an ERROR response is received, the remaining transfers in a burst can be canceled, but this is not a strict requirement, and it is also acceptable to continue.
+> * HRESP is 2 bits wide in AHB2, to support SPLIT and RETRY (removed on AMBA3).
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
 ### AHB5 - HWSTRB
@@ -358,6 +373,11 @@ Indicates that the current transfer sequence is indivisible (typically used to m
 
 > After a locked transfer, it is recommended to insert an IDLE transfer.
 <!-- .element: style="font-size: 0.4em !important;" -->
+</script></section><section data-markdown><script type="text/template">
+### The full picture
+
+![AHB full signaling](images/ahb-waves.png)
+<!-- .element: style="background-color: white;" -->
 </script></section><section data-markdown><script type="text/template">
 ### AHB design considerations - TBD
 <!-- .slide: data-background="yellow" -->
