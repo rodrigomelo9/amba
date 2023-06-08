@@ -1,0 +1,12 @@
+{
+  signal: [
+    {name: 'HCLK',        wave: 'p......', period: 1 },
+    {name: 'HADDR[ ]',    wave: 'x22.x..', data: "A1 A2"},
+    {name: 'HTRANS[ ]',   wave: 'x22.2..', data: "NONSEQ - IDLE"},
+    {name: 'HWRITE',      wave: 'x12.x..', data: "-"},
+    {name: 'HWDATA[ ]',   wave: 'x.2.x..', data: "D1"},
+    {name: 'HREADY[OUT]', wave: 'x10011x'},
+    {name: 'HRESP',       wave: 'x00110x'},
+  ],
+  config: { hscale: 2 }
+}
