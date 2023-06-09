@@ -648,14 +648,10 @@ xUSER    | User-defined (not recommended)
 
 ----
 
-### Address boundaries
+### Address boundary
 
-WIP (1KB AHB, 4KB AXI)
-
-<!--AHB-->
-<!--The minimum address space that can be allocated to a single slave is 1kB. All bus-->
-<!--masters are designed such that they will not perform incrementing transfers over a 1kB-->
-<!--boundary, thus ensuring that a burst never crosses an address decode boundary.-->
+* The minimum address space that can be allocated to a single interface is 1KB for AHB, 4KB for AXI.
+* A burst **must not** cross a 1KB/4KB (AHB/AXI) address boundary.
 
 ---
 <!-- ###################################################################### -->
