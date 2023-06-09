@@ -633,6 +633,12 @@ xUSER    | User-defined (not recommended)
 
 ### Performance comparison
 
+![Performance](images/performance.png)
+<!-- .element: style="background-color: white; height: 12em;" -->
+
+> In a real system, there are latencies and arbitration. There, burst transfers and outstanding transactions come into the action
+<!-- .element: style="font-size: 0.4em !important;" -->
+
 ----
 
 ### It is common to have multiple interfaces per IP
