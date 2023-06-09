@@ -25,6 +25,19 @@
 Rodrigo Alejandro Melo
 
 [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
+</script></section><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
+## Outline
+<!-- ###################################################################### -->
+
+* [AMBA](#/2)
+* [APB](#/3)
+* [AHB](#/4)
+* [AXI](#/5) (WIP)
+* [AXI-Lite](#/6) (WIP)
+* [AXI-Stream](#/7) (WIP)
+* [Interconnect](#/8) (TBD)
+* [Parity signals](#/9) (TBD)
+* [Practical considerations](#/10)
 </script></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AMBA
 #### Advanced Microcontroller Bus Architecture
@@ -532,6 +545,18 @@ xUSER    | User-defined (not recommended)
 ### Crossbar switches
 </script></section><section data-markdown><script type="text/template">
 ### Network-on-Chip (NoC)
+</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+### Parity signals (AMBA5)
+<!-- .slide: data-background="#581845" -->
+<!-- ###################################################################### -->
+
+<!-- diagram about interconnect protection -->
+</script></section><section data-markdown><script type="text/template">
+### APB5 parity signals
+</script></section><section data-markdown><script type="text/template">
+### AHB5 parity signals
+</script></section><section data-markdown><script type="text/template">
+### AXI5 parity signals
 </script></section></section><section ><section data-markdown><script type="text/template">
 <!-- ###################################################################### -->
 ### Practical considerations
@@ -555,18 +580,6 @@ xUSER    | User-defined (not recommended)
 
 * The minimum address space that can be allocated to a single interface is 1KB for AHB, 4KB for AXI.
 * A burst **must not** cross a 1KB/4KB (AHB/AXI) address boundary.
-</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
-### AMBA5 parity signals
-<!-- .slide: data-background="#581845" -->
-<!-- ###################################################################### -->
-
-<!-- diagram about interconnect protection -->
-</script></section><section data-markdown><script type="text/template">
-### APB5 parity signals
-</script></section><section data-markdown><script type="text/template">
-### AHB5 parity signals
-</script></section><section data-markdown><script type="text/template">
-### AXI5 parity signals
 </script></section></section><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
 # Questions?
 <!-- .slide: data-background="#1F618D" -->
