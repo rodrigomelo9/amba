@@ -80,14 +80,14 @@ Subordinate | Agent that receives and responds to requests
 ### Description
 
 A low-cost interface, optimized for minimal power consumption and reduced complexity.
-It is not  pipelined and is a simple, synchronous protocol.
+It is not pipelined and is a simple, synchronous protocol.
 Every transfer takes at least two cycles to complete.
 
 Main uses:
-* Low bandwidth peripherals
+* Low bandwidth/speed peripherals
 * Control/Status registers
 
-> Transfers are typically initiated by a bridge (Requester), and a peripheral interface (Completer) responds.
+> Transfers are initiated by a REQUESTER, and a peripheral interface (COMPLETER) responds.
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 ----
@@ -99,7 +99,7 @@ Main uses:
 | PCLK           | Y     | Y     | Y     | Y     |         | Clock
 | PRESETn        | Y     | Y     | Y     | Y     |         | Reset
 | PADDR[A-1:0]   | Y     | Y     | Y     | Y     |         | Address (up to 32 bits)
-| PSELx          | Y     | Y     | Y     | Y     |         | Completer x selected
+| PSELx          | Y     | Y     | Y     | Y     |         | COMPLETER x selected
 | PENABLE        | Y     | Y     | Y     | Y     |         | Enable
 | PWRITE         | Y     | Y     | Y     | Y     |         | Write operation
 | PWDATA[D-1]    | Y     | Y     | Y     | Y     |         | Write Data. (8, 16 or 32 bits)
@@ -131,7 +131,7 @@ Main uses:
 
 ### APB3 - PREADY
 
-* Completer can use PREADY to extend (introduce wait states) transfers.
+* COMPLETER can use PREADY to extend (introduce wait states) transfers.
 * Peripherals with fixed two-cycle access can set PREADY always HIGH.
 
 ----
@@ -185,7 +185,7 @@ Main uses:
 ### Unaligned transfers
 <!-- .slide: data-background="yellow" -->
 
-PADDR can be unaligned, but the result is UNPREDICTABLE (Completer may utilize the unaligned address, aligned address, or indicate an error response).
+PADDR can be unaligned, but the result is UNPREDICTABLE (COMPLETER may utilize the unaligned address, aligned address, or indicate an error response).
 
 ----
 
@@ -212,9 +212,13 @@ PADDR can be unaligned, but the result is UNPREDICTABLE (Completer may utilize t
 
 ### Description
 
+A high-performance, high-bandwidth, interface, that supports burst data transfers.
+It is a **pipelined**, synchronous protocol.
+
 Main uses:
-* High Performance system bus
-* Lite: single masters
+* Internal memory devices
+* External memory interfaces
+* High-bandwidth peripherals
 
 ----
 
