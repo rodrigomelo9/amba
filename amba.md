@@ -170,14 +170,7 @@ Main uses:
 
 ----
 
-### APB design considerations - Unaligned transfers
-<!-- .slide: data-background="yellow" -->
-
-PADDR can be unaligned, but the result is UNPREDICTABLE (Completer may utilize the unaligned address, aligned address, or indicate an error response).
-
-----
-
-### APB design considerations - Operating States
+### Operating States
 <!-- .slide: data-background="yellow" -->
 
 ![APB states](images/apb-states.svg)
@@ -189,15 +182,22 @@ PADDR can be unaligned, but the result is UNPREDICTABLE (Completer may utilize t
 
 ----
 
-### APB design considerations - Validity rules
+### Unaligned transfers
 <!-- .slide: data-background="yellow" -->
 
-* PSEL must be always valid
-* PADDR, PPROT, PENABLE, PWRITE, PSTRB and PWDATA must be valid when PSEL is asserted
-* PREADY must be valid when PSEL, and PENABLE are asserted
-* PRDATA, and PSLVERR must be valid when PSEL, PENABLE and PREADY are asserted
+PADDR can be unaligned, but the result is UNPREDICTABLE (Completer may utilize the unaligned address, aligned address, or indicate an error response).
 
-> **RECOMMENDATION:** signals which are not required to be valid should be driven to zero
+----
+
+### Validity rules
+<!-- .slide: data-background="yellow" -->
+
+* PSEL **must be** always valid
+* PADDR, PPROT, PENABLE, PWRITE, PSTRB and PWDATA **must be** valid when PSEL is asserted
+* PREADY **must be** valid when PSEL, and PENABLE are asserted
+* PRDATA, and PSLVERR **must be** valid when PSEL, PENABLE and PREADY are asserted
+
+> Signals which are not required to be valid **should be** driven to zero
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 ---
@@ -304,13 +304,14 @@ Main uses:
 ![AHB response](images/ahb-hresp.png)
 <!-- .element: style="background-color: white;" -->
 
-> * If an ERROR response is received, the remaining transfers in a burst can be canceled, but this is not a strict requirement, and it is also acceptable to continue.
-> * HRESP is 2 bits wide in AHB2, to support SPLIT and RETRY (removed on AMBA3).
+> * In case of IDLE and BUSY, a zero wait state OKAY response **must** always provide, and the transfer **must** be ignored.
+> * If an ERROR response is received, the remaining transfers in a burst can be canceled, but it is also acceptable to continue.
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 ----
 
 ### AHB5 - HWSTRB
+<!-- .slide: data-background="cyan" -->
 
 * Enables sparse data transfer on the write data bus
 * There is one bit per each byte of HWDATA
@@ -347,7 +348,10 @@ Main uses:
 | 2'b11       | SEQ    | Remaining transfers in a burst (control information is identical to the previous transfer, address is adjusted)       |
 <!-- .element: style="font-size: 0.5em !important;" -->
 
-> In case of IDLE and BUSY, a subordinate **must** always provide a zero wait state OKAY response, and the transfer **must** be ignored.
+> During a waited transfer:
+> * HTRANS can change from IDLE to NONSEQ. When it changes to NONSEQ, it must keep constant until HREADY is HIGH.
+> * For a fixed-length burst, HTRANS can change from BUSY to NONSEQ. When it changes to SEQ, it must keep constant until HREADY is HIGH.
+> * During an INCR, HTRANS can change from BUSY to any other transfer type. The burst continues if a SEQ is performed but terminates in other cases.
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 ----
@@ -410,10 +414,6 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 
 ----
 
-### AHB - Early burst termination
-
-----
-
 ### AHB - HMASTLOCK (locked transfers)
 
 Indicates that the current transfer sequence is indivisible (typically used to maintain the integrity of a semaphore).
@@ -434,8 +434,33 @@ Indicates that the current transfer sequence is indivisible (typically used to m
 
 ----
 
-### AHB design considerations - TBD
+### AHB2 - HRESP
 <!-- .slide: data-background="yellow" -->
+
+HRESP was 2 bits wide in AHB2, to support SPLIT and RETRY, something that was removed on AMBA3.
+
+----
+
+### Unaligned transfers
+<!-- .slide: data-background="yellow" -->
+
+> "All transfers in a burst must be aligned to the address boundary equal to the size of the transfer".
+
+Nothing more is said in the specification about unaligned transfers.
+
+----
+
+### Validity rules
+<!-- .slide: data-background="yellow" -->
+
+* HSEL, HADDR, HTRANS, HMASTLOCK, HREADY[OUT] and HRESP **must be** always valid
+* HBURST, HSIZE, HPROT and HWRITE **must be** valid when HTRANS is not IDLE
+* HWDATA and HWSTRB **must be** valid during the data phase of a write transaction
+* HRDATA **must be** valid during the data phase of a read when HREADY is HIGH and HRESP is LOW
+
+> * Signals which are not required to be valid can take any value, but 0 or X are recommended
+> * In data transfers with invalid byte lanes, it is recommended that those be 0
+<!-- .element: style="font-size: 0.4em !important;" -->
 
 ---
 <!-- ###################################################################### -->
