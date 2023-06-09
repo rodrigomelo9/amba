@@ -22,7 +22,7 @@ Rodrigo Alejandro Melo
 * [AXI-Stream](#/7) (WIP)
 * [Interconnect](#/8) (TBD)
 * [Parity signals](#/9) (TBD)
-* [Practical considerations](#/10)
+* [Final remarks](#/10)
 
 ---
 <!-- ###################################################################### -->
@@ -629,13 +629,22 @@ xUSER    | User-defined (not recommended)
 
 ### Buses
 
+![Bus](images/bus.svg)
+<!-- .element: style="background-color: white;" -->
+
 ----
 
 ### Crossbar switches
 
+![Crossbar](images/crossbar.svg)
+<!-- .element: style="background-color: white;" -->
+
 ----
 
 ### Network-on-Chip (NoC)
+
+![NoC](images/noc.svg)
+<!-- .element: style="background-color: white;" -->
 
 ---
 <!-- ###################################################################### -->
@@ -660,7 +669,7 @@ xUSER    | User-defined (not recommended)
 ---
 
 <!-- ###################################################################### -->
-### Practical considerations
+### Final remarks
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
@@ -676,10 +685,9 @@ xUSER    | User-defined (not recommended)
 
 ----
 
-### It is common to have multiple interfaces per IP
+### Multiple interfaces
 
 ![DMA example](images/dma-example.svg)
-<!-- .element: style="background-color: white;" -->
 
 ----
 
