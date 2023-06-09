@@ -11,6 +11,21 @@ Rodrigo Alejandro Melo
 
 ---
 <!-- ###################################################################### -->
+## Outline
+<!-- ###################################################################### -->
+
+* [AMBA](#/2)
+* [APB](#/3)
+* [AHB](#/4)
+* [AXI](#/5) (WIP)
+* [AXI-Lite](#/6) (WIP)
+* [AXI-Stream](#/7) (WIP)
+* [Interconnect](#/8) (TBD)
+* [Parity signals](#/9) (TBD)
+* [Practical considerations](#/10)
+
+---
+<!-- ###################################################################### -->
 ### AMBA
 #### Advanced Microcontroller Bus Architecture
 <!-- .slide: data-background="#581845" -->
@@ -623,6 +638,26 @@ xUSER    | User-defined (not recommended)
 ### Network-on-Chip (NoC)
 
 ---
+<!-- ###################################################################### -->
+### Parity signals (AMBA5)
+<!-- .slide: data-background="#581845" -->
+<!-- ###################################################################### -->
+
+<!-- diagram about interconnect protection -->
+
+----
+
+### APB5 parity signals
+
+----
+
+### AHB5 parity signals
+
+----
+
+### AXI5 parity signals
+
+---
 
 <!-- ###################################################################### -->
 ### Practical considerations
@@ -652,26 +687,6 @@ xUSER    | User-defined (not recommended)
 
 * The minimum address space that can be allocated to a single interface is 1KB for AHB, 4KB for AXI.
 * A burst **must not** cross a 1KB/4KB (AHB/AXI) address boundary.
-
----
-<!-- ###################################################################### -->
-### AMBA5 parity signals
-<!-- .slide: data-background="#581845" -->
-<!-- ###################################################################### -->
-
-<!-- diagram about interconnect protection -->
-
-----
-
-### APB5 parity signals
-
-----
-
-### AHB5 parity signals
-
-----
-
-### AXI5 parity signals
 
 ---
 <!-- ###################################################################### -->
