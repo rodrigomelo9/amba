@@ -37,7 +37,7 @@ Rodrigo Alejandro Melo
 * [AXI-Stream](#/7) (WIP)
 * [Interconnect](#/8) (TBD)
 * [Parity signals](#/9) (TBD)
-* [Practical considerations](#/10)
+* [Final remarks](#/10)
 </script></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AMBA
 #### Advanced Microcontroller Bus Architecture
@@ -541,10 +541,19 @@ xUSER    | User-defined (not recommended)
 <!-- ###################################################################### -->
 </script></section><section data-markdown><script type="text/template">
 ### Buses
+
+![Bus](images/bus.svg)
+<!-- .element: style="background-color: white;" -->
 </script></section><section data-markdown><script type="text/template">
 ### Crossbar switches
+
+![Crossbar](images/crossbar.svg)
+<!-- .element: style="background-color: white;" -->
 </script></section><section data-markdown><script type="text/template">
 ### Network-on-Chip (NoC)
+
+![NoC](images/noc.svg)
+<!-- .element: style="background-color: white;" -->
 </script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### Parity signals (AMBA5)
 <!-- .slide: data-background="#581845" -->
@@ -559,7 +568,7 @@ xUSER    | User-defined (not recommended)
 ### AXI5 parity signals
 </script></section></section><section ><section data-markdown><script type="text/template">
 <!-- ###################################################################### -->
-### Practical considerations
+### Final remarks
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 </script></section><section data-markdown><script type="text/template">
@@ -571,10 +580,9 @@ xUSER    | User-defined (not recommended)
 > In a real system, there are latencies and arbitration. There, burst transfers and outstanding transactions come into the action
 <!-- .element: style="font-size: 0.4em !important;" -->
 </script></section><section data-markdown><script type="text/template">
-### It is common to have multiple interfaces per IP
+### Multiple interfaces
 
 ![DMA example](images/dma-example.svg)
-<!-- .element: style="background-color: white;" -->
 </script></section><section data-markdown><script type="text/template">
 ### Address boundary
 
