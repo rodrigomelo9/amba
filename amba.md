@@ -652,19 +652,24 @@ xUSER    | User-defined (not recommended)
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
-<!-- diagram about interconnect protection -->
+----
+
+### Parity protection
+
+![AMBA parity](images/amba-parity.svg)
+<!-- .element: style="background-color: white;" -->
 
 ----
 
-### APB5 parity signals
+### APB5
 
 ----
 
-### AHB5 parity signals
+### AHB5
 
 ----
 
-### AXI5 parity signals
+### AXI5
 
 ---
 
