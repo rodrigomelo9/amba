@@ -583,7 +583,6 @@ xUSER    | User-defined (not recommended)
 ### AXI4 interface
 
 ![AXI4 interface](images/axi.svg)
-<!-- .element: style="background-color: white;" -->
 
 ---
 <!-- ###################################################################### -->
@@ -619,7 +618,6 @@ xUSER    | User-defined (not recommended)
 ### AXI4-Lite interface
 
 ![AXI4-Lite interface](images/axi-lite.svg)
-<!-- .element: style="background-color: white;" -->
 
 ---
 <!-- ###################################################################### -->
@@ -651,6 +649,12 @@ xUSER    | User-defined (not recommended)
 |              | TWAKEUP      | Wake-up
 |              | T*CHK        | Parity (for safety)
 <!-- .element: style="font-size: 0.5em !important;" -->
+
+----
+
+### AXI4-Stream interface
+
+![AXI4-Stream interface](images/axi-stream.svg)
 
 ---
 <!-- ###################################################################### -->
