@@ -648,31 +648,117 @@ xUSER    | User-defined (not recommended)
 
 ---
 <!-- ###################################################################### -->
-### Parity signals (AMBA5)
+### Parity signals
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
 ----
 
-### Parity protection
+### AMBA5 parity protection
+<!-- .slide: data-background="cyan" -->
 
 ![AMBA parity](images/amba-parity.svg)
 <!-- .element: style="background-color: white;" -->
 
+> * Odd parity: `~(^<SIGNAL>)`
+> * Each parity bit covers up to 8 bits
+> * If signals covered by a parity signal are not present, those are assumed LOW
+<!-- .element: style="font-size: 0.4em !important;" -->
+
 ----
 
 ### APB5
+<!-- .slide: data-background="cyan" -->
+
+Parity signal | Signals covered | Width          | Validity
+:---:         |:---:            |:---:           |:---:
+PSELxCHK      | PSELx           | 1              | PRESETn
+PENABLECHK    | PENABLE         | 1              | PSEL
+PADDRCHK      | PADDR           | ceil(AWIDTH/8) | PSEL
+PCTRLCHK      | PPROT,PWRITE    | 1              | PSEL
+PSTRBCHK      | PSTRB           | 1              | PSEL & PWRITE
+PWDATACHK     | PWDATA          | DWIDTH/8       | PSEL & PWRITE
+PRDATACHK     | PRDATA          | DWIDTH/8       | PSEL & PENABLE & PREADY & !PWRITE
+PSLVERRCHK    | PSLVERR         | 1              | PSEL & PENABLE & PREADY
+PREADYCHK     | PREADY          | 1              | PSEL & PENABLE
+<!-- .element: style="font-size: 0.5em !important;" -->
 
 ----
 
 ### AHB5
+<!-- .slide: data-background="cyan" -->
+
+Parity signal | Signals covered               | Width           | Validity
+:---:         |:---:                          |:---:            |:---:
+HSELxCHK      | HSELx                         | 1               | HRESETn
+HTRANSCHK     | HTRANS                        | 1               | HRESETn
+HADDRCHK      | HADDR                         | ceil(AWIDTH/8)  | HRESETn
+HCTRLCHK      | HBURST,HMASTLOCK,HWRITE,HSIZE | 1               | HTRANS != IDLE
+HWSTRBCHK     | HWSTRB                        | ceil(DWIDTH/64) | WR data phase
+HWDATACHK     | HWDATA                        | DWIDTH/8        | WR data phase
+HRDATACHK     | HRDATA                        | DWIDTH/8        | RD data phase & HREADY
+HRESPCHK      | HRESP,HEXOKAY                 | 1               | data phase
+HREADYCHK     | HREADY                        | 1               | HRESETn
+HREADYOUTCHK  | HREADYOUT                     | 1               | HRESETn
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+**ATTENTION:** adapted/reduced for AHB3
+<!-- .element: style="font-size: 0.4em !important;" -->
 
 ----
 
 ### AXI5
+<!-- .slide: data-background="cyan" -->
+
+Parity signal | Signals covered                          | Width           | Validity
+:---:         |:---:                                     |:---:            |:---:
+A[WR]VALIDCHK | A[WR]VALID                               | 1               | ARESETn
+A[WR]READYCHK | A[WR]READY                               | 1               | ARESETn
+A[WR]IDCHK    | A[WR]ID                                  | ceil(IWIDTH/8)  | A[WR]VALID
+A[WR]ADDRCHK  | A[WR]ADDR                                | ceil(AWIDTH/8)  | A[WR]VALID
+A[WR]LENCHK   | A[WR]LEN                                 | 1               | A[WR]VALID
+A[WR]CTLCHK0  | A[WR]SIZE,A[WR]BURST,A[WR]LOCK,A[WR]PROT | 1               | A[WR]VALID
+A[WR]CTLCHK1  | A[WR]REGION,A[WR]CACHE,A[WR]QOS          | 1               | A[WR]VALID
+A[WR]USERCHK  | A[WR]USER                                | ceil(UWIDTH/8)  | A[WR]VALID
+[WR]VALIDCHK  | [WR]VALID                                | 1               | ARESETn
+[WR]READYCHK  | [WR]READY                                | 1               | ARESETn
+RIDCHK        | RID                                      | ceil(IWIDTH/8)  | RVALID
+WSTRBCHK      | WSTRB                                    | ceil(DWIDTH/64) | WVALID
+[WR]DATACHK   | [WR]DATA                                 | ceil(DWIDTH/8)  | [WR]VALID
+[WR]LASTCHK   | [WR]LAST                                 | 1               | [WR]VALID
+[WR]USERCHK   | [WR]USER                                 | ceil(UWIDTH/8)  | [WR]VALID
+BVALIDCHK     | BVALID                                   | 1               | ARESETn
+BREADYCHK     | BREADY                                   | 1               | ARESETn
+BIDCHK        | BID                                      | ceil(IWIDTH/8)  | BVALID
+[BR]RESPCHK   | [BR]RESP                                 | 1               | [BR]VALID
+BUSERCHK      | BUSER                                    | ceil(UWIDTH/8)  | BVALID
+<!-- .element: style="font-size: 0.35em !important;" -->
+
+**ATTENTION:** adapted/reduced for AXI4
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### AXI5 Stream
+<!-- .slide: data-background="cyan" -->
+
+Parity signal | Signals covered | Width              | Validity
+:---:         |:---:            |:---:               |:---:
+TVALIDCHK     | TVALID          | 1                  | ARESETn
+TREADYCHK     | TREADY          | 1                  | ARESETn
+TIDCHK        | TID             | ceil(IDWIDTH/8)    | TVALID
+TSTRBCHK      | TSRTB           | ceil(DATAWIDTH/64) | TVALID
+TKEEPCHK      | TKEEP           | ceil(DATAWIDTH/64) | TVALID
+TDATACHK      | TDATA           | ceil(DATAWIDTH/8)  | TVALID
+TLASTCHK      | TLAST           | 1                  | TVALID
+TDESTCHK      | TDEST           | ceil(DESTWIDTH/8)  | TVALID
+TUSERCHK      | TUSER           | ceil(USERWIDTH/8)  | TVALID
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+**ATTENTION:** adapted/reduced for AXI4 Stream
+<!-- .element: style="font-size: 0.4em !important;" -->
 
 ---
-
 <!-- ###################################################################### -->
 ### Final remarks
 <!-- .slide: data-background="#581845" -->
