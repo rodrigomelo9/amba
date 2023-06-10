@@ -635,8 +635,26 @@ BUSERCHK      | BUSER                                    | ceil(UWIDTH/8)  | BVA
 
 **ATTENTION:** adapted/reduced for AXI4
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section></section><section ><section data-markdown><script type="text/template">
-<!-- ###################################################################### -->
+</script></section><section data-markdown><script type="text/template">
+### AXI5 Stream
+<!-- .slide: data-background="cyan" -->
+
+Parity signal | Signals covered | Width              | Validity
+:---:         |:---:            |:---:               |:---:
+TVALIDCHK     | TVALID          | 1                  | ARESETn
+TREADYCHK     | TREADY          | 1                  | ARESETn
+TIDCHK        | TID             | ceil(IDWIDTH/8)    | TVALID
+TSTRBCHK      | TSRTB           | ceil(DATAWIDTH/64) | TVALID
+TKEEPCHK      | TKEEP           | ceil(DATAWIDTH/64) | TVALID
+TDATACHK      | TDATA           | ceil(DATAWIDTH/8)  | TVALID
+TLASTCHK      | TLAST           | 1                  | TVALID
+TDESTCHK      | TDEST           | ceil(DESTWIDTH/8)  | TVALID
+TUSERCHK      | TUSER           | ceil(USERWIDTH/8)  | TVALID
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+**ATTENTION:** adapted/reduced for AXI4 Stream
+<!-- .element: style="font-size: 0.4em !important;" -->
+</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### Final remarks
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
