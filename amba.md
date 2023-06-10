@@ -18,11 +18,12 @@ Rodrigo Alejandro Melo
 * [APB](#/3)
 * [AHB](#/4)
 * [AXI](#/5) (WIP)
-* [AXI-Lite](#/6) (WIP)
-* [AXI-Stream](#/7) (WIP)
-* [Interconnect](#/8) (TBD)
-* [Parity signals](#/9) (TBD)
-* [Final remarks](#/10)
+* [AXI-Full](#/6) (WIP)
+* [AXI-Lite](#/7) (WIP)
+* [AXI-Stream](#/8) (WIP)
+* [Interconnect](#/9) (TBD)
+* [Parity signals](#/10) (TBD)
+* [Final remarks](#/11)
 
 ---
 <!-- ###################################################################### -->
@@ -499,6 +500,23 @@ Main uses:
 
 ----
 
+### AXI Handshake
+
+![AXI Handshake](images/axi-handshake.svg)
+<!-- .element: style="background-color: white;" -->
+
+---
+<!-- ###################################################################### -->
+### AXI-Full
+<!-- .slide: data-background="#581845" -->
+<!-- ###################################################################### -->
+
+----
+
+### Description
+
+----
+
 ### AXI signals
 
 Write Address Channel    | Write Data Channel         | Read Address Channel     | Read Data Channel
@@ -552,7 +570,6 @@ xUSER    | User-defined (not recommended)
 <!-- .element: style="background-color: white;" -->
 
 ---
-
 <!-- ###################################################################### -->
 ### AXI-Lite
 <!-- .slide: data-background="#581845" -->

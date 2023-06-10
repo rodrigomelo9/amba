@@ -1,0 +1,10 @@
+{
+  signal: [
+    {name: 'ACLK',  wave: 'p...|...|..'},
+    {name: 'INFO',  wave: 'x2.x|.2x|2x'},
+    {name: 'VALID', wave: '01.0|.10|10'},
+    {name: 'READY', wave: '0.10|1.0|10'},
+  ],
+  foot: {text: ['tspan', '1. VALID before READY | 2. READY before VALID | 3. VALID with READY']},
+  config: { hscale: 2 }
+}

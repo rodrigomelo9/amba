@@ -1,6 +1,6 @@
 {
   signal: [
-    {name: 'xCLK',      wave: 'p.....|....|......', period: 1 },
+    {name: 'xCLK',      wave: 'p.................', period: 1 },
     ['APB',
       {name: 'PSEL',      wave: '01.1.1.1.1.1.1.1.0'},
       {name: 'PENABLE',   wave: 'x01010101010101010'},
