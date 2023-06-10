@@ -194,7 +194,7 @@ Main uses:
 
 > When a transfer is required, the interface moves into the SETUP state, where the appropriate PSELx is asserted.
 > The interface remains in this state for one clock cycle and always moves to the ACCESS state, where PENABLE is asserted.
-<!-- .element: style="font-size: 0.4em !important;" -->
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
 
 ----
 
@@ -319,14 +319,14 @@ Main uses:
 > In the first cycle, HREADY must be LOW, and HIGH in the second.
 > The two cycles are needed because of the pipelined nature of the bus (when ERROR response starts,
 > the address of the following transfer is already available).
-<!-- .element: style="font-size: 0.4em !important;" -->
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
 
 ![AHB response](images/ahb-hresp.png)
 <!-- .element: style="background-color: white;" -->
 
 > * In case of IDLE and BUSY, a zero wait state OKAY response **must** always provide, and the transfer **must** be ignored.
 > * If an ERROR response is received, the remaining transfers in a burst can be canceled, but it is also acceptable to continue.
-<!-- .element: style="font-size: 0.4em !important;" -->
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
 
 ----
 
@@ -372,7 +372,7 @@ Main uses:
 > * HTRANS can change from IDLE to NONSEQ. When it changes to NONSEQ, it must keep constant until HREADY is HIGH.
 > * For a fixed-length burst, HTRANS can change from BUSY to NONSEQ. When it changes to SEQ, it must keep constant until HREADY is HIGH.
 > * During an INCR, HTRANS can change from BUSY to any other transfer type. The burst continues if a SEQ is performed but terminates in other cases.
-<!-- .element: style="font-size: 0.4em !important;" -->
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
 
 ----
 
@@ -491,12 +491,23 @@ Nothing more is said in the specification about unaligned transfers.
 
 ----
 
-### Description
+### Variations
 
-Main uses:
-* Full: Higher performance system bus
-* Lite: Control/Status registers
-* Stream: High speeds unidirectional transfers
+* **Full:** Higher performance system bus
+* **Lite:** Control/Status registers
+* **Stream:** High speeds unidirectional transfers
+
+----
+
+### AXI Channels
+
+![AXI Channels](images/axi-channels.svg)
+
+> Most systems use one of three interconnect topologies: shared address and data buses (1);
+> shared address buses and multiple data buses (2); multiple address and data buses (3).
+> With this channels schema, we can use the second alternative to achieve a good balance between
+> system performance and interconnect complexity.
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
 
 ----
 
@@ -504,6 +515,11 @@ Main uses:
 
 ![AXI Handshake](images/axi-handshake.svg)
 <!-- .element: style="background-color: white;" -->
+
+> * Each independent channel consists of INFO plus VALID and READY signals that provide a two-way handshake mechanism.
+> * The source uses the VALID signal to indicate valid INFO is available on the channel.
+> * The destination uses the READY signal to accept INFO.
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
 
 ---
 <!-- ###################################################################### -->
@@ -789,7 +805,7 @@ TUSERCHK      | TUSER           | ceil(USERWIDTH/8)  | TVALID
 <!-- .element: style="background-color: white; height: 12em;" -->
 
 > In a real system, there are latencies and arbitration. There, burst transfers and outstanding transactions come into the action
-<!-- .element: style="font-size: 0.4em !important;" -->
+<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
 
 ----
 
