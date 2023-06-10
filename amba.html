@@ -437,12 +437,23 @@ Nothing more is said in the specification about unaligned transfers.
 ### AXI Channels
 
 ![AXI Channels](images/axi-channels.svg)
+</script></section><section data-markdown><script type="text/template">
+### Why Channels?
 
-> Most systems use one of three interconnect topologies: shared address and data buses (1);
-> shared address buses and multiple data buses (2); multiple address and data buses (3).
-> With this channels schema, we can use the second alternative to achieve a good balance between
-> system performance and interconnect complexity.
-<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
+Most systems use one of three interconnect topologies:
+<!-- .element: style="font-size: 0.6em !important;" -->
+1. Shared address and data buses
+<!-- .element: style="font-size: 0.6em !important;" -->
+2. Shared address buses and multiple data buses
+<!-- .element: style="font-size: 0.6em !important;" -->
+3. Multiple address and data buses
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+With the channels schema, we can use the second alternative to achieve a good balance between system performance and interconnect complexity.
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+Additionally, each channel transfers information in one direction, and there isn't any fixed relationship between them, so register slices can be inserted in any channel to improve timing, at the cost of additional latency cycles.
+<!-- .element: style="font-size: 0.6em !important;" -->
 </script></section><section data-markdown><script type="text/template">
 ### AXI Handshake
 
@@ -452,7 +463,7 @@ Nothing more is said in the specification about unaligned transfers.
 > * Each independent channel consists of INFO plus VALID and READY signals that provide a two-way handshake mechanism.
 > * The source uses the VALID signal to indicate valid INFO is available on the channel.
 > * The destination uses the READY signal to accept INFO.
-<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
+<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
 </script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AXI-Full
 <!-- .slide: data-background="#581845" -->
