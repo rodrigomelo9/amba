@@ -33,8 +33,8 @@ Rodrigo Alejandro Melo
 * [APB](#/3)
 * [AHB](#/4)
 * [AXI](#/5)
-* [AXI-Full](#/6) (WIP)
 * [AXI-Lite](#/7) (WIP)
+* [AXI-Full](#/6) (WIP)
 * [AXI-Stream](#/8) (WIP)
 * [Interconnect](#/9)
 * [Parity signals](#/10)
@@ -464,6 +464,33 @@ With the channels schema, we can use the second alternative to achieve a good ba
 Additionally, each channel transfers information in one direction, and there isn't any fixed relationship between them, so register slices can be inserted in any channel to improve timing, at the cost of additional latency cycles.
 <!-- .element: style="font-size: 0.6em !important;" -->
 </script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+### AXI-Lite
+<!-- .slide: data-background="#581845" -->
+<!-- ###################################################################### -->
+</script></section><section data-markdown><script type="text/template">
+### Description
+</script></section><section data-markdown><script type="text/template">
+### AXI-Lite signals
+
+|Write Address Channel | Write Data Channel         | Read Address Channel     | Read Data Channel
+|---                   |---                         |---                       |---
+|AWADDR[]              | WDATA[]                    | ARADDR[]                 | RDATA[]
+|AWPROT[2:0]           | WSTRB[]                    | ARPROT[2:0]              | RRESP[1:0]
+|AWVALID               | WVALID                     | AWVALID                  | RVALID
+|AWREADY               | WREADY                     | AWREADY                  | RREADY
+|                      | __Write Response Channel__ |                          |
+|                      | BRESP[1:0]                 |                          | __Global signals__
+|                      | BVALID                     |                          | ACLK
+|                      | BREADY                     |                          | ARESETn
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+> AXI5-lite: several signals added, for parity and more flexibility on bus width and ordering
+<!-- .element: style="font-size: 0.4em !important;" -->
+</script></section><section data-markdown><script type="text/template">
+### AXI4-Lite interface
+
+![AXI4-Lite interface](images/axi-lite.svg)
+</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AXI-Full
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
@@ -516,33 +543,6 @@ xUSER    | User-defined (not recommended)
 ### AXI4 interface
 
 ![AXI4 interface](images/axi.svg)
-</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
-### AXI-Lite
-<!-- .slide: data-background="#581845" -->
-<!-- ###################################################################### -->
-</script></section><section data-markdown><script type="text/template">
-### Description
-</script></section><section data-markdown><script type="text/template">
-### AXI-Lite signals
-
-|Write Address Channel | Write Data Channel         | Read Address Channel     | Read Data Channel
-|---                   |---                         |---                       |---
-|AWADDR[]              | WDATA[]                    | ARADDR[]                 | RDATA[]
-|AWPROT[2:0]           | WSTRB[]                    | ARPROT[2:0]              | RRESP[1:0]
-|AWVALID               | WVALID                     | AWVALID                  | RVALID
-|AWREADY               | WREADY                     | AWREADY                  | RREADY
-|                      | __Write Response Channel__ |                          |
-|                      | BRESP[1:0]                 |                          | __Global signals__
-|                      | BVALID                     |                          | ACLK
-|                      | BREADY                     |                          | ARESETn
-<!-- .element: style="font-size: 0.5em !important;" -->
-
-> AXI5-lite: several signals added, for parity and more flexibility on bus width and ordering
-<!-- .element: style="font-size: 0.4em !important;" -->
-</script></section><section data-markdown><script type="text/template">
-### AXI4-Lite interface
-
-![AXI4-Lite interface](images/axi-lite.svg)
 </script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AXI-Stream
 <!-- .slide: data-background="#581845" -->
