@@ -11,18 +11,18 @@ Rodrigo Alejandro Melo
 
 ---
 <!-- ###################################################################### -->
-## Outline
+### Outline
 <!-- ###################################################################### -->
 
 * [AMBA](#/2)
 * [APB](#/3)
 * [AHB](#/4)
-* [AXI](#/5) (WIP)
+* [AXI](#/5)
 * [AXI-Full](#/6) (WIP)
 * [AXI-Lite](#/7) (WIP)
 * [AXI-Stream](#/8) (WIP)
-* [Interconnect](#/9) (TBD)
-* [Parity signals](#/10) (TBD)
+* [Interconnect](#/9)
+* [Parity signals](#/10)
 * [Final remarks](#/11)
 
 ---
@@ -67,8 +67,8 @@ Bus         | Multi-bit signal (not an interface, not a channel)
 Transfer    | (aka beat) single clock cycle, qualified by a VALID/READY handshake
 Transaction | Complete communication, with one or more transfers
 Burst       | Transaction with more than one transfer
-Manager     | Agent that initiates transactions
-Subordinate | Agent that receives and responds to requests
+Manager     | Agent that initiates transactions (aka requester, transmitter)
+Subordinate | Agent that receives and responds to requests (aka completer, receiver)
 <!-- .element: style="font-size: 0.5em !important;" -->
 
 ----
@@ -77,11 +77,12 @@ Subordinate | Agent that receives and responds to requests
 
 * All signals are sampled at the rising edge of xCLK.
 * xRESETn is the only active low signal.
-* xADDR indicates a byte address.
-* Transfers are initiated by M (specifying ADDR/CTRL), and finished by S (with a response).
 
-> **ATTENTION:** transfers **CAN'T BE CANCELED**
-<!-- .element: style="font-size: 0.8em !important;" -->
+![Exit from RESET](images/reset.svg)
+<!-- .element: style="background-color: white;" -->
+
+* xADDR indicates a byte address.
+* Transfers are initiated by M, finished by S, and **CAN'T BE CANCELED!!!**
 
 ---
 
@@ -102,9 +103,6 @@ Every transfer takes at least two cycles to complete.
 Main uses:
 * Low bandwidth/speed peripherals
 * Control/Status registers
-
-> Transfers are initiated by a REQUESTER, and a peripheral interface (COMPLETER) responds.
-<!-- .element: style="font-size: 0.4em !important;" -->
 
 ----
 
@@ -493,8 +491,8 @@ Nothing more is said in the specification about unaligned transfers.
 
 ### Variations
 
-* **Full:** Higher performance system bus
 * **Lite:** Control/Status registers
+* **Full:** Higher (than AHB) performance system bus
 * **Stream:** High speeds unidirectional transfers
 
 ----
@@ -505,7 +503,20 @@ Nothing more is said in the specification about unaligned transfers.
 
 ----
 
-### Why Channels?
+### AXI Handshake
+
+![AXI Handshake](images/axi-handshake.svg)
+<!-- .element: style="background-color: white;" -->
+
+> * Each independent channel consists of INFO plus VALID and READY signals that provide a two-way handshake mechanism.
+> * The source uses the VALID signal to indicate valid INFO is available on the channel.
+> * The destination uses the READY signal to accept INFO.
+<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
+
+----
+
+### Reasons for multiple channels
+<!-- .slide: data-background="yellow" -->
 
 Most systems use one of three interconnect topologies:
 <!-- .element: style="font-size: 0.6em !important;" -->
@@ -521,18 +532,6 @@ With the channels schema, we can use the second alternative to achieve a good ba
 
 Additionally, each channel transfers information in one direction, and there isn't any fixed relationship between them, so register slices can be inserted in any channel to improve timing, at the cost of additional latency cycles.
 <!-- .element: style="font-size: 0.6em !important;" -->
-
-----
-
-### AXI Handshake
-
-![AXI Handshake](images/axi-handshake.svg)
-<!-- .element: style="background-color: white;" -->
-
-> * Each independent channel consists of INFO plus VALID and READY signals that provide a two-way handshake mechanism.
-> * The source uses the VALID signal to indicate valid INFO is available on the channel.
-> * The destination uses the READY signal to accept INFO.
-<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
 
 ---
 <!-- ###################################################################### -->
