@@ -18,8 +18,8 @@ Rodrigo Alejandro Melo
 * [APB](#/3)
 * [AHB](#/4)
 * [AXI](#/5)
-* [AXI-Full](#/6) (WIP)
 * [AXI-Lite](#/7) (WIP)
+* [AXI-Full](#/6) (WIP)
 * [AXI-Stream](#/8) (WIP)
 * [Interconnect](#/9)
 * [Parity signals](#/10)
@@ -535,6 +535,41 @@ Additionally, each channel transfers information in one direction, and there isn
 
 ---
 <!-- ###################################################################### -->
+### AXI-Lite
+<!-- .slide: data-background="#581845" -->
+<!-- ###################################################################### -->
+
+----
+
+### Description
+
+----
+
+### AXI-Lite signals
+
+|Write Address Channel | Write Data Channel         | Read Address Channel     | Read Data Channel
+|---                   |---                         |---                       |---
+|AWADDR[]              | WDATA[]                    | ARADDR[]                 | RDATA[]
+|AWPROT[2:0]           | WSTRB[]                    | ARPROT[2:0]              | RRESP[1:0]
+|AWVALID               | WVALID                     | AWVALID                  | RVALID
+|AWREADY               | WREADY                     | AWREADY                  | RREADY
+|                      | __Write Response Channel__ |                          |
+|                      | BRESP[1:0]                 |                          | __Global signals__
+|                      | BVALID                     |                          | ACLK
+|                      | BREADY                     |                          | ARESETn
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+> AXI5-lite: several signals added, for parity and more flexibility on bus width and ordering
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### AXI4-Lite interface
+
+![AXI4-Lite interface](images/axi-lite.svg)
+
+---
+<!-- ###################################################################### -->
 ### AXI-Full
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
@@ -595,41 +630,6 @@ xUSER    | User-defined (not recommended)
 ### AXI4 interface
 
 ![AXI4 interface](images/axi.svg)
-
----
-<!-- ###################################################################### -->
-### AXI-Lite
-<!-- .slide: data-background="#581845" -->
-<!-- ###################################################################### -->
-
-----
-
-### Description
-
-----
-
-### AXI-Lite signals
-
-|Write Address Channel | Write Data Channel         | Read Address Channel     | Read Data Channel
-|---                   |---                         |---                       |---
-|AWADDR[]              | WDATA[]                    | ARADDR[]                 | RDATA[]
-|AWPROT[2:0]           | WSTRB[]                    | ARPROT[2:0]              | RRESP[1:0]
-|AWVALID               | WVALID                     | AWVALID                  | RVALID
-|AWREADY               | WREADY                     | AWREADY                  | RREADY
-|                      | __Write Response Channel__ |                          |
-|                      | BRESP[1:0]                 |                          | __Global signals__
-|                      | BVALID                     |                          | ACLK
-|                      | BREADY                     |                          | ARESETn
-<!-- .element: style="font-size: 0.5em !important;" -->
-
-> AXI5-lite: several signals added, for parity and more flexibility on bus width and ordering
-<!-- .element: style="font-size: 0.4em !important;" -->
-
-----
-
-### AXI4-Lite interface
-
-![AXI4-Lite interface](images/axi-lite.svg)
 
 ---
 <!-- ###################################################################### -->
