@@ -204,10 +204,14 @@ PADDR can be unaligned, but the result is UNPREDICTABLE (COMPLETER may utilize t
 ### Validity rules
 <!-- .slide: data-background="yellow" -->
 
-* PSEL **must be** always valid
-* PADDR, PPROT, PENABLE, PWRITE, PSTRB and PWDATA **must be** valid when PSEL is asserted
-* PREADY **must be** valid when PSEL, and PENABLE are asserted
-* PRDATA, and PSLVERR **must be** valid when PSEL, PENABLE and PREADY are asserted
+| Always | PSEL    | PSEL & PENABLE | PSEL & PENABLE & PREADY |
+| :---:  | :---:   | :---:          | :---:                   |
+| PSEL   | PENABLE | PREADY         | PRDATA                  |
+|        | PADDR   |                | PSLVERR                 |
+|        | PPROT   |                |                         |
+|        | PSTRB   |                |                         |
+|        | PWDATA  |                |                         |
+<!-- .element: style="font-size: 0.5em !important;" -->
 
 > Signals which are not required to be valid **should be** driven to zero
 <!-- .element: style="font-size: 0.4em !important;" -->
@@ -468,10 +472,15 @@ Nothing more is said in the specification about unaligned transfers.
 ### Validity rules
 <!-- .slide: data-background="yellow" -->
 
-* HSEL, HADDR, HTRANS, HMASTLOCK, HREADY[OUT] and HRESP **must be** always valid
-* HBURST, HSIZE, HPROT and HWRITE **must be** valid when HTRANS is not IDLE
-* HWDATA and HWSTRB **must be** valid during the data phase of a write transaction
-* HRDATA **must be** valid during the data phase of a read when HREADY is HIGH and HRESP is LOW
+| Always      | HTRANS!=IDLE | WR data phase | RD data phase & HREADYOUT & !HRESP |
+| :---:       | :---:        | :---:         | :---:                              |
+| HSEL        | HBURST       | HWDATA        | HRDATA                             |
+| HADDR       | HSIZE        | HWSTRB        |                                    |
+| HTRANS      | HPROT        |               |                                    |
+| HMASTLOCK   | HWRITE       |               |                                    |
+| HREADY[OUT] |              |               |                                    |
+| HRESP       |              |               |                                    |
+<!-- .element: style="font-size: 0.5em !important;" -->
 
 > * Signals which are not required to be valid can take any value, but 0 or X are recommended
 > * In data transfers with invalid byte lanes, it is recommended that those be 0
