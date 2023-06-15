@@ -132,7 +132,6 @@ Main uses:
 ### APB4-S interface
 
 ![APB-S interface](images/apb-s.svg)
-<!-- .element: style="background-color: white;" -->
 
 ----
 
@@ -188,7 +187,6 @@ Main uses:
 <!-- .slide: data-background="yellow" -->
 
 ![APB states](images/apb-states.svg)
-<!-- .element: style="background-color: white;" -->
 
 > When a transfer is required, the interface moves into the SETUP state, where the appropriate PSELx is asserted.
 > The interface remains in this state for one clock cycle and always moves to the ACCESS state, where PENABLE is asserted.
@@ -273,7 +271,6 @@ Main uses:
 ### AHB-Lite interfaces
 
 ![AHB interface](images/ahb.svg)
-<!-- .element: style="background-color: white;" -->
 
 ----
 
