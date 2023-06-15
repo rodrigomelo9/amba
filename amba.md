@@ -279,7 +279,7 @@ Main uses:
 
 ### AHB-Lite Signaling (basic transfers)
 
-![AHB basic transfers signaling](images/ahb-waves-basic.png)
+![AHB basic transfers signaling](images/ahb-waves-basic.svg)
 <!-- .element: style="background-color: white;" -->
 
 ----

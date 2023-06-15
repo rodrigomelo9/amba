@@ -1,7 +1,7 @@
 {
   signal: [
-    {name: 'xCLK',    wave: 'p....', period: 1 },
-    {name: 'xRESETn', wave: '01...'},
+    {name: 'xCLK',      wave: 'p....', period: 1 },
+    {name: 'xRESETn',   wave: '01...'},
     {name: 'x<VALID>',  wave: '0.1..'},
     {name: 'x<OTHERS>', wave: 'x.2..'}
   ]
