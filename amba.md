@@ -131,13 +131,13 @@ Main uses:
 
 ### APB4-S interface
 
-![APB-S interface](images/apb-s.svg)
+![APB-S interface](images/apb/apb-interface.svg)
 
 ----
 
 ### APB4 Signaling
 
-![APB Signaling](images/apb-waves.png)
+![APB Signaling](images/apb/apb-single.svg)
 <!-- .element: style="background-color: white;" -->
 
 ----
@@ -186,7 +186,7 @@ Main uses:
 ### Operating States
 <!-- .slide: data-background="yellow" -->
 
-![APB states](images/apb-states.svg)
+![APB states](images/apb/apb-states.svg)
 
 > When a transfer is required, the interface moves into the SETUP state, where the appropriate PSELx is asserted.
 > The interface remains in this state for one clock cycle and always moves to the ACCESS state, where PENABLE is asserted.
