@@ -684,21 +684,21 @@ xUSER    | User-defined (not recommended)
 
 ### Buses
 
-![Bus](images/bus.svg)
+![Bus](images/interconnect/bus.svg)
 <!-- .element: style="background-color: white;" -->
 
 ----
 
 ### Crossbar switches
 
-![Crossbar](images/crossbar.svg)
+![Crossbar](images/interconnect/crossbar.svg)
 <!-- .element: style="background-color: white;" -->
 
 ----
 
 ### Network-on-Chip (NoC)
 
-![NoC](images/noc.svg)
+![NoC](images/interconnect/noc.svg)
 <!-- .element: style="background-color: white;" -->
 
 ---
