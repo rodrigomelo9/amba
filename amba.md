@@ -572,7 +572,7 @@ Additionally, each channel transfers information in one direction, and there isn
 
 ### AXI4-Lite interface
 
-![AXI4-Lite interface](images/axi-lite.svg)
+![AXI4-Lite interface](images/axil/axil-interface.svg)
 
 ---
 <!-- ###################################################################### -->
@@ -635,7 +635,7 @@ xUSER    | User-defined (not recommended)
 
 ### AXI4 interface
 
-![AXI4 interface](images/axi.svg)
+![AXI4 interface](images/axif/axif-interface.svg)
 
 ---
 <!-- ###################################################################### -->
@@ -672,7 +672,7 @@ xUSER    | User-defined (not recommended)
 
 ### AXI4-Stream interface
 
-![AXI4-Stream interface](images/axi-stream.svg)
+![AXI4-Stream interface](images/axis/axis-interface.svg)
 
 ---
 <!-- ###################################################################### -->
