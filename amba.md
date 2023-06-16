@@ -519,26 +519,6 @@ Nothing more is said in the specification about unaligned transfers.
 > * The destination uses the READY signal to accept INFO.
 <!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
 
-----
-
-### Reasons for multiple channels
-<!-- .slide: data-background="yellow" -->
-
-Most systems use one of three interconnect topologies:
-<!-- .element: style="font-size: 0.6em !important;" -->
-1. Shared address and data buses
-<!-- .element: style="font-size: 0.6em !important;" -->
-2. Shared address buses and multiple data buses
-<!-- .element: style="font-size: 0.6em !important;" -->
-3. Multiple address and data buses
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-With the channels schema, we can use the second alternative to achieve a good balance between system performance and interconnect complexity.
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-Additionally, each channel transfers information in one direction, and there isn't any fixed relationship between them, so register slices can be inserted in any channel to improve timing, at the cost of additional latency cycles.
-<!-- .element: style="font-size: 0.6em !important;" -->
-
 ---
 <!-- ###################################################################### -->
 ### AXI-Lite
@@ -826,14 +806,50 @@ TUSERCHK      | TUSER           | ceil(USERWIDTH/8)  | TVALID
 ![Performance](images/performance.svg)
 <!-- .element: style="background-color: white; height: 12em;" -->
 
+----
+
+### Reasons for BURST transactions
+
 > In a real system, there are latencies and arbitration. There, burst transfers and outstanding transactions come into the action
 <!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
+
+----
+
+### Reasons for WRITE STROBE
+
+* Implementation of column-based algorithms
+* Decrease the need for read-modify-write operations
+* Deal with access to a wider data bus
+  * 32/64-bits access in a 128-bits bus
+  * Different widths in a interconnect
+
+----
+
+### Reasons for multiple channels
+
+Most systems use one of three interconnect topologies:
+<!-- .element: style="font-size: 0.6em !important;" -->
+1. Shared address and data buses
+<!-- .element: style="font-size: 0.6em !important;" -->
+2. Shared address buses and multiple data buses
+<!-- .element: style="font-size: 0.6em !important;" -->
+3. Multiple address and data buses
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+Having channels, we can use the second alternative to achieve a good balance between system performance and interconnect complexity.
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+Additionally, each channel transfers information in one direction, and there isn't any fixed relationship between them, so register slices can be inserted in any channel to improve timing, at the cost of additional latency cycles.
+<!-- .element: style="font-size: 0.6em !important;" -->
 
 ----
 
 ### Multiple interfaces
 
 ![DMA example](images/dma-example.svg)
+
+> It is possible (recommended when suitable) to have multiple interfaces per IP
+<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
 
 ----
 
