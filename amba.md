@@ -507,6 +507,9 @@ Nothing more is said in the specification about unaligned transfers.
 
 ![AXI Channels](images/axi-channels.svg)
 
+> AXI-Stream is comparable with the WRITE DATA CHANNEL
+<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
+
 ----
 
 ### AXI Handshake
@@ -548,6 +551,13 @@ Nothing more is said in the specification about unaligned transfers.
 > AXI5-lite: several signals added, for parity and more flexibility on bus width and ordering
 <!-- .element: style="font-size: 0.4em !important;" -->
 
+Signal   | Description
+---      |---
+AxPROT   | Protection type (un/privileged, non/secure, data/instruction access)
+WSTRB    | Write strobe, indicates valid bytes
+xRESP    | OKAY, EXOKAY (exclusive), SLVERR (Slave ERROR), DECERR (Decode ERROR)
+<!-- .element: style="font-size: 0.5em !important;" -->
+
 ----
 
 ### AXI4-Lite interface
@@ -566,7 +576,7 @@ Nothing more is said in the specification about unaligned transfers.
 
 ----
 
-### AXI signals
+### AXI-Full signals
 
 Write Address Channel    | Write Data Channel         | Read Address Channel     | Read Data Channel
 ---                      |---                         |---                       |---
@@ -592,7 +602,7 @@ AWREADY                  | BREADY                     | AWREADY                 
 
 ----
 
-### AXI signals description
+### AXI-Full signals description
 
 Signal   | Description
 ---      |---
@@ -613,7 +623,7 @@ xUSER    | User-defined (not recommended)
 
 ----
 
-### AXI4 interface
+### AXI4-Full interface
 
 ![AXI4 interface](images/axif/axif-interface.svg)
 
