@@ -274,20 +274,20 @@ Main uses:
 
 ### AHB-Lite interfaces
 
-![AHB interface](images/ahb.svg)
+![AHB interface](images/ahb/ahb-interface.svg)
 
 ----
 
 ### AHB-Lite Signaling (basic transfers)
 
-![AHB basic transfers signaling](images/ahb-waves-basic.svg)
+![AHB basic transfers signaling](images/ahb/ahb-single.svg)
 <!-- .element: style="background-color: white;" -->
 
 ----
 
 ### AHB-Lite Signaling (multiple transfers)
 
-![AHB multiple transfers signaling](images/ahb-waves-multi.png)
+![AHB multiple transfers signaling](images/ahb/ahb-multi.svg)
 <!-- .element: style="background-color: white;" -->
 
 > Extending the data phase of transfer B has the effect of extending the address phase of transfer C.
@@ -320,7 +320,7 @@ Main uses:
 > the address of the following transfer is already available).
 <!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
 
-![AHB response](images/ahb-hresp.png)
+![AHB response](images/ahb/ahb-resp.svg)
 <!-- .element: style="background-color: white;" -->
 
 > * In case of IDLE and BUSY, a zero wait state OKAY response **must** always provide, and the transfer **must** be ignored.
@@ -421,14 +421,14 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 
 ### AHB - WRAP4/INCR4 example
 
-![AHB WRAP4/INCR4 example](images/ahb-wrap4-incr4.png)
+![AHB WRAP4/INCR4 example](images/ahb/ahb-wrap4-incr4.svg)
 <!-- .element: style="background-color: white;" -->
 
 ----
 
 ### AHB - Undefined INCR example
 
-![AHB undefined INCR example](images/ahb-undef-incr.png)
+![AHB undefined INCR example](images/ahb/ahb-undef-incr.svg)
 <!-- .element: style="background-color: white;" -->
 
 ----
@@ -438,7 +438,7 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 Indicates that the current transfer sequence is indivisible (typically used to maintain the integrity of a semaphore).
 <!-- .element: style="font-size: 0.8em !important;" -->
 
-![AHB locked transfers](images/ahb-lock.png)
+![AHB locked transfers](images/ahb/ahb-lock.svg)
 <!-- .element: style="background-color: white;" -->
 
 > After a locked transfer, it is recommended to insert an IDLE transfer.
@@ -448,7 +448,7 @@ Indicates that the current transfer sequence is indivisible (typically used to m
 
 ### The full picture
 
-![AHB full signaling](images/ahb-waves.png)
+![AHB full signaling](images/ahb/ahb-full.svg)
 <!-- .element: style="background-color: white;" -->
 
 ----
