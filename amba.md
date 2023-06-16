@@ -823,7 +823,7 @@ TUSERCHK      | TUSER           | ceil(USERWIDTH/8)  | TVALID
 
 ### Performance comparison
 
-![Performance](images/performance.png)
+![Performance](images/performance.svg)
 <!-- .element: style="background-color: white; height: 12em;" -->
 
 > In a real system, there are latencies and arbitration. There, burst transfers and outstanding transactions come into the action
