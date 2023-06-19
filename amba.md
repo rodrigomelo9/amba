@@ -52,8 +52,8 @@ It facilitates right-first-time development of multiprocessor designs, with larg
 | Advanced<br>Peripherals<br>Bus      | APB<br>(1996) | APB2<br>(1999) | APB3<br>(2003/4)   | APB4<br>(2010)              | APB5<br>(2021)
 <!-- .element: style="font-size: 0.5em !important;" -->
 
-> **WARNING:** ASB and the first APB are deprecated (shouldn't be used in new designs)
-<!-- .element: style="font-size: 0.4em !important;" -->
+> **ATTENTION:** ASB and the first APB are deprecated (shouldn't be used in new designs)
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
 
@@ -77,12 +77,12 @@ Subordinate | Agent that receives and responds to requests (aka completer, recei
 
 * All signals are sampled at the rising edge of xCLK.
 * xRESETn is the only active low signal.
-
 ![Exit from RESET](images/reset.svg)
 <!-- .element: style="background-color: white;" -->
-
 * xADDR indicates a byte address.
-* Transfers are initiated by M, finished by S, and **CAN'T BE CANCELED!!!**
+
+> **ATTENTION:** TRANSFERS are initiated by M, finished by S, and **CAN'T BE CANCELED!!!**
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ---
 
@@ -165,7 +165,7 @@ Main uses:
 * When asserted HIGH, the corresponding byte of PWDATA contains valid information
 
 > During read transfers, all the bits of PSTRB **must** be driven LOW
-<!-- .element: style="font-size: 0.4em !important;" -->
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
 
@@ -175,11 +175,9 @@ Main uses:
 * PPROT[1]: Secure or Non-secure
 * PPROT[2]: Data or Instruction
 
-> **ATTENTION:** the primary use of PPROT is as an identifier for Secure or Non-secure transactions (it is acceptable to use different interpretations for PPROT[0] and PPROT[2])
-<!-- .element: style="font-size: 0.4em !important;" -->
-
-> **WARNING:** PPROT[2] is provided as a hint, but might not be accurate in all cases
-<!-- .element: style="font-size: 0.4em !important;" -->
+> * The primary use of PPROT is as an identifier for Secure or Non-secure transactions (it is acceptable to use different interpretations for PPROT[0] and PPROT[2])
+> * PPROT[2] is provided as a hint, but might not be accurate in all cases
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
 
@@ -291,14 +289,14 @@ Main uses:
 <!-- .element: style="background-color: white;" -->
 
 > Extending the data phase of transfer B has the effect of extending the address phase of transfer C.
-<!-- .element: style="font-size: 0.4em !important;" -->
+<!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
 
 ----
 
 ### AHB - HREADY & HREADYOUT (waited transfers)
 
 > SUBORDINATES require HREADY as both an input and an output (HREADYOUT) signal.
-<!-- .element: style="font-size: 0.4em !important;" -->
+<!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
 
 * HSELx, HADDR and control **must** be sampled when HREADY is HIGH (previous transfer is completed).
 * HREADYOUT is driven during the data phase:
@@ -307,53 +305,7 @@ Main uses:
 * The INTERCONNECT is responsible for combining all the HREADYOUT to generate a single HREADY.
 
 > A SUBORDINATE cannot request that the address phase be extended, so it **must** always be capable of sampling the address.
-<!-- .element: style="font-size: 0.4em !important;" -->
-
-----
-
-### AHB - HRESP (transfer response)
-
-> HRESP is used to indicate an ERROR condition.
-> OKAY response can be given in a single cycle, but for ERROR two cycles are required.
-> In the first cycle, HREADY must be LOW, and HIGH in the second.
-> The two cycles are needed because of the pipelined nature of the bus (when ERROR response starts,
-> the address of the following transfer is already available).
-<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
-
-![AHB response](images/ahb/ahb-resp.svg)
-<!-- .element: style="background-color: white;" -->
-
-> * In case of IDLE and BUSY, a zero wait state OKAY response **must** always provide, and the transfer **must** be ignored.
-> * If an ERROR response is received, the remaining transfers in a burst can be canceled, but it is also acceptable to continue.
-<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
-
-----
-
-### AHB5 - HWSTRB
-<!-- .slide: data-background="cyan" -->
-
-* Enables sparse data transfer on the write data bus
-* There is one bit per each byte of HWDATA
-  * HWSTRB[n] -> HWDATA[(8n + 7):(8n)]
-* When asserted HIGH, the corresponding byte of HWDATA contains valid information
-
-> * During read transfers, it is recommended that write strobes are deasserted.
-> * Write transfers with all HWSTRB deasserted are permitted (no bytes are written).
-> * HWSTRB can change between beats of a burst.
-<!-- .element: style="font-size: 0.4em !important;" -->
-
-----
-
-### AHB - HPROT
-
-* HPROT[0]: Data/Opcode
-* HPROT[1]: Privileged
-* HPROT[2]: Buffereable
-* HPROT[3]: Cacheable
-
-> * HPROT **must** remain constant during a burst transfer.
-> * A subordinate shouldn't use HPROT unless absolutely necessary.
-<!-- .element: style="font-size: 0.4em !important;" -->
+<!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
 
 ----
 
@@ -371,7 +323,7 @@ Main uses:
 > * HTRANS can change from IDLE to NONSEQ. When it changes to NONSEQ, it must keep constant until HREADY is HIGH.
 > * For a fixed-length burst, HTRANS can change from BUSY to NONSEQ. When it changes to SEQ, it must keep constant until HREADY is HIGH.
 > * During an INCR, HTRANS can change from BUSY to any other transfer type. The burst continues if a SEQ is performed but terminates in other cases.
-<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
 
@@ -393,7 +345,7 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 
 > * HSIZE **must** remain constant during a burst transfer.
 > * SIZE = `2**HSIZE` (or `1<<HSIZE`).
-<!-- .element: style="font-size: 0.4em !important;" -->
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
 
@@ -433,6 +385,52 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 
 ----
 
+### AHB - HRESP (transfer response)
+
+> HRESP is used to indicate an ERROR condition.
+> OKAY response can be given in a single cycle, but for ERROR two cycles are required.
+> In the first cycle, HREADY must be LOW, and HIGH in the second.
+> The two cycles are needed because of the pipelined nature of the bus (when ERROR response starts,
+> the address of the following transfer is already available).
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
+
+![AHB response](images/ahb/ahb-resp.svg)
+<!-- .element: style="background-color: white;" -->
+
+> * In case of IDLE and BUSY, a zero wait state OKAY response **must** always provide, and the transfer **must** be ignored.
+> * If an ERROR response is received, the remaining transfers in a burst can be canceled, but it is also acceptable to continue.
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
+
+----
+
+### AHB5 - HWSTRB
+<!-- .slide: data-background="cyan" -->
+
+* Enables sparse data transfer on the write data bus
+* There is one bit per each byte of HWDATA
+  * HWSTRB[n] -> HWDATA[(8n + 7):(8n)]
+* When asserted HIGH, the corresponding byte of HWDATA contains valid information
+
+> * During read transfers, it is recommended that write strobes are deasserted.
+> * Write transfers with all HWSTRB deasserted are permitted (no bytes are written).
+> * HWSTRB can change between beats of a burst.
+<!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
+
+----
+
+### AHB - HPROT
+
+* HPROT[0]: Data/Opcode
+* HPROT[1]: Privileged
+* HPROT[2]: Buffereable
+* HPROT[3]: Cacheable
+
+> * HPROT **must** remain constant during a burst transfer.
+> * A subordinate shouldn't use HPROT unless absolutely necessary.
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
+
+----
+
 ### AHB - HMASTLOCK (locked transfers)
 
 Indicates that the current transfer sequence is indivisible (typically used to maintain the integrity of a semaphore).
@@ -442,7 +440,7 @@ Indicates that the current transfer sequence is indivisible (typically used to m
 <!-- .element: style="background-color: white;" -->
 
 > After a locked transfer, it is recommended to insert an IDLE transfer.
-<!-- .element: style="font-size: 0.4em !important;" -->
+<!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
 
 ----
 
@@ -464,6 +462,7 @@ HRESP was 2 bits wide in AHB2, to support SPLIT and RETRY, something that was re
 <!-- .slide: data-background="yellow" -->
 
 > "All transfers in a burst must be aligned to the address boundary equal to the size of the transfer".
+<!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
 
 Nothing more is said in the specification about unaligned transfers.
 
