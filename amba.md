@@ -547,7 +547,8 @@ Nothing more is said in the specification about unaligned transfers.
 |                      | BREADY                     |                          | ARESETn
 <!-- .element: style="font-size: 0.5em !important;" -->
 
-> AXI5-lite: several signals added, for parity and more flexibility on bus width and ordering.
+> * xDATA can be 32-bit or 64-bit wide.
+> * AXI5-lite: several signals added, for parity and more flexibility on bus width and ordering.
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 Signal   | Description
@@ -565,7 +566,7 @@ xRESP    | OKAY, EXOKAY (exclusive), SLVERR (Slave ERROR), DECERR (Decode ERROR)
 
 ----
 
-### AXI - AxPROT (protection type)
+### AXI - AWPROT/ARPROT (protection type)
 
 * AxPROT[0]: Un/privileged
 * AxPROT[1]: Secure or Non-secure
@@ -588,7 +589,7 @@ xRESP    | OKAY, EXOKAY (exclusive), SLVERR (Slave ERROR), DECERR (Decode ERROR)
 
 ----
 
-### AXI - xRESP (transfer response)
+### AXI - BRESP/RRESP (transfer response)
 
 xRESP[1:0] | Response
 ---        |---
@@ -665,6 +666,49 @@ xUSER    | User-defined (not recommended)
 ### AXI4-Full interface
 
 ![AXI4 interface](images/axif/axif-interface.svg)
+
+----
+
+### AXI - AWLEN/AXLEN
+
+----
+
+### AXI - AWSIZE/ARSIZE
+
+----
+
+### AXI - AWBURST/ARBURST
+
+----
+
+### AXI - WLAST/RLAST
+
+----
+
+### AXI - AWID/~~WID~~/BID/ARID/RID
+
+----
+
+### AXI - AWLOCK/ARLOCK
+
+----
+
+### AXI - AWCACHE/ARCACHE
+
+----
+
+### AXI - AWQOS/ARQOS
+<!-- .slide: data-background="cyan" -->
+
+----
+
+### AXI - AWREGION/ARREGION
+<!-- .slide: data-background="cyan" -->
+
+----
+
+### AXI - AWUSER/WUSER/BUSER/ARUSER/RUSER
+<!-- .slide: data-background="cyan" -->
 
 ---
 <!-- ###################################################################### -->
