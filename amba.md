@@ -52,7 +52,7 @@ It facilitates right-first-time development of multiprocessor designs, with larg
 | Advanced<br>Peripherals<br>Bus      | APB<br>(1996) | APB2<br>(1999) | APB3<br>(2003/4)   | APB4<br>(2010)              | APB5<br>(2021)
 <!-- .element: style="font-size: 0.5em !important;" -->
 
-> **ATTENTION:** ASB and the first APB are deprecated (shouldn't be used in new designs)
+> **ATTENTION:** ASB and the first APB are deprecated (shouldn't be used in new designs).
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
@@ -164,7 +164,7 @@ Main uses:
   * PSTRB[n] -> PWDATA[(8n + 7):(8n)]
 * When asserted HIGH, the corresponding byte of PWDATA contains valid information
 
-> During read transfers, all the bits of PSTRB **must** be driven LOW
+> During read transfers, all the bits of PSTRB **must** be driven LOW.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
@@ -175,8 +175,8 @@ Main uses:
 * PPROT[1]: Secure or Non-secure
 * PPROT[2]: Data or Instruction
 
-> * The primary use of PPROT is as an identifier for Secure or Non-secure transactions (it is acceptable to use different interpretations for PPROT[0] and PPROT[2])
-> * PPROT[2] is provided as a hint, but might not be accurate in all cases
+> * The primary use of PPROT is as an identifier for Secure or Non-secure transactions (it is acceptable to use different interpretations for PPROT[0] and PPROT[2]).
+> * PPROT[2] is provided as a hint, but might not be accurate in all cases.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
@@ -211,7 +211,7 @@ PADDR can be unaligned, but the result is UNPREDICTABLE (COMPLETER may utilize t
 |        | PWDATA  |                |                         |
 <!-- .element: style="font-size: 0.5em !important;" -->
 
-> Signals which are not required to be valid **should be** driven to zero
+> Signals which are not required to be valid **should be** driven to zero.
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 ---
@@ -481,8 +481,8 @@ Nothing more is said in the specification about unaligned transfers.
 | HRESP       |              |               |                                    |
 <!-- .element: style="font-size: 0.5em !important;" -->
 
-> * Signals which are not required to be valid can take any value, but 0 or X are recommended
-> * In data transfers with invalid byte lanes, it is recommended that those be 0
+> * Signals which are not required to be valid can take any value, but 0 or X are recommended.
+> * In data transfers with invalid byte lanes, it is recommended that those be 0.
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 ---
@@ -506,7 +506,7 @@ Nothing more is said in the specification about unaligned transfers.
 
 ![AXI Channels](images/axi-channels.svg)
 
-> AXI-Stream is comparable with the WRITE DATA CHANNEL
+> AXI-Stream is comparable with the WRITE DATA CHANNEL.
 <!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
 
 ----
@@ -547,7 +547,7 @@ Nothing more is said in the specification about unaligned transfers.
 |                      | BREADY                     |                          | ARESETn
 <!-- .element: style="font-size: 0.5em !important;" -->
 
-> AXI5-lite: several signals added, for parity and more flexibility on bus width and ordering
+> AXI5-lite: several signals added, for parity and more flexibility on bus width and ordering.
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 Signal   | Description
@@ -562,6 +562,46 @@ xRESP    | OKAY, EXOKAY (exclusive), SLVERR (Slave ERROR), DECERR (Decode ERROR)
 ### AXI4-Lite interface
 
 ![AXI4-Lite interface](images/axil/axil-interface.svg)
+
+----
+
+### AXI - AxPROT (protection type)
+
+* AxPROT[0]: Un/privileged
+* AxPROT[1]: Secure or Non-secure
+* AxPROT[2]: Data or Instruction
+
+> AxPROT[2] is provided as a hint, but might not be accurate in all cases.
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
+
+----
+
+### AXI - WSTRB
+
+* Enables sparse data transfer on the write data bus
+* There is one bit per each byte of WDATA
+  * WSTRB[n] -> WDATA[(8n + 7):(8n)]
+* When asserted HIGH, the corresponding byte of WDATA contains valid information
+
+> When WVALID is LOW, WSTRB can take any value but it is recommended to be driven LOW or held at their previous value.
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
+
+----
+
+### AXI - xRESP (transfer response)
+
+xRESP[1:0] | Response
+---        |---
+00         | **OKAY:** normal access success (or the failure of an exclusive access, also when not supported)
+01         | **EXOKAY:** exclusive access success
+10         | **SLVERR:** destination was reached, but it wants to return an ERROR condition (ex: overrun/underrun, unsupported transfer size, write access attempted to read-only location, timeout, access attempted to a disabled or powered-down function)
+11         | **DECERR:** DECode ERRor, typically generated by an interconnect, to indicate that there is nothing at the transaction address (the specification recommends routing a default device, being it charge of returns this response)
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+> * In write transactions there is a single response for the entire burst.
+> * In read transactions there is one response for each transfer of a burst.
+> * The specification requires that all data transfers for a transaction **must** be performed, even if an error occurs.
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
 
 ---
 <!-- ###################################################################### -->
@@ -819,7 +859,7 @@ TUSERCHK      | TUSER           | ceil(USERWIDTH/8)  | TVALID
 
 ### Reasons for BURST transactions
 
-> In a real system, there are latencies and arbitration. There, burst transfers and outstanding transactions come into the action
+> In a real system, there are latencies and arbitration. There, burst transfers and outstanding transactions come into the action.
 <!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
 
 ----
@@ -857,7 +897,7 @@ Additionally, each channel transfers information in one direction, and there isn
 
 ![DMA example](images/dma-example.svg)
 
-> It is possible (recommended when suitable) to have multiple interfaces per IP
+> It is possible (recommended when suitable) to have multiple interfaces per IP.
 <!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
 
 ----
