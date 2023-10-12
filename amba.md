@@ -697,8 +697,16 @@ xUSER    | User-defined (not recommended)
 
 ----
 
-### AXI - AWQOS/ARQOS
+### AXI - AWQOS/ARQOS (Quality of Service)
 <!-- .slide: data-background="cyan" -->
+
+* The exact use is not specified, but it is recommended as a priority indicator for the associated transaction
+* A higher value indicates a higher priority (but ordering rules take precedence)
+* A 0 value (default) indicates that the interface is not participating in any QoS scheme
+
+> * Support for this feature requires a system-level understanding, and collaboration between participating components (programmability recommended).
+> * Additional interpretations of the QoS identifier can be used.
+<!-- .element: style="font-size: 0.4em !important;" -->
 
 ----
 
@@ -709,6 +717,10 @@ xUSER    | User-defined (not recommended)
 
 ### AXI - AWUSER/WUSER/BUSER/ARUSER/RUSER
 <!-- .slide: data-background="cyan" -->
+
+* It is recommended not to use the User Defined Signals because have no defined uses, which can lead to interoperability issues
+* When implemented it is not required to support all the channels
+* Its width is implementation-defined and can be different for each channel
 
 ---
 <!-- ###################################################################### -->
