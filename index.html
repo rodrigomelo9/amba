@@ -484,6 +484,10 @@ WSTRB    | Write strobe, indicates valid bytes
 xRESP    | OKAY, EXOKAY (exclusive), SLVERR (Slave ERROR), DECERR (Decode ERROR)
 <!-- .element: style="font-size: 0.5em !important;" -->
 </script></section><section data-markdown><script type="text/template">
+### AXI4-Lite interface
+
+![AXI4-Lite interface](images/axil/axil-interface.svg)
+</script></section><section data-markdown><script type="text/template">
 ### AXI - AxPROT (protection type)
 
 * AxPROT[0]: Un/privileged
@@ -517,10 +521,6 @@ xRESP[1:0] | Response
 > * In read transactions there is one response for each transfer of a burst.
 > * The specification requires that all data transfers for a transaction **must** be performed, even if an error occurs.
 <!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
-</script></section><section data-markdown><script type="text/template">
-### AXI4-Lite interface
-
-![AXI4-Lite interface](images/axil/axil-interface.svg)
 </script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
 ### AXI-Full
 <!-- .slide: data-background="#581845" -->
