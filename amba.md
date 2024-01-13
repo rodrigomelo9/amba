@@ -533,6 +533,15 @@ Each channel transfers INFO in one direction, and there isn't a fixed relationsh
 **ATTENTION:** there **must** be no combinatorial paths between input and output signals.
 <!-- .element: style="font-size: 0.4em !important;" -->
 
+----
+
+### Channels dependencies
+
+TBD
+
+**ATTENTION:** dependency rules **must** be observed to prevent a deadlock condition.
+<!-- .element: style="font-size: 0.4em !important;" -->
+
 ---
 <!-- ###################################################################### -->
 ### AXI-Lite
