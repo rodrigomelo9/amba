@@ -1,5 +1,6 @@
 <!-- ###################################################################### -->
 ## AMBA APB, AHB and AXI
+### from a practical point of view
 <!-- .slide: data-background="#145A32" -->
 <!-- ###################################################################### -->
 
@@ -8,6 +9,20 @@
 Rodrigo Alejandro Melo
 
 [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
+
+---
+<!-- ###################################################################### -->
+### Introduction
+<!-- ###################################################################### -->
+
+While delving into the AMBA specifications, it's worth noting that they can be challenging to understand. In most cases, not all features are essential, and waveforms are often limited or no provided at all. Although tutorials are available, they typically represent adaptations of the spec, lacking real-world context.
+<!-- .element: style="font-size: 0.8em !important; width: 30em;" -->
+
+Our focus in this presentation is on AMBA interfaces commonly present in SoC IPs. We'll assume the interconnect is already addressed, cutting through the complexity and providing practical insights for system design.
+<!-- .element: style="font-size: 0.8em !important; width: 30em;" -->
+
+> If you still want to start from AMBA specs, I recommend APB4, AHB3 and AXI4.
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ---
 <!-- ###################################################################### -->
