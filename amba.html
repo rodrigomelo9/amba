@@ -15,8 +15,12 @@
   </head>
   <body>
     <div class="reveal">
-      <div class="slides"><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
+      <div class="slides">
+        <section data-markdown data-separator="\r?\n---\r?\n" data-separator-vertical="\r?\n----\r?\n">
+          <textarea data-template>
+            <!-- ###################################################################### -->
 ## AMBA APB, AHB and AXI
+### from a practical point of view
 <!-- .slide: data-background="#145A32" -->
 <!-- ###################################################################### -->
 
@@ -25,7 +29,23 @@
 Rodrigo Alejandro Melo
 
 [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
-</script></section><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
+
+---
+<!-- ###################################################################### -->
+### Introduction
+<!-- ###################################################################### -->
+
+While delving into the AMBA specifications, it's worth noting that they can be challenging to understand. In most cases, not all features are essential, and waveforms are often limited or no provided at all. Although tutorials are available, they typically represent adaptations of the spec, lacking real-world context.
+<!-- .element: style="font-size: 0.8em !important; width: 30em;" -->
+
+Our focus in this presentation is on AMBA interfaces commonly present in SoC IPs. We'll assume the interconnect is already addressed, cutting through the complexity and providing practical insights for system design.
+<!-- .element: style="font-size: 0.8em !important; width: 30em;" -->
+
+> If you still want to start from AMBA specs, I recommend APB4, AHB3 and AXI4.
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
+
+---
+<!-- ###################################################################### -->
 ### Outline
 <!-- ###################################################################### -->
 
@@ -39,17 +59,23 @@ Rodrigo Alejandro Melo
 * [Interconnect](#/9)
 * [Parity signals](#/10)
 * [Final remarks](#/11)
-</script></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+
+---
+<!-- ###################################################################### -->
 ### AMBA
 #### Advanced Microcontroller Bus Architecture
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Description
 
 AMBA is a freely available, globally adopted, open standard for the connection and management of functional blocks in a System-on-Chip (SoC).
 It facilitates right-first-time development of multiprocessor designs, with large numbers of controllers and peripherals.
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AMBA specifications
 
 |                                     | AMBA          | AMBA2          | AMBA3              | AMBA4                       | AMBA5
@@ -63,7 +89,9 @@ It facilitates right-first-time development of multiprocessor designs, with larg
 
 > **ATTENTION:** ASB and the first APB are deprecated (shouldn't be used in new designs).
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Terminology
 
 Term        | Description
@@ -77,24 +105,32 @@ Burst       | Transaction with more than one transfer
 Manager     | Agent that initiates transactions (aka requester, transmitter)
 Subordinate | Agent that receives and responds to requests (aka completer, receiver)
 <!-- .element: style="font-size: 0.5em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### General considerations
 
 * All signals are sampled at the rising edge of xCLK.
 * xRESETn is the only active low signal.
+
 ![Exit from RESET](images/reset.svg)
 <!-- .element: style="background-color: white;" -->
+
 * xADDR indicates a byte address.
 
 > **ATTENTION:** TRANSFERS are initiated by M, finished by S, and **CAN'T BE CANCELED!!!**
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-</script></section></section><section ><section data-markdown><script type="text/template">
+
+---
+
 <!-- ###################################################################### -->
 ### APB
 #### Advanced Peripherals Bus
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Description
 
 A low-cost interface, optimized for minimal power consumption and reduced complexity.
@@ -104,7 +140,9 @@ Every transfer takes at least two cycles to complete.
 Main uses:
 * Low bandwidth/speed peripherals
 * Control/Status registers
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### APB signals
 
 |                | APB2  | APB3  | APB4  | APB5  | Default | Description
@@ -125,27 +163,37 @@ Main uses:
 | PxUSER[]       |       |       |       | O     |         | User defined attribute
 | PxCHK          |       |       |       | O     |         | Parity protection (for safety-critical applications)
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### APB4-S interface
 
 ![APB-S interface](images/apb/apb-interface.svg)
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### APB4 Signaling
 
 ![APB Signaling](images/apb/apb-single.svg)
 <!-- .element: style="background-color: white;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### APB3 - PREADY
 
 * COMPLETER can use PREADY to extend (introduce wait states) transfers.
 * Peripherals with fixed two-cycle access can set PREADY always HIGH.
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### APB3 - PSLVERR
 
 * Can be used to indicate an ERROR condition (error, unsupported, timeout, etc).
 * A WRITE transaction with ERROR, might or might not have updated the state of the peripheral.
 * A READ transaction with ERROR, might or might not provide valid data.
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### APB4 - PSTRB
 
 * Enables sparse data transfer on the write data bus
@@ -155,7 +203,9 @@ Main uses:
 
 > During read transfers, all the bits of PSTRB **must** be driven LOW.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### APB4 - PPROT
 
 * PPROT[0]: Normal or Privileged
@@ -165,7 +215,9 @@ Main uses:
 > * The primary use of PPROT is as an identifier for Secure or Non-secure transactions (it is acceptable to use different interpretations for PPROT[0] and PPROT[2]).
 > * PPROT[2] is provided as a hint, but might not be accurate in all cases.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Operating States
 <!-- .slide: data-background="yellow" -->
 
@@ -174,12 +226,16 @@ Main uses:
 > When a transfer is required, the interface moves into the SETUP state, where the appropriate PSELx is asserted.
 > The interface remains in this state for one clock cycle and always moves to the ACCESS state, where PENABLE is asserted.
 <!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Unaligned transfers
 <!-- .slide: data-background="yellow" -->
 
 PADDR can be unaligned, but the result is UNPREDICTABLE (COMPLETER may utilize the unaligned address, aligned address, or indicate an error response).
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Validity rules
 <!-- .slide: data-background="yellow" -->
 
@@ -194,13 +250,17 @@ PADDR can be unaligned, but the result is UNPREDICTABLE (COMPLETER may utilize t
 
 > Signals which are not required to be valid **should be** driven to zero.
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section></section><section ><section data-markdown><script type="text/template">
+
+---
+
 <!-- ###################################################################### -->
 ### AHB
 #### Advanced High-performance Bus
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Description
 
 A high-performance, high-bandwidth, interface, that supports burst data transfers.
@@ -210,7 +270,9 @@ Main uses:
 * Internal memory devices
 * External memory interfaces
 * High-bandwidth peripherals
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB signals
 
 |               | AHB2     | AHB-Lite  | AHB5    | Default | Description
@@ -242,16 +304,22 @@ Main uses:
 | HxUSER[]      |          |           | O       |         | User defined attribute
 | HxCHKx        |          |           | O       |         | Parity protection (for safety-critical applications)
 <!-- .element: style="font-size: 0.3em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB-Lite interfaces
 
 ![AHB interface](images/ahb/ahb-interface.svg)
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB-Lite Signaling (basic transfers)
 
 ![AHB basic transfers signaling](images/ahb/ahb-single.svg)
 <!-- .element: style="background-color: white;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB-Lite Signaling (multiple transfers)
 
 ![AHB multiple transfers signaling](images/ahb/ahb-multi.svg)
@@ -259,7 +327,9 @@ Main uses:
 
 > Extending the data phase of transfer B has the effect of extending the address phase of transfer C.
 <!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB - HREADY & HREADYOUT (waited transfers)
 
 > SUBORDINATES require HREADY as both an input and an output (HREADYOUT) signal.
@@ -273,7 +343,9 @@ Main uses:
 
 > A SUBORDINATE cannot request that the address phase be extended, so it **must** always be capable of sampling the address.
 <!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB - HTRANS (transfer types)
 
 | HTRANS[1:0] | Type   | Description                                                                                                           |
@@ -289,7 +361,9 @@ Main uses:
 > * For a fixed-length burst, HTRANS can change from BUSY to NONSEQ. When it changes to SEQ, it must keep constant until HREADY is HIGH.
 > * During an INCR, HTRANS can change from BUSY to any other transfer type. The burst continues if a SEQ is performed but terminates in other cases.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB - HSIZE (transfer size)
 
 Indicates the size (bytes) of a data transfer (**must** be less than or equal to the width of the data bus).
@@ -309,7 +383,9 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 > * HSIZE **must** remain constant during a burst transfer.
 > * SIZE = `2**HSIZE` (or `1<<HSIZE`).
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB - HBURST (burst types)
 
 | HBURST[2:0] | Type        | Description
@@ -329,17 +405,23 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 > * Transfers in a burst **must** be aligned to the address boundary (as indicated by HSIZE[2:0]).
 > * Wrapping bursts wrap when they cross an address boundary (BEATS x SIZE).
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB - WRAP4/INCR4 example
 
 ![AHB WRAP4/INCR4 example](images/ahb/ahb-wrap4-incr4.svg)
 <!-- .element: style="background-color: white;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB - Undefined INCR example
 
 ![AHB undefined INCR example](images/ahb/ahb-undef-incr.svg)
 <!-- .element: style="background-color: white;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB - HRESP (transfer response)
 
 > HRESP is used to indicate an ERROR condition.
@@ -355,7 +437,9 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 > * In case of IDLE and BUSY, a zero wait state OKAY response **must** always provide, and the transfer **must** be ignored.
 > * If an ERROR response is received, the remaining transfers in a burst can be canceled, but it is also acceptable to continue.
 <!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB5 - HWSTRB
 <!-- .slide: data-background="cyan" -->
 
@@ -368,7 +452,9 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 > * Write transfers with all HWSTRB deasserted are permitted (no bytes are written).
 > * HWSTRB can change between beats of a burst.
 <!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB - HPROT
 
 * HPROT[0]: Data/Opcode
@@ -379,7 +465,9 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 > * HPROT **must** remain constant during a burst transfer.
 > * A subordinate shouldn't use HPROT unless absolutely necessary.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB - HMASTLOCK (locked transfers)
 
 Indicates that the current transfer sequence is indivisible (typically used to maintain the integrity of a semaphore).
@@ -390,17 +478,23 @@ Indicates that the current transfer sequence is indivisible (typically used to m
 
 > After a locked transfer, it is recommended to insert an IDLE transfer.
 <!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### The full picture
 
 ![AHB full signaling](images/ahb/ahb-full.svg)
 <!-- .element: style="background-color: white;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB2 - HRESP
 <!-- .slide: data-background="yellow" -->
 
 HRESP was 2 bits wide in AHB2, to support SPLIT and RETRY, something that was removed on AMBA3.
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Unaligned transfers
 <!-- .slide: data-background="yellow" -->
 
@@ -408,7 +502,9 @@ HRESP was 2 bits wide in AHB2, to support SPLIT and RETRY, something that was re
 <!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
 
 Nothing more is said in the specification about unaligned transfers.
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Validity rules
 <!-- .slide: data-background="yellow" -->
 
@@ -425,41 +521,76 @@ Nothing more is said in the specification about unaligned transfers.
 > * Signals which are not required to be valid can take any value, but 0 or X are recommended.
 > * In data transfers with invalid byte lanes, it is recommended that those be 0.
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+
+---
+<!-- ###################################################################### -->
 ### AXI
 #### Advanced eXtensible Interface
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Variations
 
 * **Lite:** Control/Status registers
 * **Full:** Higher (than AHB) performance system bus
 * **Stream:** High speeds unidirectional transfers
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI Channels
 
 ![AXI Channels](images/axi-channels.svg)
 
-> AXI-Stream is comparable with the WRITE DATA CHANNEL.
+Each channel transfers INFO in one direction, and there isn't a fixed relationship between channels, so registers (for timing closure) can be inserted in any channel, at the expense of an additional cycle of latency.
 <!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI Handshake
 
 ![AXI Handshake](images/axi-handshake.svg)
 <!-- .element: style="background-color: white;" -->
 
 > * Each independent channel consists of INFO plus VALID and READY signals that provide a two-way handshake mechanism.
-> * The source uses the VALID signal to indicate valid INFO is available on the channel.
-> * The destination uses the READY signal to accept INFO.
+> * The source uses the xVALID signal to indicate valid INFO is available on the channel.
+>   * It is not permitted to wait until xREADY is asserted before asserting xVALID.
+>   * When asserted, it **must** remain asserted until the slave asserts xREADY.
+> * The destination uses the xREADY signal to accept INFO.
+>   * It is permitted to wait for xVALID to be asserted before asserting the corresponding xREADY.
+>   * If xREADY is asserted, it is permitted to deassert xREADY before xVALID is asserted.
+>   * Its default value can be HIGH or LOW, but HIGH is recommended
+> * During reset, xVALID **must** be LOW.
+>   * All other signals can be driven to any value.
 <!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
-</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+
+**ATTENTION:** there **must** be no combinatorial paths between input and output signals.
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### Channels dependencies
+
+TBD
+
+**ATTENTION:** dependency rules **must** be observed to prevent a deadlock condition.
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+---
+<!-- ###################################################################### -->
 ### AXI-Lite
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Description
-</script></section><section data-markdown><script type="text/template">
+
+A subset of AXI for communication with simpler control register-style interfaces.
+
+----
+
 ### AXI-Lite signals
 
 |Write Address Channel | Write Data Channel         | Read Address Channel     | Read Data Channel
@@ -482,13 +613,17 @@ Signal   | Description
 ---      |---
 AxPROT   | Protection type (un/privileged, non/secure, data/instruction access)
 WSTRB    | Write strobe, indicates valid bytes
-xRESP    | OKAY, EXOKAY (exclusive), SLVERR (Slave ERROR), DECERR (Decode ERROR)
+xRESP    | OKAY, SLVERR (Slave ERROR), DECERR (Decode ERROR)
 <!-- .element: style="font-size: 0.5em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI4-Lite interface
 
 ![AXI4-Lite interface](images/axil/axil-interface.svg)
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - AWPROT/ARPROT (protection type)
 
 * AxPROT[0]: Un/privileged
@@ -497,7 +632,9 @@ xRESP    | OKAY, EXOKAY (exclusive), SLVERR (Slave ERROR), DECERR (Decode ERROR)
 
 > AxPROT[2] is provided as a hint, but might not be accurate in all cases.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - WSTRB
 
 * Enables sparse data transfer on the write data bus
@@ -507,13 +644,15 @@ xRESP    | OKAY, EXOKAY (exclusive), SLVERR (Slave ERROR), DECERR (Decode ERROR)
 
 > When WVALID is LOW, WSTRB can take any value but it is recommended to be driven LOW or held at their previous value.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - BRESP/RRESP (transfer response)
 
 xRESP[1:0] | Response
 ---        |---
-00         | **OKAY:** normal access success (or the failure of an exclusive access, also when not supported)
-01         | **EXOKAY:** exclusive access success
+00         | **OKAY:** normal access success (~~or the failure of an exclusive access, also when not supported~~)
+~~01~~     | ~~**EXOKAY:** exclusive access success~~
 10         | **SLVERR:** destination was reached, but it wants to return an ERROR condition (ex: overrun/underrun, unsupported transfer size, write access attempted to read-only location, timeout, access attempted to a disabled or powered-down function)
 11         | **DECERR:** DECode ERRor, typically generated by an interconnect, to indicate that there is nothing at the transaction address (the specification recommends routing a default device, being it charge of returns this response)
 <!-- .element: style="font-size: 0.5em !important;" -->
@@ -522,13 +661,31 @@ xRESP[1:0] | Response
 > * In read transactions there is one response for each transfer of a burst.
 > * The specification requires that all data transfers for a transaction **must** be performed, even if an error occurs.
 <!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
-</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+
+---
+<!-- ###################################################################### -->
 ### AXI-Full
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Description
-</script></section><section data-markdown><script type="text/template">
+
+An interface for high-performance, high-frequency system designs, suitable for high-bandwidth and low-latency.
+Provides high-frequency operation without using complex bridges, and flexibility in the implementation of interconnect architectures.
+
+> * Separate address/control and data phases
+> * Support for unaligned data transfers, using byte strobes
+> * Uses burst-based transactions with only the start address issued
+> * Separate read and write data channels, that can provide low-cost DMA
+> * Support for issuing multiple outstanding addresses
+> * Support for out-of-order transaction completion
+> * Permits easy addition of register stages to provide timing closure
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
 ### AXI-Full signals
 
 Write Address Channel    | Write Data Channel         | Read Address Channel     | Read Data Channel
@@ -552,7 +709,9 @@ AWREADY                  | BREADY                     | AWREADY                 
 > * AXI4: removed WID, added AxQOS, AxREGION and xUSER.
 > * AXI5: several signals added (not only parity)
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI-Full signals description
 
 Signal   | Description
@@ -571,25 +730,43 @@ AxREGION | Up to 16 regions for the address decode
 xID      | Transaction identifiers (ordering)
 xUSER    | User-defined (not recommended)
 <!-- .element: style="font-size: 0.5em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI4-Full interface
 
 ![AXI4 interface](images/axif/axif-interface.svg)
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - AWLEN/AXLEN
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - AWSIZE/ARSIZE
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - AWBURST/ARBURST
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - WLAST/RLAST
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - AWID/~~WID~~/BID/ARID/RID
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - AWLOCK/ARLOCK
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - AWCACHE/ARCACHE
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - AWQOS/ARQOS (Quality of Service)
 <!-- .slide: data-background="cyan" -->
 
@@ -600,23 +777,35 @@ xUSER    | User-defined (not recommended)
 > * Support for this feature requires a system-level understanding, and collaboration between participating components (programmability recommended).
 > * Additional interpretations of the QoS identifier can be used.
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - AWREGION/ARREGION
 <!-- .slide: data-background="cyan" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI - AWUSER/WUSER/BUSER/ARUSER/RUSER
 <!-- .slide: data-background="cyan" -->
 
 * It is recommended not to use the User Defined Signals because have no defined uses, which can lead to interoperability issues
 * When implemented it is not required to support all the channels
 * Its width is implementation-defined and can be different for each channel
-</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+
+---
+<!-- ###################################################################### -->
 ### AXI-Stream
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Description
-</script></section><section data-markdown><script type="text/template">
+
+A point-to-point protocol, connecting a single Transmitter with a single Receiver.
+
+----
+
 ### AXI-Stream signals
 
 | AXI4-Stream  | AXI5-Stream  | Description
@@ -635,34 +824,51 @@ xUSER    | User-defined (not recommended)
 |              | TWAKEUP      | Wake-up
 |              | T*CHK        | Parity (for safety)
 <!-- .element: style="font-size: 0.5em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI4-Stream interface
 
 ![AXI4-Stream interface](images/axis/axis-interface.svg)
-</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+
+> AXI-Stream is comparable with the WRITE DATA CHANNEL.
+<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
+
+---
+<!-- ###################################################################### -->
 ### Interconnect
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Buses
 
 ![Bus](images/interconnect/bus.svg)
 <!-- .element: style="background-color: white;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Crossbar switches
 
 ![Crossbar](images/interconnect/crossbar.svg)
 <!-- .element: style="background-color: white;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Network-on-Chip (NoC)
 
 ![NoC](images/interconnect/noc.svg)
 <!-- .element: style="background-color: white;" -->
-</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+
+---
+<!-- ###################################################################### -->
 ### Parity signals
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AMBA5 parity protection
 <!-- .slide: data-background="cyan" -->
 
@@ -673,7 +879,9 @@ xUSER    | User-defined (not recommended)
 > * Each parity bit covers up to 8 bits
 > * If signals covered by a parity signal are not present, those are assumed LOW
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### APB5
 <!-- .slide: data-background="cyan" -->
 
@@ -689,7 +897,9 @@ PRDATACHK     | PRDATA          | DWIDTH/8       | PSEL & PENABLE & PREADY & !PW
 PSLVERRCHK    | PSLVERR         | 1              | PSEL & PENABLE & PREADY
 PREADYCHK     | PREADY          | 1              | PSEL & PENABLE
 <!-- .element: style="font-size: 0.5em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AHB5
 <!-- .slide: data-background="cyan" -->
 
@@ -709,7 +919,9 @@ HREADYOUTCHK  | HREADYOUT                     | 1               | HRESETn
 
 **ATTENTION:** adapted/reduced for AHB3
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI5
 <!-- .slide: data-background="cyan" -->
 
@@ -739,7 +951,9 @@ BUSERCHK      | BUSER                                    | ceil(UWIDTH/8)  | BVA
 
 **ATTENTION:** adapted/reduced for AXI4
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### AXI5 Stream
 <!-- .slide: data-background="cyan" -->
 
@@ -758,21 +972,29 @@ TUSERCHK      | TUSER           | ceil(USERWIDTH/8)  | TVALID
 
 **ATTENTION:** adapted/reduced for AXI4 Stream
 <!-- .element: style="font-size: 0.4em !important;" -->
-</script></section></section><section ><section data-markdown><script type="text/template"><!-- ###################################################################### -->
+
+---
+<!-- ###################################################################### -->
 ### Final remarks
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Performance comparison
 
 ![Performance](images/performance.svg)
 <!-- .element: style="background-color: white; height: 12em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Reasons for BURST transactions
 
 > In a real system, there are latencies and arbitration. There, burst transfers and outstanding transactions come into the action.
 <!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Reasons for WRITE STROBE
 
 * Implementation of column-based algorithms
@@ -780,7 +1002,9 @@ TUSERCHK      | TUSER           | ceil(USERWIDTH/8)  | TVALID
 * Deal with access to a wider data bus
   * 32/64-bits access in a 128-bits bus
   * Different widths in a interconnect
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Reasons for multiple channels
 
 Most systems use one of three interconnect topologies:
@@ -797,19 +1021,25 @@ Having channels, we can use the second alternative to achieve a good balance bet
 
 Additionally, each channel transfers information in one direction, and there isn't any fixed relationship between them, so register slices can be inserted in any channel to improve timing, at the cost of additional latency cycles.
 <!-- .element: style="font-size: 0.6em !important;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Multiple interfaces
 
 ![DMA example](images/dma-example.svg)
 
 > It is possible (recommended when suitable) to have multiple interfaces per IP.
 <!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
-</script></section><section data-markdown><script type="text/template">
+
+----
+
 ### Address boundary
 
 * The minimum address space that can be allocated to a single interface is 1KB for AHB, 4KB for AXI.
 * A burst **must not** cross a 1KB/4KB (AHB/AXI) address boundary.
-</script></section></section><section  data-markdown><script type="text/template"><!-- ###################################################################### -->
+
+---
+<!-- ###################################################################### -->
 # Questions?
 <!-- .slide: data-background="#1F618D" -->
 <!-- ###################################################################### -->
@@ -820,7 +1050,10 @@ Additionally, each channel transfers information in one direction, and there isn
 | ![Twitter icon](icons/twitter.png)   | [rodrigomelo9ok](https://twitter.com/rodrigomelo9ok)                     |
 | ![LinkedIn icon](icons/linkedin.png) | [rodrigoalejandromelo](https://www.linkedin.com/in/rodrigoalejandromelo) |
 |   |   |
-</script></section></div>
+
+          </textarea>
+        </section>
+      </div>
     </div>
 
     <script src="./dist/reveal.js"></script>
@@ -864,7 +1097,7 @@ Additionally, each channel transfers information in one direction, and there isn
       // options from URL query string
       var queryOptions = Reveal().getQueryHash() || {};
 
-      var options = extend(defaultOptions, {}, queryOptions);
+      var options = extend(defaultOptions, {"_":["amba.md"],"theme":"moon","static":"build"}, queryOptions);
     </script>
 
 
