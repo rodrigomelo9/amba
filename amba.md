@@ -604,6 +604,13 @@ xRESP    | OKAY, SLVERR (Slave ERROR), DECERR (Decode ERROR)
 
 ----
 
+### AXIL Signaling
+
+![AXIL Signaling](images/axil/axil-single.svg)
+<!-- .element: style="background-color: white; height: 14em;" -->
+
+----
+
 ### AXI - AWPROT/ARPROT (protection type)
 
 * AxPROT[0]: Un/privileged
