@@ -726,6 +726,13 @@ xUSER    | User-defined (not recommended)
 
 ----
 
+### AXIF Signaling
+
+![AXIF Signaling](images/axif/axif-single.svg)
+<!-- .element: style="background-color: white; height: 14em;" -->
+
+----
+
 ### AXI - AWLEN/AXLEN
 
 ----
