@@ -570,9 +570,14 @@ Each channel transfers INFO in one direction, and there isn't a fixed relationsh
 
 ----
 
-### Channels dependencies
+### Dependencies between channel handshake signals
 
-TBD
+![AXI Channels dependencies](images/axi-channels-deps.svg)
+<!-- .element: style="background-color: white;" -->
+
+> * Single arrows point to signals that can be asserted before of after the signal at the start of the arrow.
+> * Double arros point to signals that must be assserted only after assertion of the signal at the start of the arrow.
+<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
 
 **ATTENTION:** dependency rules **must** be observed to prevent a deadlock condition.
 <!-- .element: style="font-size: 0.4em !important;" -->
