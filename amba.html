@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="./dist/reveal.css" />
     <link rel="stylesheet" href="./dist/theme/moon.css" id="theme" />
     <link rel="stylesheet" href="./css/highlight/base16/zenburn.css" />
-
 
   </head>
   <body>
@@ -49,16 +48,16 @@ Our focus in this presentation is on AMBA interfaces commonly present in SoC IPs
 ### Outline
 <!-- ###################################################################### -->
 
-* [AMBA](#/2)
-* [APB](#/3)
-* [AHB](#/4)
-* [AXI](#/5)
+* [AMBA](#/3)
+* [APB](#/4)
+* [AHB](#/5)
+* [AXI](#/6)
 * [AXI-Lite](#/7) (WIP)
-* [AXI-Full](#/6) (WIP)
-* [AXI-Stream](#/8) (WIP)
-* [Interconnect](#/9)
-* [Parity signals](#/10)
-* [Final remarks](#/11)
+* [AXI-Full](#/8) (WIP)
+* [AXI-Stream](#/9) (WIP)
+* [Interconnect](#/10)
+* [Parity signals](#/11)
+* [Final remarks](#/12)
 
 ---
 <!-- ###################################################################### -->
@@ -1077,6 +1076,8 @@ Additionally, each channel transfers information in one direction, and there isn
 
     <script src="./dist/reveal.js"></script>
 
+    <script src="./mermaid/dist/mermaid.min.js"></script>
+
     <script src="./plugin/markdown/markdown.js"></script>
     <script src="./plugin/highlight/highlight.js"></script>
     <script src="./plugin/zoom/zoom.js"></script>
@@ -1104,6 +1105,9 @@ Additionally, each channel transfers information in one direction, and there isn
         center: true,
         transition: 'default', // none/fade/slide/convex/concave/zoom
         slideNumber: true,
+        highlight: {
+          highlightOnLoad: false
+        },
         plugins: [
           RevealMarkdown,
           RevealHighlight,
@@ -1122,6 +1126,20 @@ Additionally, each channel transfers information in one direction, and there isn
 
     <script>
       Reveal.initialize(options);
+      Reveal.addEventListener('ready', function (event) {
+        const blocks = Reveal.getRevealElement().querySelectorAll('pre code:not(.mermaid)');
+        const hlp = Reveal.getPlugin('highlight');
+        blocks.forEach(hlp.highlightBlock);
+      });
+    </script>
+
+    <script>
+      const mermaidOptions = extend({ startOnLoad: false }, {});
+      mermaid.startOnLoad = false;
+      mermaid.initialize(mermaidOptions);
+      const cb = function (event) { mermaid.init(mermaidOptions, '.stack.present>.present pre code.mermaid'); };
+      Reveal.addEventListener('ready', cb);
+      Reveal.addEventListener('slidetransitionend', cb);
     </script>
   </body>
 </html>
