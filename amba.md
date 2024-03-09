@@ -29,16 +29,16 @@ Our focus in this presentation is on AMBA interfaces commonly present in SoC IPs
 ### Outline
 <!-- ###################################################################### -->
 
-* [AMBA](#/2)
-* [APB](#/3)
-* [AHB](#/4)
-* [AXI](#/5)
+* [AMBA](#/3)
+* [APB](#/4)
+* [AHB](#/5)
+* [AXI](#/6)
 * [AXI-Lite](#/7) (WIP)
-* [AXI-Full](#/6) (WIP)
-* [AXI-Stream](#/8) (WIP)
-* [Interconnect](#/9)
-* [Parity signals](#/10)
-* [Final remarks](#/11)
+* [AXI-Full](#/8) (WIP)
+* [AXI-Stream](#/9) (WIP)
+* [Interconnect](#/10)
+* [Parity signals](#/11)
+* [Final remarks](#/12)
 
 ---
 <!-- ###################################################################### -->
