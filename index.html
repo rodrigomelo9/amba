@@ -1053,8 +1053,12 @@ Additionally, each channel transfers information in one direction, and there isn
 
 ### Address boundary
 
-* The minimum address space that can be allocated to a single interface is 1KB for AHB, 4KB for AXI.
+* The minimum address space that can be allocated to a single interface is 1KB/4KB (AHB/AXI).
 * A burst **must not** cross a 1KB/4KB (AHB/AXI) address boundary.
+
+> * This prevents a burst from crossing a boundary between two Subordinates.
+> * Additionally (AXI), limits the number of address increments a Subordinate supports.
+<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
 
 ---
 <!-- ###################################################################### -->
