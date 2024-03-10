@@ -33,7 +33,7 @@ Our focus in this presentation is on AMBA interfaces commonly present in SoC IPs
 * [APB](#/4)
 * [AHB](#/5)
 * [AXI](#/6)
-* [AXI-Lite](#/7) (WIP)
+* [AXI-Lite](#/7)
 * [AXI-Full](#/8) (WIP)
 * [AXI-Stream](#/9) (WIP)
 * [Interconnect](#/10)
