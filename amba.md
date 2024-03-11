@@ -293,6 +293,12 @@ Main uses:
 
 ----
 
+### AHB-Lite interconnection
+
+![AHB interconnection](images/ahb/ahb-interconnection.svg)
+
+----
+
 ### AHB-Lite Signaling (basic transfers)
 
 ![AHB basic transfers signaling](images/ahb/ahb-single.svg)
