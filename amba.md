@@ -297,6 +297,12 @@ Main uses:
 
 ![AHB interconnection](images/ahb/ahb-interconnection.svg)
 
+> * HSELx, HADDR and control **must** be sampled when HREADY is HIGH (previous transfer is completed).
+>   * A SUBORDINATE cannot request that the address phase be extended.
+> * HREADYOUT is driven during the data phase: LOW extends the transfer; HIGH finishes the transfer.
+> * The INTERCONNECT is responsible for combining all the HREADYOUT to generate a single HREADY (aka HREADYIN).
+<!-- .element: style="font-size: 0.5em !important; width: 50em;" -->
+
 ----
 
 ### AHB-Lite Signaling (basic transfers)
@@ -312,22 +318,6 @@ Main uses:
 <!-- .element: style="background-color: white;" -->
 
 > Extending the data phase of transfer B has the effect of extending the address phase of transfer C.
-<!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
-
-----
-
-### AHB - HREADY & HREADYOUT (waited transfers)
-
-> SUBORDINATES require HREADY as both an input and an output (HREADYOUT) signal.
-<!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
-
-* HSELx, HADDR and control **must** be sampled when HREADY is HIGH (previous transfer is completed).
-* HREADYOUT is driven during the data phase:
-  * LOW: extend the transfer
-  * HIGH: transfer has finished
-* The INTERCONNECT is responsible for combining all the HREADYOUT to generate a single HREADY.
-
-> A SUBORDINATE cannot request that the address phase be extended, so it **must** always be capable of sampling the address.
 <!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
 
 ----
