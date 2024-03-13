@@ -1050,6 +1050,18 @@ TUSERCHK      | TUSER           | ceil(USERWIDTH/8)  | TVALID
 
 ----
 
+### Interoperability principles
+
+Components **must** support all combinations of inputs, but do not have to generate all combinations of outputs.
+
+> **Example:** a Subordinate must support all the possible burst lengths, but a Manager only has to generate the types of burst that it uses.
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+> **ATTENTION:** if it is not TRUE, it **should** be well documented!
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+----
+
 ### Reasons for BURST transactions
 
 > In a real system, there are latencies and arbitration. There, burst transfers and outstanding transactions come into the action.
