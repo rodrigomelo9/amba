@@ -198,6 +198,12 @@ Main uses:
 
 ----
 
+### Unaligned transfers
+
+PADDR can be unaligned, but the result is UNPREDICTABLE (COMPLETER may utilize the unaligned address, aligned address, or indicate an error response).
+
+----
+
 ### Operating States
 <!-- .slide: data-background="yellow" -->
 
@@ -206,13 +212,6 @@ Main uses:
 > When a transfer is required, the interface moves into the SETUP state, where the appropriate PSELx is asserted.
 > The interface remains in this state for one clock cycle and always moves to the ACCESS state, where PENABLE is asserted.
 <!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
-
-----
-
-### Unaligned transfers
-<!-- .slide: data-background="yellow" -->
-
-PADDR can be unaligned, but the result is UNPREDICTABLE (COMPLETER may utilize the unaligned address, aligned address, or indicate an error response).
 
 ----
 
@@ -464,20 +463,19 @@ Indicates that the current transfer sequence is indivisible (typically used to m
 
 ----
 
-### AHB2 - HRESP
-<!-- .slide: data-background="yellow" -->
-
-HRESP was 2 bits wide in AHB2, to support SPLIT and RETRY, something that was removed on AMBA3.
-
-----
-
 ### Unaligned transfers
-<!-- .slide: data-background="yellow" -->
 
 > "All transfers in a burst must be aligned to the address boundary equal to the size of the transfer".
 <!-- .element: style="font-size: 0.5em !important; width: 40em;" -->
 
 Nothing more is said in the specification about unaligned transfers.
+
+----
+
+### AHB2 - HRESP
+<!-- .slide: data-background="yellow" -->
+
+HRESP was 2 bits wide in AHB2, to support SPLIT and RETRY, something that was removed on AMBA3.
 
 ----
 
@@ -759,6 +757,53 @@ xUSER    | User-defined (not recommended)
 ----
 
 ### AXI - AWCACHE/ARCACHE
+
+----
+
+### Unaligned transfers
+
+In any burst where data transfers are wider than one byte, the first bytes accessed **might** be unaligned with the natural address boundary.
+
+An **AXI-M** can use the low-order address bits, or provide an aligned address and use write strobe.
+
+An **AXI-S** is not required to take any special action based on alignment information.
+
+----
+
+### Narrow transfers
+
+Transfers narrower (AxSIZE) than the data (xDATA) bus size.
+<!-- .element: style="font-size: 0.8em !important;" -->
+
+### Narrow burst
+
+|31:24|23:16|15:08|07:00|Transfer|
+|:---:|:---:|:---:|:---:|-------:|
+|     |     |     | 0x00|    1st |
+|     |     | 0x01|     |    2nd |
+|     | 0x02|     |     |    3rd |
+| 0x03|     |     |     |    4th |
+|     |     |     | 0x05|    5th |
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+Example: 5 x 8-bits INCR transfers in a 32-bits bus.
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+----
+
+### Unaligned narrow transfers
+
+|63:56|55:48|47:40|39:32|31:24|23:16|15:08|07:00|Transfer|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|-------:|
+| 0x07|     |     |     |     |     |     |     |    1st |
+|     |     |     |     | 0x0B| 0x0A| 0x09| 0x08|    2nd |
+| 0x0F| 0x0E| 0x0D| 0x0C|     |     |     |     |    3rd |
+|     |     |     |     | 0x1B| 0x1A| 0x19| 0x18|    4th |
+| 0x1F| 0x1E| 0x1D| 0x1C|     |     |     |     |    5th |
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+Example: 5 x 32-bits INCR transfers in a 64-bits bus, starting from address 7.
+<!-- .element: style="font-size: 0.6em !important;" -->
 
 ----
 
