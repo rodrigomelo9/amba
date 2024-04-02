@@ -227,7 +227,8 @@ PADDR can be unaligned, but the result is UNPREDICTABLE (COMPLETER may utilize t
 |        | PWDATA  |                |                         |
 <!-- .element: style="font-size: 0.5em !important;" -->
 
-> Signals which are not required to be valid **should be** driven to zero.
+> * **Until APB4:** it is **recommended** that address and write signals not be changed immediately after a transfer, but remain stable until the next one (this reduces power consumption).
+> * **APB5:** signals that are not required to be valid **should** be driven to zero.
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 ---
@@ -679,7 +680,7 @@ Provides high-frequency operation without using complex bridges, and flexibility
 
 Write Address Channel    | Write Data Channel         | Read Address Channel     | Read Data Channel
 ---                      |---                         |---                       |---
-AWID[]                   | ~~WID[]~~                  | ARID[]                   | RID[]
+AWID[]                   | ~~WID[]~~ -- __REM__       | ARID[]                   | RID[]
 AWADDR[]                 | WDATA[]                    | ARADDR[]                 | RDATA[]
 AWLEN[7:0] -- __MOD__    | WSTRB[]                    | ARLEN[7:0] -- __MOD__    | RRESP[1:0]
 AWSIZE[2:0]              | WLAST                      | ARSIZE[2:0]              | RLAST
@@ -1040,6 +1041,10 @@ Components **must** support all combinations of inputs, but do not have to gener
 
 > **ATTENTION:** if it is not TRUE, it **should** be well documented!
 <!-- .element: style="font-size: 0.6em !important;" -->
+
+----
+
+### Default subordinate (AHB/AXI)
 
 ----
 

@@ -23,7 +23,7 @@
     ],
     ['AR',
       {name: 'ARADDR[ ]',   wave: 'x.....|....|....|2x..', data: "A4"},
-      {name: 'AR<OTHERS>',  wave: 'x.2x..|2x..|.2x.|....', data: "VAL VAL VAL"},
+      {name: 'AR<OTHERS>',  wave: 'x.....|....|....|2x..', data: "VAL"},
       {name: 'ARVALID',     wave: 'x.....|....|....|1x..'},
       {name: 'ARREADY',     wave: 'x.....|....|....|1x..'},
     ],
