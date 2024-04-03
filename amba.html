@@ -700,7 +700,7 @@ AWLEN[7:0] -- __MOD__    | WSTRB[]                    | ARLEN[7:0] -- __MOD__   
 AWSIZE[2:0]              | WLAST                      | ARSIZE[2:0]              | RLAST
 AWBURST[1:0]             | WUSER[] -- __NEW__         | ARBURST[1:0]             | RUSER[] -- __NEW__
 AWLOCK -- __MOD__        | WVALID                     | ARLOCK -- __MOD__        | RVALID
-AWCACHE[3:0]             | WREADY                     | ARCACHE[3:0]             | RREADY
+AWCACHE[3:0] -- __MOD__  | WREADY                     | ARCACHE[3:0] -- __MOD__  | RREADY
 AWPROT[2:0]              | __Write Response Channel__ | ARPROT[2:0]              |
 AWQOS[3:0] -- __NEW__    | BID[]                      | ARQOS[3:0] -- __NEW__    |
 AWREGION[3:0] -- __NEW__ | BRESP[1:0]                 | ARREGION[3:0] -- __NEW__ |
@@ -709,9 +709,9 @@ AWVALID                  | BVALID                     | AWVALID                 
 AWREADY                  | BREADY                     | AWREADY                  | ARESETn
 <!-- .element: style="font-size: 0.5em !important;" -->
 
-> * AXI3: AxLEN[3:0] and AxLOCK[1:0].
-> * AXI4: removed WID, added AxQOS, AxREGION and xUSER.
-> * AXI5: several signals added (not only parity)
+> * AXI3: AxLEN[3:0]; AxLOCK[1:0].
+> * AXI4: removed WID; modified meaning of AxCACHE[3:1]; added AxQOS, AxREGION and xUSER.
+> * AXI5: several signals added (not only parity).
 <!-- .element: style="font-size: 0.4em !important;" -->
 
 ----
@@ -725,7 +725,7 @@ AxLEN        | Burst length (AxLEN + 1)
 AxSIZE       | 1, 2, 4, 8, 16, 32, 64, 128 bytes of the beat (2^AxSIZE)
 AxBURST      | FIXED, INCR, WRAP, reserved
 AxPROT       | Protection type (un/privileged, non/secure, data/instruction access)
-AxCACHE      | Indicates Bufferable, Cacheable, and Allocate attributes
+AxCACHE      | Indicates Bufferable, Modifiable and Allocate attributes
 AxLOCK       | Normal, exclusive or locked (only AXI3) access
 WSTRB        | Write strobe, indicates valid bytes
 xLAST        | Indicates last beat in the burst
@@ -801,7 +801,7 @@ AxBURST[1:0] | Response
 
 ----
 
-### AXIF - AxPROT - Protection type
+### AXIF - AxPROT - Access permissions
 
 * AxPROT[0]: Un/privileged
 * AxPROT[1]: Secure or Non-secure
@@ -814,25 +814,37 @@ AxBURST[1:0] | Response
 
 ### AXIF - AxCACHE
 
+Specifies the **Bufferable**, **Modifiable**, and **Allocate** attributes of the transaction.
+
+* AxCACHE[0]: Non/Bufferable
+* AxCACHE[1]: Non/Modifiable
+* AxCACHE[2]: Other-Allocate
+* AxCACHE[3]: Allocate
+
+> * Bufferable: when asserted, the write response can be obtained from the interconnect (posted writes).
+> * Modifiable: indicates that the characteristics of the transaction can be modified.
+> * See the spec. for more details about AxCACHE[3:1].
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
+
 ----
 
 ### AXIF - AxLOCK
 
 ----
 
-### AXIF - WSTRB- Write Strobe
+### AXIF - WSTRB - Write Strobe
 
 * Enables sparse data transfer on the write data bus
 * There is one bit per each byte of WDATA
   * WSTRB[n] -> WDATA[(8n + 7):(8n)]
 * When asserted HIGH, the corresponding byte of WDATA contains valid information
 
-> When WVALID is LOW, WSTRB can take any value but it is recommended to be driven LOW or held at their previous value.
+> When WVALID is LOW, WSTRB can take any value but it is **recommended** to be driven LOW or held at their previous value.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
 
-### AXIF - Last Transfer - xLAST
+### AXIF - xLAST - Last Transfer
 
 ----
 
@@ -857,9 +869,9 @@ xRESP[1:0] | Response
 
 In any burst where data transfers are wider than one byte, the first bytes accessed **might** be unaligned with the natural address boundary.
 
-An **AXI-M** can use the low-order address bits, or provide an aligned address and use write strobe.
-
-An **AXI-S** is not required to take any special action based on alignment information.
+> * An **AXI-M** can use the low-order address bits, or provide an aligned address and use write strobe.
+> * An **AXI-S** is not required to take any special action based on alignment information.
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
 
@@ -909,7 +921,7 @@ Example: 5 x 32-bits INCR transfers in a 64-bits bus, starting from address 7.
 
 > * Support for this feature requires a system-level understanding, and collaboration between participating components (programmability recommended).
 > * Additional interpretations of the QoS identifier can be used.
-<!-- .element: style="font-size: 0.4em !important;" -->
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
 
 ----
 
