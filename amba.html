@@ -846,6 +846,11 @@ Specifies the **Bufferable**, **Modifiable**, and **Allocate** attributes of the
 
 ### AXIF - xLAST - Last Transfer
 
+Indicates the last transfer in a burst.
+
+> It **must** be asserted in the source, but is **not required** in the destination (can be calculated based on AxLEN).
+<!-- .element: style="font-size: 0.6em !important;" -->
+
 ----
 
 ### AXIF - xRESP - Transfer response
@@ -912,7 +917,7 @@ Example: 5 x 32-bits INCR transfers in a 64-bits bus, starting from address 7.
 
 ----
 
-### AXI - AWQOS/ARQOS (Quality of Service)
+### AXI - AxQOS - Quality of Service
 <!-- .slide: data-background="cyan" -->
 
 * The exact use is not specified, but it is recommended as a priority indicator for the associated transaction
@@ -925,7 +930,7 @@ Example: 5 x 32-bits INCR transfers in a 64-bits bus, starting from address 7.
 
 ----
 
-### AXI - AWREGION/ARREGION
+### AXI - AxREGION
 <!-- .slide: data-background="cyan" -->
 
 ----
