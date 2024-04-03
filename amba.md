@@ -782,6 +782,20 @@ AxBURST[1:0] | Response
 
 ----
 
+### AXIF - Write Burst examples
+
+![AXIF Write Burst examples](images/axif/axif-wr-burst.svg)
+<!-- .element: style="background-color: white;" -->
+
+----
+
+### AXIF - Read Burst examples
+
+![AXIF Read Burst examples](images/axif/axif-rd-burst.svg)
+<!-- .element: style="background-color: white;" -->
+
+----
+
 ### AXIF - AxPROT - Access permissions
 
 * AxPROT[0]: Un/privileged

@@ -1,0 +1,23 @@
+{
+  signal: [
+      {name: 'ACLK',         wave: 'p....................', period: 1 },
+    ['AR',
+      {name: 'ARADDR[ ]',    wave: 'x345.6.x.............', data: "0x00 0x10 0x20 0x38"},
+      {name: 'ARLEN[7:0]',   wave: 'x345.6.x.............', data: "3 3 3 3"},
+      {name: 'ARSIZE[2:0]',  wave: 'x345.6.x.............', data: "2 1 2 2"},
+      {name: 'ARBURST[1:0]', wave: 'x345.6.x.............', data: "INCR INCR FIXED WRAP"},
+      {name: 'AR<OTHERS>',   wave: 'x345.6.x.............'},
+      {name: 'ARVALID',      wave: '01.01..0.............'},
+      {name: 'ARREADY',      wave: 'x1...01x.............'},
+    ],
+    ['R',
+      {name: 'RDATA[ ]',     wave: 'x.3333444.45555.6666x', data: "D1 D1 D1 D1 D2 D2 D2 D2 D3 D3 D3 D3 D4 D4 D4 D4"},
+      {name: 'RRESP[ ]',     wave: 'x.3333444.45555.6666x', data: "R1 R1 R1 R1 R2 R2 R2 R2 R3 R3 R3 R3 R4 R4 R4 R4"},
+      {name: 'R<OTHERS>',    wave: 'x.3333444.45555.6666x'},
+      {name: 'RLAST',        wave: 'x.0..10...10...10..1x'},
+      {name: 'RVALID',       wave: '0.1...........01....0'},
+      {name: 'RREADY',       wave: 'x.1.....01..........x'},
+    ],
+      {name: 'ADDR@S',       wave: 'x.333344.44555.56666x', data: "0x00 0x04 0x08 0x0C 0x10 0x12 0x14 0x16 0x20 0x20 0x20 0x20 0x38 0x3C 0x30 0x34"},
+  ],
+}
