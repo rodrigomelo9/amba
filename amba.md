@@ -193,7 +193,7 @@ Main uses:
 
 > * The primary use of PPROT is as an identifier for Secure or Non-secure transactions (it is acceptable to use different interpretations for PPROT[0] and PPROT[2]).
 > * PPROT[2] is provided as a hint, but might not be accurate in all cases.
-> * **WARNING:** a wrong value on `PPROT` can lead to an incorrect system behavior.
+> * **ATTENTION:** a wrong value on `PPROT` can lead to an incorrect system behavior.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
@@ -443,7 +443,7 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 
 > * HPROT **must** remain constant during a burst transfer.
 > * A subordinate shouldn't use HPROT unless absolutely necessary.
-> * **WARNING:** a wrong value on `HPROT` can lead to an incorrect system behavior.
+> * **ATTENTION:** a wrong value on `HPROT` can lead to an incorrect system behavior.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
@@ -560,6 +560,18 @@ Each channel transfers INFO in one direction, and there isn't a fixed relationsh
 
 **ATTENTION:** dependency rules **must** be observed to prevent a deadlock condition.
 <!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### Reasons for multiple channels
+<!-- .slide: data-background="yellow" -->
+
+Most systems use one of three interconnect topologies:
+1. Shared address and data buses
+2. Shared address buses and multiple data buses
+3. Multiple address and data buses
+
+Having channels, we can use the second alternative to achieve a good balance between system performance and interconnect complexity.
 
 ---
 <!-- ###################################################################### -->
@@ -756,7 +768,7 @@ xRESP[1:0] | Response
 * AxPROT[2]: Data or Instruction
 
 > * AxPROT[2] is provided as a hint, but might not be accurate in all cases.
-> * **WARNING:** a wrong value on `AxPROT` can lead to an incorrect system behavior.
+> * **ATTENTION:** a wrong value on `AxPROT` can lead to an incorrect system behavior.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
@@ -919,7 +931,7 @@ xRESP    | OKAY, SLVERR (Slave ERROR), DECERR (Decode ERROR)
 * AxPROT[2]: Data or Instruction
 
 > * AxPROT[2] is provided as a hint, but might not be accurate in all cases.
-> * **WARNING:** a wrong value on `AxPROT` can lead to an incorrect system behavior.
+> * **ATTENTION:** a wrong value on `AxPROT` can lead to an incorrect system behavior.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
@@ -1034,11 +1046,9 @@ A point-to-point protocol, connecting a single Transmitter with a single Receive
 
 Components **must** support all combinations of inputs, but do not have to generate all combinations of outputs.
 
-> **Example:** a Subordinate must support all the possible burst lengths, but a Manager only has to generate the types of burst that it uses.
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-> **ATTENTION:** if it is not TRUE, it **should** be well documented!
-<!-- .element: style="font-size: 0.6em !important;" -->
+> * **Example:** a Subordinate must support all the possible burst lengths, but a Manager only has to generate the types of burst that it uses.
+> * **ATTENTION:** if it is not TRUE, it **should** be well documented!
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
 
@@ -1046,39 +1056,20 @@ Components **must** support all combinations of inputs, but do not have to gener
 
 ----
 
-### Reasons for BURST transactions
+### Reasons for
 
-> In a real system, there are latencies and arbitration. There, burst transfers and outstanding transactions come into the action.
-<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
+#### BURST transactions
+> * In a real system, there are latencies and arbitration.
+> * Burst transfers and outstanding transactions come into the action.
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
-----
-
-### Reasons for WRITE STROBE
-
-* Implementation of column-based algorithms
-* Decrease the need for read-modify-write operations
-* Deal with access to a wider data bus
-  * 32/64-bits access in a 128-bits bus
-  * Different widths in a interconnect
-
-----
-
-### Reasons for multiple channels
-
-Most systems use one of three interconnect topologies:
-<!-- .element: style="font-size: 0.6em !important;" -->
-1. Shared address and data buses
-<!-- .element: style="font-size: 0.6em !important;" -->
-2. Shared address buses and multiple data buses
-<!-- .element: style="font-size: 0.6em !important;" -->
-3. Multiple address and data buses
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-Having channels, we can use the second alternative to achieve a good balance between system performance and interconnect complexity.
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-Additionally, each channel transfers information in one direction, and there isn't any fixed relationship between them, so register slices can be inserted in any channel to improve timing, at the cost of additional latency cycles.
-<!-- .element: style="font-size: 0.6em !important;" -->
+#### Write STROBE
+> * Implementation of column-based algorithms
+> * Decrease the need for read-modify-write operations
+> * Deal with access to a wider data bus
+>   * 32/64-bits access in a 128-bits bus
+>   * Different widths in a interconnect
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
 
