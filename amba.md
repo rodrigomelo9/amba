@@ -193,6 +193,7 @@ Main uses:
 
 > * The primary use of PPROT is as an identifier for Secure or Non-secure transactions (it is acceptable to use different interpretations for PPROT[0] and PPROT[2]).
 > * PPROT[2] is provided as a hint, but might not be accurate in all cases.
+> * **WARNING:** a wrong value on `PPROT` can lead to an incorrect system behavior.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
@@ -442,6 +443,7 @@ Indicates the size (bytes) of a data transfer (**must** be less than or equal to
 
 > * HPROT **must** remain constant during a burst transfer.
 > * A subordinate shouldn't use HPROT unless absolutely necessary.
+> * **WARNING:** a wrong value on `HPROT` can lead to an incorrect system behavior.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
@@ -753,7 +755,8 @@ xRESP[1:0] | Response
 * AxPROT[1]: Secure or Non-secure
 * AxPROT[2]: Data or Instruction
 
-> AxPROT[2] is provided as a hint, but might not be accurate in all cases.
+> * AxPROT[2] is provided as a hint, but might not be accurate in all cases.
+> * **WARNING:** a wrong value on `AxPROT` can lead to an incorrect system behavior.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
@@ -915,7 +918,8 @@ xRESP    | OKAY, SLVERR (Slave ERROR), DECERR (Decode ERROR)
 * AxPROT[1]: Secure or Non-secure
 * AxPROT[2]: Data or Instruction
 
-> AxPROT[2] is provided as a hint, but might not be accurate in all cases.
+> * AxPROT[2] is provided as a hint, but might not be accurate in all cases.
+> * **WARNING:** a wrong value on `AxPROT` can lead to an incorrect system behavior.
 <!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ----
