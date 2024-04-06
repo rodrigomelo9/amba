@@ -1054,6 +1054,19 @@ Components **must** support all combinations of inputs, but do not have to gener
 
 ### Default subordinate (AHB/AXI)
 
+If a design does not implement the full memory map, a default Subordinate **must** respond (`ERROR`/`DECERR`) when any of the nonexistent address locations are accessed.
+
+----
+
+### Address boundary
+
+* The minimum address space that can be allocated to a single interface is 1KB/4KB (AHB/AXI).
+* A burst **must not** cross a 1KB/4KB (AHB/AXI) address boundary.
+
+> * This prevents a burst from crossing a boundary between two Subordinates.
+> * Additionally (AXI), limits the number of address increments a Subordinate supports.
+<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
+
 ----
 
 ### Reasons for
@@ -1078,18 +1091,7 @@ Components **must** support all combinations of inputs, but do not have to gener
 ![DMA example](images/dma-example.svg)
 
 > It is possible (recommended when suitable) to have multiple interfaces per IP.
-<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
-
-----
-
-### Address boundary
-
-* The minimum address space that can be allocated to a single interface is 1KB/4KB (AHB/AXI).
-* A burst **must not** cross a 1KB/4KB (AHB/AXI) address boundary.
-
-> * This prevents a burst from crossing a boundary between two Subordinates.
-> * Additionally (AXI), limits the number of address increments a Subordinate supports.
-<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
 
 ---
 <!-- ###################################################################### -->
