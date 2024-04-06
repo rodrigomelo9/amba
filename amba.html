@@ -52,12 +52,11 @@ Our focus in this presentation is on AMBA interfaces commonly present in SoC IPs
 * [APB](#/4)
 * [AHB](#/5)
 * [AXI](#/6)
-* [AXI-Lite](#/7)
-* [AXI-Full](#/8) (WIP)
+* [AXI-Full](#/7)
+* [AXI-Lite](#/8)
 * [AXI-Stream](#/9) (WIP)
 * [Interconnect](#/10)
-* [Parity signals](#/11)
-* [Final remarks](#/12)
+* [Final remarks](#/11)
 
 ---
 <!-- ###################################################################### -->
@@ -528,11 +527,11 @@ HRESP was 2 bits wide in AHB2, to support SPLIT and RETRY, something that was re
 
 ----
 
-### Variations
+### Flavours
 
-* **Lite:** Control/Status registers
-* **Full:** Higher (than AHB) performance system bus
-* **Stream:** High speeds unidirectional transfers
+* **Full:** memory-mapped high-performance interface (higher than AHB), that supports burst transactions.
+* **Lite:** a lightweight/simpler interface, without burst support, mainly intended for Control/Status registers.
+* **Stream:** a reduced high-performance streaming interface, for unidirectional data transfer.
 
 ----
 
@@ -578,6 +577,302 @@ Each channel transfers INFO in one direction, and there isn't a fixed relationsh
 
 **ATTENTION:** dependency rules **must** be observed to prevent a deadlock condition.
 <!-- .element: style="font-size: 0.4em !important;" -->
+
+---
+<!-- ###################################################################### -->
+### AXI-Full
+<!-- .slide: data-background="#581845" -->
+<!-- ###################################################################### -->
+
+----
+
+### Description
+
+An interface for high-performance, high-frequency system designs, suitable for high-bandwidth and low-latency.
+Provides high-frequency operation without using complex bridges, and flexibility in the implementation of interconnect architectures.
+
+> * Separate address/control and data phases
+> * Support for unaligned data transfers, using byte strobes
+> * Uses burst-based transactions with only the start address issued
+> * Separate read and write data channels, that can provide low-cost DMA
+> * Support for issuing multiple outstanding addresses
+> * Support for out-of-order transaction completion
+> * Permits easy addition of register stages to provide timing closure
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### AXI-Full signals
+
+Write Address Channel    | Write Data Channel         | Read Address Channel     | Read Data Channel
+---                      |---                         |---                       |---
+AWID[]                   | ~~WID[]~~ -- __REM__       | ARID[]                   | RID[]
+AWADDR[]                 | WDATA[]                    | ARADDR[]                 | RDATA[]
+AWLEN[7:0] -- __MOD__    | WSTRB[]                    | ARLEN[7:0] -- __MOD__    | RRESP[1:0]
+AWSIZE[2:0]              | WLAST                      | ARSIZE[2:0]              | RLAST
+AWBURST[1:0]             | WUSER[] -- __NEW__         | ARBURST[1:0]             | RUSER[] -- __NEW__
+AWLOCK -- __MOD__        | WVALID                     | ARLOCK -- __MOD__        | RVALID
+AWCACHE[3:0] -- __MOD__  | WREADY                     | ARCACHE[3:0] -- __MOD__  | RREADY
+AWPROT[2:0]              | __Write Response Channel__ | ARPROT[2:0]              |
+AWQOS[3:0] -- __NEW__    | BID[]                      | ARQOS[3:0] -- __NEW__    |
+AWREGION[3:0] -- __NEW__ | BRESP[1:0]                 | ARREGION[3:0] -- __NEW__ |
+AWUSER[] -- __NEW__      | BUSER[] -- __NEW__         | ARUSER[] -- __NEW__      | __Global signals__
+AWVALID                  | BVALID                     | AWVALID                  | ACLK
+AWREADY                  | BREADY                     | AWREADY                  | ARESETn
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+> * AXI3: AxLEN[3:0]; AxLOCK[1:0].
+> * AXI4: removed WID; modified meaning of AxCACHE[3:1]; added AxQOS, AxREGION and xUSER.
+> * AXI5: several signals added (not only parity).
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### AXI-Full signals description
+
+Signal       | Description
+---          |---
+[A]xID       | Transaction identifiers (ordering)
+AxLEN        | Burst length (AxLEN + 1)
+AxSIZE       | 1, 2, 4, 8, 16, 32, 64, 128 bytes of the beat (2^AxSIZE)
+AxBURST      | FIXED, INCR, WRAP, reserved
+AxPROT       | Protection type (un/privileged, non/secure, data/instruction access)
+AxCACHE      | Indicates Bufferable, Modifiable and Allocate attributes
+AxLOCK       | Normal, exclusive or locked (AXI3) access
+WSTRB        | Write strobe, indicates valid bytes
+xLAST        | Indicates last beat in the burst
+xRESP        | OKAY, EXOKAY (exclusive), SLVERR (SLaVe ERRor), DECERR (DECode ERRor)
+AxQOS        | Quality of Service
+AxREGION     | Up to 16 regions for the address decode
+[A]xUSER     | User-defined (not recommended)
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+> Where `x` is `W`/`B` for WRITES and `R` for READS.
+<!-- .element: style="font-size: 0.4em !important;" -->
+
+----
+
+### AXI4-Full interface
+
+![AXI4 interface](images/axif/axif-interface.svg)
+
+----
+
+### AXIF Signaling (Single Transfers)
+
+![AXIF Signaling](images/axif/axif-single.svg)
+<!-- .element: style="background-color: white; height: 14em;" -->
+
+----
+
+### AXIF - AxLEN - Burst Length
+
+Indicates the length (quantity of transfers) in a burst.
+
+> * Burst Length = `AxLEN` + 1
+> * AXI3 (`AxLEN[3:0]`) supports 1 to 16 transfers for all burs types.
+> * AXI4 (`AxLEN[7:0]`) extends `INCR` to 256 transfers.
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
+
+----
+
+### AXIF - AxSIZE - Transfer Size
+
+Indicates the size (bytes) of a data transfer (**must** be less than or equal to the width of the data bus).
+
+| AxSIZE[2:0] | Bytes |
+| :---:       | :---: |
+| 3'b000      | 1     |
+| 3'b001      | 2     |
+| 3'b010      | 4     |
+| 3'b011      | 8     |
+| 3'b100      | 16    |
+| 3'b101      | 32    |
+| 3'b110      | 64    |
+| 3'b111      | 128   |
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+> * Transfer Size = `2^AxSIZE` (or `1<<AxSIZE`).
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
+
+----
+
+### AXIF - AxBURST - Burst Type
+
+AxBURST[1:0] | Response
+---          |---
+00           | **FIXED:** the address is the same for every transfer in the burst (FIFO-like accesses).
+01           | **INCR:** the address is incremented (based on AxSIZE) for every transfer in the burst (sequential memory accesses).
+10           | **WRAP:** similar to INCR, but the address wraps around to a lower address if an upper address limit is reached. The start address **must** be aligned to the SIZE of each transfer. The LENGTH **must** be 2, 4, 8, or 16.
+11           | Reserved
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+----
+
+### AXIF - WSTRB - Write Strobe
+
+* Enables sparse data transfer on the write data bus
+* There is one bit per each byte of WDATA
+  * WSTRB[n] -> WDATA[(8n + 7):(8n)]
+* When asserted HIGH, the corresponding byte of WDATA contains valid information
+
+> When WVALID is LOW, WSTRB can take any value but it is **recommended** to be driven LOW or held at their previous value.
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
+
+----
+
+### AXIF - xLAST - Last Transfer
+
+Indicates the last transfer in a burst.
+
+> * It **must** be asserted in the source.
+> * It is **not required** in the destination (can be calculated based on AxLEN).
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
+
+----
+
+### AXIF - xRESP - Transfer response
+
+xRESP[1:0] | Response
+---        |---
+00         | **OKAY:** normal access success (or the failure of an exclusive access, also when not supported)
+01         | **EXOKAY:** exclusive access success
+10         | **SLVERR:** destination was reached, but it wants to return an ERROR condition (e.g., overrun/underrun, unsupported transfer size, write access attempted to read-only location, timeout, access attempted to a disabled or powered-down function)
+11         | **DECERR:** DECode ERRor, typically generated by an interconnect, to indicate that there is nothing at the transaction address (the specification recommends routing a default device, being it charge of returns this response)
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+> * In write transactions there is a single response for the entire burst.
+> * In read transactions there is one response for each transfer of a burst.
+> * The specification requires that all data transfers for a transaction **must** be performed, even if an error occurs.
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
+
+----
+
+### AXIF Signaling (Write Burst)
+
+![AXIF Write Burst examples](images/axif/axif-wr-burst.svg)
+<!-- .element: style="background-color: white;" -->
+
+----
+
+### AXIF Signaling (Read Burst)
+
+![AXIF Read Burst examples](images/axif/axif-rd-burst.svg)
+<!-- .element: style="background-color: white;" -->
+
+----
+
+### AXIF - AWID/~~WID~~/BID/ARID/RID
+
+----
+
+### AXIF - AxPROT - Access permissions
+
+* AxPROT[0]: Un/privileged
+* AxPROT[1]: Secure or Non-secure
+* AxPROT[2]: Data or Instruction
+
+> AxPROT[2] is provided as a hint, but might not be accurate in all cases.
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
+
+----
+
+### AXIF - AxCACHE
+
+Specifies the **Bufferable**, **Modifiable**, and **Allocate** attributes of the transaction.
+
+* AxCACHE[0]: Non/Bufferable
+* AxCACHE[1]: Non/Modifiable
+* AxCACHE[2]: Other-Allocate
+* AxCACHE[3]: Allocate
+
+> * Bufferable: when asserted, the write response can be obtained from the interconnect (posted writes).
+> * Modifiable: indicates that the characteristics of the transaction can be modified.
+> * See the spec. for more details about AxCACHE[3:1].
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
+
+----
+
+### AXIF - AxLOCK
+
+----
+
+### Unaligned transfers
+
+In any burst where data transfers are wider than one byte, the first bytes accessed **might** be unaligned with the natural address boundary.
+
+> * An **AXI-M** can use the low-order address bits, or provide an aligned address and use write strobe.
+> * An **AXI-S** is not required to take any special action based on alignment information.
+<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
+
+----
+
+### Narrow transfers
+
+Transfers narrower (AxSIZE) than the data (xDATA) bus size.
+<!-- .element: style="font-size: 0.8em !important;" -->
+
+|31:24|23:16|15:08|07:00|Transfer|
+|:---:|:---:|:---:|:---:|-------:|
+|     |     |     | 0x00|    1st |
+|     |     | 0x01|     |    2nd |
+|     | 0x02|     |     |    3rd |
+| 0x03|     |     |     |    4th |
+|     |     |     | 0x05|    5th |
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+Example: 5 x 8-bits INCR transfers in a 32-bits bus (Narrow burst).
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+----
+
+### Unaligned narrow transfers
+
+|63:56|55:48|47:40|39:32|31:24|23:16|15:08|07:00|Transfer|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|-------:|
+| 0x07|     |     |     |     |     |     |     |    1st |
+|     |     |     |     | 0x0B| 0x0A| 0x09| 0x08|    2nd |
+| 0x0F| 0x0E| 0x0D| 0x0C|     |     |     |     |    3rd |
+|     |     |     |     | 0x1B| 0x1A| 0x19| 0x18|    4th |
+| 0x1F| 0x1E| 0x1D| 0x1C|     |     |     |     |    5th |
+<!-- .element: style="font-size: 0.5em !important;" -->
+
+Example: 5 x 32-bits INCR transfers in a 64-bits bus, starting from address 7.
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+----
+
+### AXI - AxQOS - Quality of Service
+<!-- .slide: data-background="cyan" -->
+
+* The exact use is not specified, but it is recommended as a priority indicator for the associated transaction
+* A higher value indicates a higher priority (but ordering rules take precedence)
+* A 0 value (default) indicates that the interface is not participating in any QoS scheme
+
+> * Support for this feature requires a system-level understanding, and collaboration between participating components (programmability recommended).
+> * Additional interpretations of the QoS identifier can be used.
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
+
+----
+
+### AXI - AxREGION - Region Identifier
+<!-- .slide: data-background="cyan" -->
+
+Allows a single physical AXI-S interface to be used as multiple logical interfaces, providing a decode of higher-order address bits.
+
+> * An IP can have its data path and control registers at different locations in the address map, and be accessed through a single interface.
+> * An IP can exhibit different behaviors in different memory regions (e.g., read/write access in one region, but read-only access in another region).
+> * See the spec. for more details about AxREGION[3:0].
+<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
+
+----
+
+### AXI - AWUSER/WUSER/BUSER/ARUSER/RUSER
+<!-- .slide: data-background="cyan" -->
+
+* It is recommended not to use the User Defined Signals because have no defined uses, which can lead to interoperability issues
+* When implemented it is not required to support all the channels
+* Its width is implementation-defined and can be different for each channel
 
 ---
 <!-- ###################################################################### -->
@@ -661,300 +956,10 @@ xRESP    | OKAY, SLVERR (Slave ERROR), DECERR (Decode ERROR)
 xRESP[1:0] | Response
 ---        |---
 00         | **OKAY:** normal access success
-01         | Reserved (AXIF only)
-10         | **SLVERR:** destination was reached, but it wants to return an ERROR condition (ex: overrun/underrun, unsupported transfer size, write access attempted to read-only location, timeout, access attempted to a disabled or powered-down function)
+01         | Reserved (AXIF)
+10         | **SLVERR:** destination was reached, but it wants to return an ERROR condition (e.g., overrun/underrun, unsupported transfer size, write access attempted to read-only location, timeout, access attempted to a disabled or powered-down function)
 11         | **DECERR:** DECode ERRor, typically generated by an interconnect, to indicate that there is nothing at the transaction address (the specification recommends routing a default device, being it charge of returns this response)
 <!-- .element: style="font-size: 0.5em !important;" -->
-
----
-<!-- ###################################################################### -->
-### AXI-Full
-<!-- .slide: data-background="#581845" -->
-<!-- ###################################################################### -->
-
-----
-
-### Description
-
-An interface for high-performance, high-frequency system designs, suitable for high-bandwidth and low-latency.
-Provides high-frequency operation without using complex bridges, and flexibility in the implementation of interconnect architectures.
-
-> * Separate address/control and data phases
-> * Support for unaligned data transfers, using byte strobes
-> * Uses burst-based transactions with only the start address issued
-> * Separate read and write data channels, that can provide low-cost DMA
-> * Support for issuing multiple outstanding addresses
-> * Support for out-of-order transaction completion
-> * Permits easy addition of register stages to provide timing closure
-<!-- .element: style="font-size: 0.4em !important;" -->
-
-----
-
-### AXI-Full signals
-
-Write Address Channel    | Write Data Channel         | Read Address Channel     | Read Data Channel
----                      |---                         |---                       |---
-AWID[]                   | ~~WID[]~~ -- __REM__       | ARID[]                   | RID[]
-AWADDR[]                 | WDATA[]                    | ARADDR[]                 | RDATA[]
-AWLEN[7:0] -- __MOD__    | WSTRB[]                    | ARLEN[7:0] -- __MOD__    | RRESP[1:0]
-AWSIZE[2:0]              | WLAST                      | ARSIZE[2:0]              | RLAST
-AWBURST[1:0]             | WUSER[] -- __NEW__         | ARBURST[1:0]             | RUSER[] -- __NEW__
-AWLOCK -- __MOD__        | WVALID                     | ARLOCK -- __MOD__        | RVALID
-AWCACHE[3:0] -- __MOD__  | WREADY                     | ARCACHE[3:0] -- __MOD__  | RREADY
-AWPROT[2:0]              | __Write Response Channel__ | ARPROT[2:0]              |
-AWQOS[3:0] -- __NEW__    | BID[]                      | ARQOS[3:0] -- __NEW__    |
-AWREGION[3:0] -- __NEW__ | BRESP[1:0]                 | ARREGION[3:0] -- __NEW__ |
-AWUSER[] -- __NEW__      | BUSER[] -- __NEW__         | ARUSER[] -- __NEW__      | __Global signals__
-AWVALID                  | BVALID                     | AWVALID                  | ACLK
-AWREADY                  | BREADY                     | AWREADY                  | ARESETn
-<!-- .element: style="font-size: 0.5em !important;" -->
-
-> * AXI3: AxLEN[3:0]; AxLOCK[1:0].
-> * AXI4: removed WID; modified meaning of AxCACHE[3:1]; added AxQOS, AxREGION and xUSER.
-> * AXI5: several signals added (not only parity).
-<!-- .element: style="font-size: 0.4em !important;" -->
-
-----
-
-### AXI-Full signals description
-
-Signal       | Description
----          |---
-AxID/xID     | Transaction identifiers (ordering)
-AxLEN        | Burst length (AxLEN + 1)
-AxSIZE       | 1, 2, 4, 8, 16, 32, 64, 128 bytes of the beat (2^AxSIZE)
-AxBURST      | FIXED, INCR, WRAP, reserved
-AxPROT       | Protection type (un/privileged, non/secure, data/instruction access)
-AxCACHE      | Indicates Bufferable, Modifiable and Allocate attributes
-AxLOCK       | Normal, exclusive or locked (only AXI3) access
-WSTRB        | Write strobe, indicates valid bytes
-xLAST        | Indicates last beat in the burst
-xRESP        | OKAY, EXOKAY (exclusive), SLVERR (Slave ERROR), DECERR (Decode ERROR)
-AxQOS        | Quality of Service
-AxREGION     | Up to 16 regions for the address decode
-AxUSER/xUSER | User-defined (not recommended)
-<!-- .element: style="font-size: 0.5em !important;" -->
-
-> Where `x` is `W` for WRITES and `R` for READS.
-<!-- .element: style="font-size: 0.4em !important;" -->
-
-----
-
-### AXI4-Full interface
-
-![AXI4 interface](images/axif/axif-interface.svg)
-
-----
-
-### AXIF Signaling (Single Transfers)
-
-![AXIF Signaling](images/axif/axif-single.svg)
-<!-- .element: style="background-color: white; height: 14em;" -->
-
-----
-
-### AXIF - AWID/~~WID~~/BID/ARID/RID
-
-----
-
-### AXIF - AxLEN - Burst Length
-
-Indicates the length (quantity of transfers) in a burst.
-
-> * Burst Length = `AxLEN` + 1
-> * AXI3 (`AxLEN[3:0]`) supports 1 to 16 transfers for all burs types.
-> * AXI4 (`AxLEN[7:0]`) extends `INCR` to 256 transfers.
-<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-
-----
-
-### AXIF - AxSIZE - Transfer Size
-
-Indicates the size (bytes) of a data transfer (**must** be less than or equal to the width of the data bus).
-
-| AxSIZE[2:0] | Bytes |
-| :---:       | :---: |
-| 3'b000      | 1     |
-| 3'b001      | 2     |
-| 3'b010      | 4     |
-| 3'b011      | 8     |
-| 3'b100      | 16    |
-| 3'b101      | 32    |
-| 3'b110      | 64    |
-| 3'b111      | 128   |
-<!-- .element: style="font-size: 0.5em !important;" -->
-
-> * Transfer Size = `2^AxSIZE` (or `1<<AxSIZE`).
-<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-
-----
-
-### AXIF - AxBURST - Burst Type
-
-AxBURST[1:0] | Response
----          |---
-00           | **FIXED:** the address is the same for every transfer in the burst (FIFO-like accesses).
-01           | **INCR:** the address is incremented (based on AxSIZE) for every transfer in the burst (sequential memory accesses).
-10           | **WRAP:** similar to INCR, but the address wraps around to a lower address if an upper address limit is reached. The start address **must** be aligned to the SIZE of each transfer. The LENGTH **must** be 2, 4, 8, or 16.
-11           | Reserved
-<!-- .element: style="font-size: 0.5em !important;" -->
-
-----
-
-### AXIF - Write Burst examples
-
-![AXIF Write Burst examples](images/axif/axif-wr-burst.svg)
-<!-- .element: style="background-color: white;" -->
-
-----
-
-### AXIF - Read Burst examples
-
-![AXIF Read Burst examples](images/axif/axif-rd-burst.svg)
-<!-- .element: style="background-color: white;" -->
-
-----
-
-### AXIF - AxPROT - Access permissions
-
-* AxPROT[0]: Un/privileged
-* AxPROT[1]: Secure or Non-secure
-* AxPROT[2]: Data or Instruction
-
-> AxPROT[2] is provided as a hint, but might not be accurate in all cases.
-<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-
-----
-
-### AXIF - AxCACHE
-
-Specifies the **Bufferable**, **Modifiable**, and **Allocate** attributes of the transaction.
-
-* AxCACHE[0]: Non/Bufferable
-* AxCACHE[1]: Non/Modifiable
-* AxCACHE[2]: Other-Allocate
-* AxCACHE[3]: Allocate
-
-> * Bufferable: when asserted, the write response can be obtained from the interconnect (posted writes).
-> * Modifiable: indicates that the characteristics of the transaction can be modified.
-> * See the spec. for more details about AxCACHE[3:1].
-<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-
-----
-
-### AXIF - AxLOCK
-
-----
-
-### AXIF - WSTRB - Write Strobe
-
-* Enables sparse data transfer on the write data bus
-* There is one bit per each byte of WDATA
-  * WSTRB[n] -> WDATA[(8n + 7):(8n)]
-* When asserted HIGH, the corresponding byte of WDATA contains valid information
-
-> When WVALID is LOW, WSTRB can take any value but it is **recommended** to be driven LOW or held at their previous value.
-<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-
-----
-
-### AXIF - xLAST - Last Transfer
-
-Indicates the last transfer in a burst.
-
-> It **must** be asserted in the source, but is **not required** in the destination (can be calculated based on AxLEN).
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-----
-
-### AXIF - xRESP - Transfer response
-
-xRESP[1:0] | Response
----        |---
-00         | **OKAY:** normal access success (or the failure of an exclusive access, also when not supported)
-01         | **EXOKAY:** exclusive access success
-10         | **SLVERR:** destination was reached, but it wants to return an ERROR condition (ex: overrun/underrun, unsupported transfer size, write access attempted to read-only location, timeout, access attempted to a disabled or powered-down function)
-11         | **DECERR:** DECode ERRor, typically generated by an interconnect, to indicate that there is nothing at the transaction address (the specification recommends routing a default device, being it charge of returns this response)
-<!-- .element: style="font-size: 0.5em !important;" -->
-
-> * In write transactions there is a single response for the entire burst.
-> * In read transactions there is one response for each transfer of a burst.
-> * The specification requires that all data transfers for a transaction **must** be performed, even if an error occurs.
-<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
-
-----
-
-### Unaligned transfers
-
-In any burst where data transfers are wider than one byte, the first bytes accessed **might** be unaligned with the natural address boundary.
-
-> * An **AXI-M** can use the low-order address bits, or provide an aligned address and use write strobe.
-> * An **AXI-S** is not required to take any special action based on alignment information.
-<!-- .element: style="font-size: 0.6em !important; width: 40em;" -->
-
-----
-
-### Narrow transfers
-
-Transfers narrower (AxSIZE) than the data (xDATA) bus size.
-<!-- .element: style="font-size: 0.8em !important;" -->
-
-### Narrow burst
-
-|31:24|23:16|15:08|07:00|Transfer|
-|:---:|:---:|:---:|:---:|-------:|
-|     |     |     | 0x00|    1st |
-|     |     | 0x01|     |    2nd |
-|     | 0x02|     |     |    3rd |
-| 0x03|     |     |     |    4th |
-|     |     |     | 0x05|    5th |
-<!-- .element: style="font-size: 0.5em !important;" -->
-
-Example: 5 x 8-bits INCR transfers in a 32-bits bus.
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-----
-
-### Unaligned narrow transfers
-
-|63:56|55:48|47:40|39:32|31:24|23:16|15:08|07:00|Transfer|
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|-------:|
-| 0x07|     |     |     |     |     |     |     |    1st |
-|     |     |     |     | 0x0B| 0x0A| 0x09| 0x08|    2nd |
-| 0x0F| 0x0E| 0x0D| 0x0C|     |     |     |     |    3rd |
-|     |     |     |     | 0x1B| 0x1A| 0x19| 0x18|    4th |
-| 0x1F| 0x1E| 0x1D| 0x1C|     |     |     |     |    5th |
-<!-- .element: style="font-size: 0.5em !important;" -->
-
-Example: 5 x 32-bits INCR transfers in a 64-bits bus, starting from address 7.
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-----
-
-### AXI - AxQOS - Quality of Service
-<!-- .slide: data-background="cyan" -->
-
-* The exact use is not specified, but it is recommended as a priority indicator for the associated transaction
-* A higher value indicates a higher priority (but ordering rules take precedence)
-* A 0 value (default) indicates that the interface is not participating in any QoS scheme
-
-> * Support for this feature requires a system-level understanding, and collaboration between participating components (programmability recommended).
-> * Additional interpretations of the QoS identifier can be used.
-<!-- .element: style="font-size: 0.4em !important; width: 50em;" -->
-
-----
-
-### AXI - AxREGION
-<!-- .slide: data-background="cyan" -->
-
-----
-
-### AXI - AWUSER/WUSER/BUSER/ARUSER/RUSER
-<!-- .slide: data-background="cyan" -->
-
-* It is recommended not to use the User Defined Signals because have no defined uses, which can lead to interoperability issues
-* When implemented it is not required to support all the channels
-* Its width is implementation-defined and can be different for each channel
 
 ---
 <!-- ###################################################################### -->
@@ -1027,7 +1032,105 @@ A point-to-point protocol, connecting a single Transmitter with a single Receive
 
 ---
 <!-- ###################################################################### -->
-### Parity signals
+### Final remarks
+<!-- .slide: data-background="#581845" -->
+<!-- ###################################################################### -->
+
+----
+
+### Performance comparison
+
+![Performance](images/performance.svg)
+<!-- .element: style="background-color: white; height: 12em;" -->
+
+----
+
+### Interoperability principles
+
+Components **must** support all combinations of inputs, but do not have to generate all combinations of outputs.
+
+> **Example:** a Subordinate must support all the possible burst lengths, but a Manager only has to generate the types of burst that it uses.
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+> **ATTENTION:** if it is not TRUE, it **should** be well documented!
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+----
+
+### Default subordinate (AHB/AXI)
+
+----
+
+### Reasons for BURST transactions
+
+> In a real system, there are latencies and arbitration. There, burst transfers and outstanding transactions come into the action.
+<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
+
+----
+
+### Reasons for WRITE STROBE
+
+* Implementation of column-based algorithms
+* Decrease the need for read-modify-write operations
+* Deal with access to a wider data bus
+  * 32/64-bits access in a 128-bits bus
+  * Different widths in a interconnect
+
+----
+
+### Reasons for multiple channels
+
+Most systems use one of three interconnect topologies:
+<!-- .element: style="font-size: 0.6em !important;" -->
+1. Shared address and data buses
+<!-- .element: style="font-size: 0.6em !important;" -->
+2. Shared address buses and multiple data buses
+<!-- .element: style="font-size: 0.6em !important;" -->
+3. Multiple address and data buses
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+Having channels, we can use the second alternative to achieve a good balance between system performance and interconnect complexity.
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+Additionally, each channel transfers information in one direction, and there isn't any fixed relationship between them, so register slices can be inserted in any channel to improve timing, at the cost of additional latency cycles.
+<!-- .element: style="font-size: 0.6em !important;" -->
+
+----
+
+### Multiple interfaces
+
+![DMA example](images/dma-example.svg)
+
+> It is possible (recommended when suitable) to have multiple interfaces per IP.
+<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
+
+----
+
+### Address boundary
+
+* The minimum address space that can be allocated to a single interface is 1KB/4KB (AHB/AXI).
+* A burst **must not** cross a 1KB/4KB (AHB/AXI) address boundary.
+
+> * This prevents a burst from crossing a boundary between two Subordinates.
+> * Additionally (AXI), limits the number of address increments a Subordinate supports.
+<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
+
+---
+<!-- ###################################################################### -->
+# Questions?
+<!-- .slide: data-background="#1F618D" -->
+<!-- ###################################################################### -->
+
+|   |   |
+|---|---|
+| ![GitHub icon](icons/github.png)     | [rodrigomelo9](https://github.com/rodrigomelo9)                          |
+| ![Twitter icon](icons/twitter.png)   | [rodrigomelo9ok](https://twitter.com/rodrigomelo9ok)                     |
+| ![LinkedIn icon](icons/linkedin.png) | [rodrigoalejandromelo](https://www.linkedin.com/in/rodrigoalejandromelo) |
+|   |   |
+
+---
+<!-- ###################################################################### -->
+### AMBA5 Parity signals
 <!-- .slide: data-background="#581845" -->
 <!-- ###################################################################### -->
 
@@ -1136,104 +1239,6 @@ TUSERCHK      | TUSER           | ceil(USERWIDTH/8)  | TVALID
 
 **ATTENTION:** adapted/reduced for AXI4 Stream
 <!-- .element: style="font-size: 0.4em !important;" -->
-
----
-<!-- ###################################################################### -->
-### Final remarks
-<!-- .slide: data-background="#581845" -->
-<!-- ###################################################################### -->
-
-----
-
-### Performance comparison
-
-![Performance](images/performance.svg)
-<!-- .element: style="background-color: white; height: 12em;" -->
-
-----
-
-### Interoperability principles
-
-Components **must** support all combinations of inputs, but do not have to generate all combinations of outputs.
-
-> **Example:** a Subordinate must support all the possible burst lengths, but a Manager only has to generate the types of burst that it uses.
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-> **ATTENTION:** if it is not TRUE, it **should** be well documented!
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-----
-
-### Default subordinate (AHB/AXI)
-
-----
-
-### Reasons for BURST transactions
-
-> In a real system, there are latencies and arbitration. There, burst transfers and outstanding transactions come into the action.
-<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
-
-----
-
-### Reasons for WRITE STROBE
-
-* Implementation of column-based algorithms
-* Decrease the need for read-modify-write operations
-* Deal with access to a wider data bus
-  * 32/64-bits access in a 128-bits bus
-  * Different widths in a interconnect
-
-----
-
-### Reasons for multiple channels
-
-Most systems use one of three interconnect topologies:
-<!-- .element: style="font-size: 0.6em !important;" -->
-1. Shared address and data buses
-<!-- .element: style="font-size: 0.6em !important;" -->
-2. Shared address buses and multiple data buses
-<!-- .element: style="font-size: 0.6em !important;" -->
-3. Multiple address and data buses
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-Having channels, we can use the second alternative to achieve a good balance between system performance and interconnect complexity.
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-Additionally, each channel transfers information in one direction, and there isn't any fixed relationship between them, so register slices can be inserted in any channel to improve timing, at the cost of additional latency cycles.
-<!-- .element: style="font-size: 0.6em !important;" -->
-
-----
-
-### Multiple interfaces
-
-![DMA example](images/dma-example.svg)
-
-> It is possible (recommended when suitable) to have multiple interfaces per IP.
-<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
-
-----
-
-### Address boundary
-
-* The minimum address space that can be allocated to a single interface is 1KB/4KB (AHB/AXI).
-* A burst **must not** cross a 1KB/4KB (AHB/AXI) address boundary.
-
-> * This prevents a burst from crossing a boundary between two Subordinates.
-> * Additionally (AXI), limits the number of address increments a Subordinate supports.
-<!-- .element: style="font-size: 0.4em !important; width: 55em;" -->
-
----
-<!-- ###################################################################### -->
-# Questions?
-<!-- .slide: data-background="#1F618D" -->
-<!-- ###################################################################### -->
-
-|   |   |
-|---|---|
-| ![GitHub icon](icons/github.png)     | [rodrigomelo9](https://github.com/rodrigomelo9)                          |
-| ![Twitter icon](icons/twitter.png)   | [rodrigomelo9ok](https://twitter.com/rodrigomelo9ok)                     |
-| ![LinkedIn icon](icons/linkedin.png) | [rodrigoalejandromelo](https://www.linkedin.com/in/rodrigoalejandromelo) |
-|   |   |
 
           </textarea>
         </section>
