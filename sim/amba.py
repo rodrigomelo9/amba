@@ -32,6 +32,9 @@ class APBM():
             await RisingEdge(self.clk)
             while not self.dut.pready.value:
                 await RisingEdge(self.clk)
+            if i < len(data)-1:
+                self.dut.paddr.value = self.dut.paddr.value+4
+                self.dut.penable.value = 0
         self.idle()
 
     async def read(self, addr, length):
@@ -45,6 +48,9 @@ class APBM():
             while not self.dut.pready.value:
                 await RisingEdge(self.clk)
             resp.append(self.dut.prdata.value)
+            if i < length-1:
+                self.dut.paddr.value = self.dut.paddr.value+4
+                self.dut.penable.value = 0
         self.idle()
         return resp
 
