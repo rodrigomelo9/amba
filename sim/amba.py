@@ -184,5 +184,6 @@ class AXIM():
             await RisingEdge(self.clk)
             while not self.dut.rvalid.value:
                await RisingEdge(self.clk)
+            resp.append(self.dut.rdata.value)
         self.idle()
         return resp

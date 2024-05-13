@@ -1,6 +1,6 @@
 TOPLEVEL_LANG = verilog
 
-DUT      = stubs
+DUT      = rams
 TOPLEVEL = $(DUT)
 MODULE   = $(DUT)
 VERILOG_SOURCES += ../rtl/$(DUT).sv
