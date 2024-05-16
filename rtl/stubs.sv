@@ -1,3 +1,21 @@
+//
+// Copyright (c) 2024, Rodrigo Alejandro Melo
+//
+// Permission to use, copy, modify, and/or distribute this software for any
+// purpose with or without fee is hereby granted, provided that the above
+// copyright notice and this permission notice appear in all copies.
+//
+// THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+// WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+// ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+// WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+// ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+//
+// SPDX-License-Identifier: ISC
+//
+
 module apb_stub #(
   parameter                 AWIDTH = 10,       // Address width (bits)
   parameter    [2:0]        DSIZE  = 2,        // Data size
@@ -14,20 +32,17 @@ module apb_stub #(
   input        [AWIDTH-1:0] paddr,
   input        [DBYTES-1:0] pstrb,
   input        [DWIDTH-1:0] pwdata,
-  output       [DWIDTH-1:0] prdata,
+  output logic [DWIDTH-1:0] prdata,
   output                    pready,
   output                    pslverr
 );
 
-  logic [DWIDTH-1:0] register;
-
-  assign prdata  = register;
   assign pready  = '1;
   assign pslverr = '0;
 
   always @(posedge pclk) begin
     if (psel & penable & pwrite) begin
-      register <= pwdata;
+      prdata <= pwdata;
     end
   end
 
@@ -57,18 +72,15 @@ module ahb_stub #(
   output                    hresp
 );
 
-  logic [DWIDTH-1:0] register;
-
   logic selected;
 
-  assign hrdata    = register;
   assign hreadyout = '1;
   assign hresp     = '0;
 
   always @(posedge hclk) begin
     selected <= hsel & htrans[1] & hwrite;
     if (selected) begin
-      register <= hwdata;
+      hrdata <= hwdata;
     end
   end
 
@@ -114,14 +126,12 @@ module axi_stub #(
   input                     arvalid,
   output logic              arready,
   output logic [IWIDTH-1:0] rid,
-  output       [DWIDTH-1:0] rdata,
+  output logic [DWIDTH-1:0] rdata,
   output       [1:0]        rresp,
   output                    rlast,
   output logic              rvalid,
   input                     rready
 );
-
-  logic [DWIDTH-1:0] register;
 
   //-- Write ------------------------------------------------------------------
 
@@ -142,7 +152,7 @@ module axi_stub #(
       end else begin
         if (!bvalid) begin
           if (wvalid) begin
-            register <= wdata;
+            rdata <= wdata;
             if (wlast) begin
               wready  <= '0;
               bvalid  <= '1;
@@ -160,7 +170,6 @@ module axi_stub #(
 
   logic [7:0]            rd_len;
 
-  assign rdata = register;
   assign rresp = '0;
   assign rlast = (rd_len == '0);
 
@@ -182,7 +191,7 @@ module axi_stub #(
             arready <= '1;
             rvalid  <= '0;
           end else begin
-            rd_len <= rd_len - 1;
+            rd_len  <= rd_len - 1;
           end
         end
       end
