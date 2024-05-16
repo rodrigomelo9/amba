@@ -16,7 +16,7 @@ module apb_ram #(
   input        [AWIDTH-1:0] paddr,
   input        [DBYTES-1:0] pstrb,
   input        [DWIDTH-1:0] pwdata,
-  output       [DWIDTH-1:0] prdata,
+  output logic [DWIDTH-1:0] prdata,
   output                    pready,
   output                    pslverr
 );
@@ -39,7 +39,6 @@ module apb_ram #(
   logic [MEM_AWIDTH-1:0] mem_addr;
   assign mem_addr = paddr >> DSIZE;
 
-  assign prdata  = mem[mem_addr];
   assign pready  = '1;
   assign pslverr = '0;
 
@@ -51,6 +50,12 @@ module apb_ram #(
           mem[mem_addr][i*8+:8] <= pwdata[i*8+:8];
         end
       end
+    end
+  end
+
+  always @(posedge pclk) begin
+    if (psel & !penable & !pwrite) begin
+      prdata <= mem[mem_addr];
     end
   end
 
@@ -99,17 +104,26 @@ module ahb_ram #(
 
   logic selected;
 
-  logic [MEM_AWIDTH-1:0] mem_addr;
-  assign mem_addr = haddr >> DSIZE;
+  logic [AWIDTH-1:0] wr_addr;
+  logic [MEM_AWIDTH-1:0] mem_wr_addr;
+  logic [MEM_AWIDTH-1:0] mem_rd_addr;
+  assign mem_wr_addr = wr_addr >> DSIZE;
+  assign mem_rd_addr = haddr >> DSIZE;
 
-  assign hrdata    = mem[mem_addr];
   assign hreadyout = '1;
   assign hresp     = '0;
 
   always @(posedge hclk) begin
     selected <= hsel & htrans[1] & hwrite;
+    wr_addr <= haddr;
     if (selected) begin
-      mem[mem_addr] <= hwdata;
+      mem[mem_wr_addr] <= hwdata;
+    end
+  end
+
+  always @(posedge hclk) begin
+    if (hsel & htrans[1] & !hwrite) begin
+      hrdata <= mem[mem_rd_addr];
     end
   end
 
@@ -157,7 +171,7 @@ module axi_ram #(
   input                     arvalid,
   output logic              arready,
   output logic [IWIDTH-1:0] rid,
-  output       [DWIDTH-1:0] rdata,
+  output logic [DWIDTH-1:0] rdata,
   output       [1:0]        rresp,
   output                    rlast,
   output logic              rvalid,
@@ -179,6 +193,21 @@ module axi_ram #(
       for (i=0; i<MEM_DEPTH; i++) mem[i] = 0;
   end
 
+  always @(posedge aclk) begin
+    integer i;
+    if (wvalid & wready) begin
+      for (i=0; i<DBYTES; i++) begin
+        if (wstrb[i]) begin
+          mem[wr_addr>>DSIZE][8*i+:8] <= wdata[8*i+:8];
+        end
+      end
+    end
+  end
+
+  always @(posedge aclk) begin
+    rdata <= mem[rd_addr>>DSIZE];
+  end
+
   //-- Write ------------------------------------------------------------------
 
   logic [AWIDTH-1:0]     wr_addr;
@@ -186,13 +215,9 @@ module axi_ram #(
   logic [2:0]            wr_size;
   logic [1:0]            wr_burst;
 
-  logic [MEM_AWIDTH-1:0] mem_wr_addr;
-  assign mem_wr_addr = wr_addr >> DSIZE;
-
   assign bresp = '0;
 
   always @(posedge aclk, negedge aresetn) begin
-    integer i;
     if (!aresetn) begin
       awready <= '1;
       wready  <= '0;
@@ -211,16 +236,11 @@ module axi_ram #(
       end else begin
         if (!bvalid) begin
           if (wvalid) begin
-            for (i=0; i<DBYTES; i++) begin
-              if (wstrb[i]) begin
-                mem[mem_wr_addr][8*i+:8] <= wdata[8*i+:8];
-              end
-            end
             if (wlast) begin
               wready  <= '0;
               bvalid  <= '1;
             end else begin
-              wr_addr <= (wr_burst != 2'b00) ? wr_addr + (1 << wr_size) : wr_addr;
+              wr_addr <= wr_addr + (1 << wr_size);
               wr_len <= wr_len - 1;
             end
           end
@@ -241,11 +261,7 @@ module axi_ram #(
   logic [2:0]            rd_size;
   logic [1:0]            rd_burst;
 
-  logic [MEM_AWIDTH-1:0] mem_rd_addr;
-  assign mem_rd_addr = rd_addr >> DSIZE;
-
   assign rresp = '0;
-  assign rdata = mem[mem_rd_addr];
   assign rlast = (rd_len == '0);
 
   always @(posedge aclk, negedge aresetn) begin
@@ -261,16 +277,16 @@ module axi_ram #(
           rd_size  <= arsize;
           rd_burst <= arburst;
           arready  <= '0;
-          rvalid   <= '1;
         end
       end else begin
-        if (rready) begin
+        rvalid <= '1;
+        if (rvalid & rready) begin
+          rvalid <= '0;
           if (rlast) begin
             arready <= '1;
-            rvalid  <= '0;
           end else begin
-            rd_addr <= (rd_burst != 2'b00) ? rd_addr + (1 << rd_size) : rd_addr;
-            rd_len <= rd_len - 1;
+            rd_addr <= rd_addr + (1 << rd_size);
+            rd_len  <= rd_len - 1;
           end
         end
       end

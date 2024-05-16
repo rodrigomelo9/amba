@@ -16,8 +16,8 @@ async def test_apb(dut):
     resp = await apbm.read(0x10, len(SINGLE))
     assert resp == SINGLE, 'ERROR'
     await RisingEdge(dut.xclk)
-    await apbm.write(0x10, MULTIPLE)
-    resp = await apbm.read(0x10, len(MULTIPLE))
+    await apbm.write(0x20, MULTIPLE)
+    resp = await apbm.read(0x20, len(MULTIPLE))
     assert resp == MULTIPLE, 'ERROR'
     await RisingEdge(dut.xclk)
 
@@ -31,8 +31,8 @@ async def test_ahb(dut):
     resp = await ahbm.read(0x10, len(SINGLE))
     assert resp == SINGLE, 'ERROR'
     await RisingEdge(dut.xclk)
-    await ahbm.write(0x10, MULTIPLE)
-    resp = await ahbm.read(0x10, len(MULTIPLE))
+    await ahbm.write(0x20, MULTIPLE)
+    resp = await ahbm.read(0x20, len(MULTIPLE))
     assert resp == MULTIPLE, 'ERROR'
     await RisingEdge(dut.xclk)
 
@@ -46,8 +46,8 @@ async def test_axi(dut):
     resp = await axim.read(0x10, len(SINGLE))
     assert resp == SINGLE, 'ERROR'
     await RisingEdge(dut.xclk)
-    await axim.write(0x10, MULTIPLE)
-    resp = await axim.read(0x10, len(MULTIPLE))
+    await axim.write(0x20, MULTIPLE)
+    resp = await axim.read(0x20, len(MULTIPLE))
     assert resp == MULTIPLE, 'ERROR'
     await RisingEdge(dut.xclk)
 
