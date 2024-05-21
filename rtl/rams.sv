@@ -44,6 +44,8 @@ module apb_ram #(
 
   (* ram_decomp = "power" *) logic [DWIDTH-1:0] mem [0:MEM_DEPTH-1];
 
+  logic [MEM_AWIDTH-1:0] mem_addr;
+
   initial begin
     integer i;
     if (IBIN != "")
@@ -54,11 +56,7 @@ module apb_ram #(
       for (i=0; i<MEM_DEPTH; i++) mem[i] = 0;
   end
 
-  logic [MEM_AWIDTH-1:0] mem_addr;
   assign mem_addr = paddr >> DSIZE;
-
-  assign pready  = '1;
-  assign pslverr = '0;
 
   always @(posedge pclk) begin
     integer i;
@@ -76,6 +74,9 @@ module apb_ram #(
       prdata <= mem[mem_addr];
     end
   end
+
+  assign pready  = '1;
+  assign pslverr = '0;
 
 endmodule
 
@@ -110,6 +111,11 @@ module ahb_ram #(
 
   (* ram_decomp = "power" *) logic [DWIDTH-1:0] mem [0:MEM_DEPTH-1];
 
+  logic                  selected;
+  logic [AWIDTH-1:0]     wr_addr;
+  logic [MEM_AWIDTH-1:0] mem_wr_addr;
+  logic [MEM_AWIDTH-1:0] mem_rd_addr;
+
   initial begin
     integer i;
     if (IBIN != "")
@@ -120,16 +126,8 @@ module ahb_ram #(
       for (i=0; i<MEM_DEPTH; i++) mem[i] = 0;
   end
 
-  logic selected;
-
-  logic [AWIDTH-1:0] wr_addr;
-  logic [MEM_AWIDTH-1:0] mem_wr_addr;
-  logic [MEM_AWIDTH-1:0] mem_rd_addr;
   assign mem_wr_addr = wr_addr >> DSIZE;
   assign mem_rd_addr = haddr >> DSIZE;
-
-  assign hreadyout = '1;
-  assign hresp     = '0;
 
   always @(posedge hclk) begin
     selected <= hsel & htrans[1] & hwrite;
@@ -144,6 +142,9 @@ module ahb_ram #(
       hrdata <= mem[mem_rd_addr];
     end
   end
+
+  assign hreadyout = '1;
+  assign hresp     = '0;
 
 endmodule
 
@@ -201,6 +202,18 @@ module axi_ram #(
 
   (* ram_decomp = "power" *) logic [DWIDTH-1:0] mem [0:MEM_DEPTH-1];
 
+  logic [AWIDTH-1:0]     wr_addr;
+  logic [7:0]            wr_len;
+  logic [2:0]            wr_size;
+  logic [1:0]            wr_burst;
+
+  logic [AWIDTH-1:0]     rd_addr;
+  logic [7:0]            rd_len;
+  logic [2:0]            rd_size;
+  logic [1:0]            rd_burst;
+
+  //-- Memory -----------------------------------------------------------------
+
   initial begin
     integer i;
     if (IBIN != "")
@@ -227,13 +240,6 @@ module axi_ram #(
   end
 
   //-- Write ------------------------------------------------------------------
-
-  logic [AWIDTH-1:0]     wr_addr;
-  logic [7:0]            wr_len;
-  logic [2:0]            wr_size;
-  logic [1:0]            wr_burst;
-
-  assign bresp = '0;
 
   always @(posedge aclk, negedge aresetn) begin
     if (!aresetn) begin
@@ -270,17 +276,9 @@ module axi_ram #(
     end
   end
 
-  // bvalid = bvalid && !bready;
+  assign bresp = '0;
 
   //-- Read -------------------------------------------------------------------
-
-  logic [AWIDTH-1:0]     rd_addr;
-  logic [7:0]            rd_len;
-  logic [2:0]            rd_size;
-  logic [1:0]            rd_burst;
-
-  assign rresp = '0;
-  assign rlast = (rd_len == '0);
 
   always @(posedge aclk, negedge aresetn) begin
     if (!aresetn) begin
@@ -310,5 +308,8 @@ module axi_ram #(
       end
     end
   end
+
+  assign rresp = '0;
+  assign rlast = (rd_len == '0);
 
 endmodule

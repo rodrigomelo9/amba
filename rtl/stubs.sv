@@ -37,14 +37,19 @@ module apb_stub #(
   output                    pslverr
 );
 
-  assign pready  = '1;
-  assign pslverr = '0;
-
   always @(posedge pclk) begin
+    integer i;
     if (psel & penable & pwrite) begin
-      prdata <= pwdata;
+      for (i=0; i<DBYTES; i++) begin
+        if (pstrb[i]) begin
+          prdata[i*8+:8] <= pwdata[i*8+:8];
+        end
+      end
     end
   end
+
+  assign pready  = '1;
+  assign pslverr = '0;
 
 endmodule
 
@@ -72,10 +77,7 @@ module ahb_stub #(
   output                    hresp
 );
 
-  logic selected;
-
-  assign hreadyout = '1;
-  assign hresp     = '0;
+  logic                  selected;
 
   always @(posedge hclk) begin
     selected <= hsel & htrans[1] & hwrite;
@@ -83,6 +85,9 @@ module ahb_stub #(
       hrdata <= hwdata;
     end
   end
+
+  assign hreadyout = '1;
+  assign hresp     = '0;
 
 endmodule
 
@@ -133,9 +138,9 @@ module axi_stub #(
   input                     rready
 );
 
-  //-- Write ------------------------------------------------------------------
+  logic [7:0]            rd_len;
 
-  assign bresp = '0;
+  //-- Write ------------------------------------------------------------------
 
   always @(posedge aclk, negedge aresetn) begin
     if (!aresetn) begin
@@ -166,12 +171,9 @@ module axi_stub #(
     end
   end
 
+  assign bresp = '0;
+
   //-- Read -------------------------------------------------------------------
-
-  logic [7:0]            rd_len;
-
-  assign rresp = '0;
-  assign rlast = (rd_len == '0);
 
   always @(posedge aclk, negedge aresetn) begin
     if (!aresetn) begin
@@ -197,5 +199,8 @@ module axi_stub #(
       end
     end
   end
+
+  assign rresp = '0;
+  assign rlast = (rd_len == '0);
 
 endmodule
