@@ -145,9 +145,9 @@ Main uses:
 
 ----
 
-### APB4-S interface
+### APB4 interfaces
 
-![APB-S interface](images/apb/apb-interface.svg)
+![APB interfaces](images/apb/apb-interface.svg)
 
 ----
 
